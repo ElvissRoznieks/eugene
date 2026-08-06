@@ -1,4 +1,4 @@
-import localSea from '../assets/vide-bg.mp4'
+import heroSea from '../assets/hero-sea.png'
 import missingBrendanPoster from '../assets/posters/missing-brendan.png'
 import theNephewPoster from '../assets/posters/the-nephew.png'
 import theGirlWhoStayedPoster from '../assets/posters/the-girl-who-stayed.png'
@@ -26,8 +26,9 @@ export const SITE_TZ = 'Europe/Dublin'
 export const SITE_LOCATION_LINE = 'Based · Ireland · International'
 export const SITE_OG_IMAGE = `${SITE_URL}/og-image.png`
 
-/** Single hero reel — keep array shape for VideoBackground */
-export const HERO_VIDEOS = [{ id: 0, label: '01 / SEA', src: localSea }]
+/** Full-bleed home still */
+export const HERO_IMAGE = heroSea
+export const HERO_IMAGE_ALT = 'Ocean waves under open sky'
 
 export const DEFAULT_ATMOSPHERE = '/audio/default-atmosphere.m4a'
 

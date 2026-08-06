@@ -5,7 +5,7 @@ import { PAGE_SEO, SITE_OG_IMAGE } from '../data/site'
 
 export default function Home() {
   return (
-    <Layout variant="hero" activeIndex={0}>
+    <Layout variant="hero">
       <SeoHead
         {...PAGE_SEO.home}
         jsonLd={personJsonLd({

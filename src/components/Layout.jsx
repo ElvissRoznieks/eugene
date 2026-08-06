@@ -1,5 +1,5 @@
 import Navbar from './Navbar'
-import VideoBackground from './VideoBackground'
+import HeroBackground from './HeroBackground'
 import ImdbBar from './ImdbBar'
 import ImdbFab from './ImdbFab'
 import PageFade from './PageFade'
@@ -10,7 +10,7 @@ const SHELL = {
     nav: 'hero',
     dock: 'light',
     fade: false,
-    video: true,
+    heroBg: true,
     mainClass: 'relative z-[2] h-screen',
   },
   immersive: {
@@ -18,7 +18,7 @@ const SHELL = {
     nav: 'immersive',
     dock: 'light',
     fade: false,
-    video: false,
+    heroBg: false,
     mainClass: 'relative z-[1]',
   },
   dark: {
@@ -26,7 +26,7 @@ const SHELL = {
     nav: 'dark',
     dock: 'dark',
     fade: true,
-    video: false,
+    heroBg: false,
     mainClass: 'pb-24',
   },
   paper: {
@@ -34,7 +34,7 @@ const SHELL = {
     nav: 'paper',
     dock: 'light',
     fade: true,
-    video: false,
+    heroBg: false,
     mainClass: 'pb-24',
   },
   light: {
@@ -42,23 +42,19 @@ const SHELL = {
     nav: 'light',
     dock: 'light',
     fade: true,
-    video: false,
+    heroBg: false,
     mainClass: 'pb-24',
   },
 }
 
-export default function Layout({
-  children,
-  variant = 'light',
-  activeIndex = 0,
-}) {
+export default function Layout({ children, variant = 'light' }) {
   const shell = SHELL[variant] || SHELL.light
 
   return (
     <div className={shell.root}>
-      {shell.video ? <VideoBackground activeIndex={activeIndex} /> : null}
+      {shell.heroBg ? <HeroBackground /> : null}
       <Navbar variant={shell.nav} />
-      {shell.video ? (
+      {shell.heroBg ? (
         <div className={shell.mainClass}>{children}</div>
       ) : (
         <main className={shell.mainClass}>
@@ -70,4 +66,3 @@ export default function Layout({
     </div>
   )
 }
-
