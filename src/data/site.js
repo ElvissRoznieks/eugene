@@ -1,4 +1,4 @@
-import heroHome from '../assets/home.webp'
+import heroHome from '../assets/home2.webp'
 import missingBrendanPoster from '../assets/posters/missing-brendan.png'
 import theNephewPoster from '../assets/posters/the-nephew.png'
 import theGirlWhoStayedPoster from '../assets/posters/the-girl-who-stayed.png'
