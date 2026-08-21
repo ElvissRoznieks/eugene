@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Layout from '../components/Layout'
+import Reveal from '../components/Reveal'
 import SeoHead from '../components/SeoHead'
 import useDublinClock from '../hooks/useDublinClock'
 import {
@@ -47,27 +48,35 @@ export default function Contact() {
     <Layout variant="dark">
       <SeoHead {...PAGE_SEO.contact} />
       <div className="contact-signal page-shell">
-        <p className="contact-signal__kicker">{pageKicker('/contact')}</p>
+        <Reveal as="p" className="contact-signal__kicker" immediate>
+          {pageKicker('/contact')}
+        </Reveal>
 
-        <a
+        <Reveal
+          as="a"
           href={`mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(mailSubject(enquiry))}`}
           className="contact-signal__email"
+          immediate
+          delay={80}
         >
           {CONTACT_EMAIL}
-        </a>
+        </Reveal>
 
-        <div className="contact-signal__details">
+        <Reveal className="contact-signal__details" immediate delay={140}>
           <a href={CONTACT_PHONE_HREF} className="contact-signal__phone">
             {CONTACT_PHONE}
           </a>
           <p className="contact-signal__time" aria-live="polite">
             {SITE_CITY} · {time}
           </p>
-        </div>
+        </Reveal>
 
-        <nav
+        <Reveal
+          as="nav"
           className="contact-signal__enquiries"
           aria-label="Enquiry type"
+          immediate
+          delay={200}
         >
           {CONTACT_ENQUIRIES.map((item) => (
             <button
@@ -80,13 +89,25 @@ export default function Contact() {
               {item.id}
             </button>
           ))}
-        </nav>
+        </Reveal>
 
-        <p key={active.id} className="contact-signal__prompt">
+        <Reveal
+          as="p"
+          key={active.id}
+          className="contact-signal__prompt"
+          immediate
+          delay={260}
+        >
           {active.prompt}
-        </p>
+        </Reveal>
 
-        <form onSubmit={handleSubmit} className="contact-signal__form">
+        <Reveal
+          as="form"
+          onSubmit={handleSubmit}
+          className="contact-signal__form"
+          immediate
+          delay={320}
+        >
           <label className="contact-signal__field">
             <span>Name</span>
             <input
@@ -127,7 +148,7 @@ export default function Contact() {
           <button type="submit" className="contact-signal__submit">
             {sent ? 'Opening email…' : 'Send enquiry'}
           </button>
-        </form>
+        </Reveal>
       </div>
     </Layout>
   )

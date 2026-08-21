@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Layout from '../components/Layout'
+import Reveal from '../components/Reveal'
 import SeoHead, { personJsonLd } from '../components/SeoHead'
 import {
   ABOUT_CHAPTERS,
@@ -62,7 +63,12 @@ export default function About() {
       <SeoHead {...PAGE_SEO.about} jsonLd={jsonLd} />
       <div className="about-essay">
         <aside className="about-essay__rail">
-          <div className="about-essay__portrait">
+          <Reveal
+            className="about-essay__portrait"
+            variant="up"
+            immediate
+            delay={40}
+          >
             <div className="about-essay__frame">
               <img
                 src={ABOUT_HEADSHOT}
@@ -83,27 +89,49 @@ export default function About() {
                 </p>
               </div>
             </div>
-          </div>
+          </Reveal>
         </aside>
 
         <div className="about-essay__copy page-shell">
           <header className="about-essay__head">
-            <p className="about-essay__kicker">{pageKicker('/about')}</p>
-            <h1 className="about-essay__title">
+            <Reveal as="p" className="about-essay__kicker" immediate delay={0}>
+              {pageKicker('/about')}
+            </Reveal>
+            <Reveal
+              as="h1"
+              className="about-essay__title look--title"
+              variant="up"
+              immediate
+              delay={90}
+            >
               {SITE_NAME}
               <span className="text-[var(--accent)]">.</span>
-            </h1>
-            <p className="about-essay__subtitle">
+            </Reveal>
+            <Reveal
+              as="p"
+              className="about-essay__subtitle"
+              immediate
+              delay={200}
+            >
               {SITE_TAGLINE} · BAFTA Member
-            </p>
-            <p className="about-essay__pull">{PULL_LINE}</p>
+            </Reveal>
+            <Reveal
+              as="p"
+              className="about-essay__pull"
+              immediate
+              delay={300}
+            >
+              {PULL_LINE}
+            </Reveal>
           </header>
 
           {ABOUT_CHAPTERS.map((chapter, i) => {
             const filmIdx = Math.min(i, FILMS.length - 1)
             return (
-              <section
+              <Reveal
                 key={chapter.id}
+                as="section"
+                delay={i * 40}
                 ref={(el) => {
                   sectionRefs.current[i] = el
                 }}
@@ -116,11 +144,12 @@ export default function About() {
                     {text}
                   </p>
                 ))}
-              </section>
+              </Reveal>
             )
           })}
 
-          <section
+          <Reveal
+            as="section"
             ref={(el) => {
               sectionRefs.current[ABOUT_CHAPTERS.length] = el
             }}
@@ -149,9 +178,9 @@ export default function About() {
                 </li>
               ))}
             </ul>
-          </section>
+          </Reveal>
 
-          <div className="about-essay__actions">
+          <Reveal className="about-essay__actions" delay={80}>
             <Link
               to="/film"
               className="project-btn-dark inline-flex px-5 py-3 text-xs font-medium uppercase tracking-[-0.12px]"
@@ -164,7 +193,7 @@ export default function About() {
             >
               get in touch
             </Link>
-          </div>
+          </Reveal>
         </div>
       </div>
     </Layout>

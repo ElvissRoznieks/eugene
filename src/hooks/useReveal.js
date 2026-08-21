@@ -2,21 +2,29 @@ import { useEffect, useRef, useState } from 'react'
 
 export default function useReveal(threshold = 0.15, { immediate = false } = {}) {
   const ref = useRef(null)
-  const [visible, setVisible] = useState(immediate)
+  // Always start hidden so CSS transitions can run (even for immediate)
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    if (immediate) {
-      setVisible(true)
-      return undefined
-    }
-
-    const node = ref.current
-    if (!node) return undefined
-
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       setVisible(true)
       return undefined
     }
+
+    if (immediate) {
+      // Double rAF so the browser paints the hidden state first
+      let raf2 = 0
+      const raf1 = requestAnimationFrame(() => {
+        raf2 = requestAnimationFrame(() => setVisible(true))
+      })
+      return () => {
+        cancelAnimationFrame(raf1)
+        cancelAnimationFrame(raf2)
+      }
+    }
+
+    const node = ref.current
+    if (!node) return undefined
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -30,7 +38,6 @@ export default function useReveal(threshold = 0.15, { immediate = false } = {}) 
 
     observer.observe(node)
 
-    // Catch already-in-view elements on first paint
     const rect = node.getBoundingClientRect()
     if (rect.top < window.innerHeight * 0.92 && rect.bottom > 0) {
       setVisible(true)

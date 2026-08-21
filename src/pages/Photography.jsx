@@ -1,6 +1,7 @@
 import { useMemo, useEffect, useRef } from 'react'
 import Layout from '../components/Layout'
 import PhotoStudies from '../components/PhotoStudies'
+import Reveal from '../components/Reveal'
 import SeoHead from '../components/SeoHead'
 import {
   PhotoSeoCatalog,
@@ -46,12 +47,26 @@ export default function Photography() {
 
       <header ref={heroRef} className="photo-hero page-shell">
         <div className="photo-hero__sticky">
-          <p className="photo-hero__kicker">{pageKicker('/photography')}</p>
-          <h1 className="photo-hero__title">
+          <Reveal as="p" className="photo-hero__kicker" immediate delay={0}>
+            {pageKicker('/photography')}
+          </Reveal>
+          <Reveal
+            as="h1"
+            className="photo-hero__title"
+            immediate
+            delay={80}
+          >
             Portraiture
             <span className="text-[var(--accent)]">.</span>
-          </h1>
-          <p className="photo-hero__lede">{PHOTO_LEDE}</p>
+          </Reveal>
+          <Reveal
+            as="p"
+            className="photo-hero__lede"
+            immediate
+            delay={160}
+          >
+            {PHOTO_LEDE}
+          </Reveal>
         </div>
       </header>
 

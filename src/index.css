@@ -134,7 +134,103 @@ img {
   animation-delay: 0.08s;
 }
 
-/* Scroll reveals â€” interior pages */
+/* —— First-look reveals (site-wide) —— */
+.look {
+  opacity: 0;
+  transition:
+    opacity 0.9s var(--ease-spring) var(--look-delay, 0ms),
+    transform 0.9s var(--ease-spring) var(--look-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.look--up {
+  transform: translate3d(0, 28px, 0);
+}
+
+.look--right {
+  transform: translate3d(24px, 0, 0);
+}
+
+.look--left {
+  transform: translate3d(-24px, 0, 0);
+}
+
+.look--scale {
+  transform: scale(0.97) translate3d(0, 18px, 0);
+}
+
+/* Display titles — longer, clearer rise */
+.look--title {
+  transform: translate3d(0, 40px, 0);
+  transition-duration: 1.15s, 1.15s;
+}
+
+.look.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Gallery thumbs — fade up as they enter */
+.photo-studies__piece.look {
+  opacity: 0;
+  transform: translate3d(0, 36px, 0);
+  transition:
+    opacity 0.85s var(--ease-spring) var(--look-delay, 0ms),
+    transform 0.85s var(--ease-spring) var(--look-delay, 0ms);
+}
+
+.photo-studies__piece.look.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Film wall — smooth enter */
+.poster-wall.is-booting .poster-wall__stage {
+  opacity: 0;
+  transform: scale(1.035);
+  filter: blur(6px);
+}
+
+.poster-wall.is-booting .poster-wall__hud-top,
+.poster-wall.is-booting .poster-wall__rails,
+.poster-wall.is-booting .poster-wall__progress,
+.poster-wall.is-booting .poster-wall__side-nav,
+.poster-wall.is-booting .poster-wall__enter-slot {
+  opacity: 0;
+}
+
+.poster-wall.is-ready .poster-wall__stage {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  transition:
+    opacity 1.05s var(--ease-spring),
+    transform 1.15s var(--ease-spring),
+    filter 1.05s var(--ease-spring);
+}
+
+.poster-wall.is-ready .poster-wall__hud-top {
+  opacity: 1;
+  transition: opacity 0.85s var(--ease-spring) 0.12s;
+}
+
+.poster-wall.is-ready .poster-wall__rails {
+  opacity: 1;
+  transition: opacity 0.9s var(--ease-spring) 0.22s;
+}
+
+.poster-wall.is-ready .poster-wall__progress {
+  opacity: 1;
+  transition: opacity 0.8s var(--ease-spring) 0.35s;
+}
+
+.poster-wall.is-ready .poster-wall__side-nav,
+.poster-wall.is-ready .poster-wall__enter-slot {
+  opacity: 1;
+  transition: opacity 0.8s var(--ease-spring) 0.4s;
+}
+
+/* Scroll reveals — interior pages (legacy) */
 .scroll-up,
 .scroll-right,
 .scroll-left,
@@ -967,7 +1063,7 @@ html.is-gallery-focus header {
   min-height: 0;
   margin-top: auto;
   padding-block: 0;
-  animation: fame-in 520ms var(--ease-spring) both;
+  animation: fame-in 480ms ease both;
 }
 
 .poster-wall__rail {
@@ -1035,11 +1131,9 @@ html.is-gallery-focus header {
 @keyframes fame-in {
   from {
     opacity: 0;
-    transform: translateY(10px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
@@ -1726,6 +1820,8 @@ html.is-gallery-focus header {
 
   .animate-reveal-up,
   .animate-reveal-right,
+  .look,
+  .photo-studies__piece.look,
   .scroll-up,
   .scroll-right,
   .scroll-left,
@@ -1733,6 +1829,18 @@ html.is-gallery-focus header {
   .page-fade {
     opacity: 1 !important;
     transform: none !important;
+    filter: none !important;
+  }
+
+  .poster-wall.is-booting .poster-wall__stage,
+  .poster-wall.is-booting .poster-wall__hud-top,
+  .poster-wall.is-booting .poster-wall__rails,
+  .poster-wall.is-booting .poster-wall__progress,
+  .poster-wall.is-booting .poster-wall__side-nav,
+  .poster-wall.is-booting .poster-wall__enter-slot {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
   }
 
   .flow-panel__img,

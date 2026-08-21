@@ -1176,6 +1176,7 @@ export default function PosterWall() {
   const [canvasKey, setCanvasKey] = useState(0)
   const [webglOk, setWebglOk] = useState(true)
   const [pageScrollable, setPageScrollable] = useState(false)
+  const [introReady, setIntroReady] = useState(false)
   // idle | zooming-in | slider | zooming-out
   const [roomPhase, setRoomPhase] = useState('idle')
   const roomPhaseRef = useRef(roomPhase)
@@ -1221,6 +1222,16 @@ export default function PosterWall() {
     else root.classList.remove('is-gallery-focus')
     return () => root.classList.remove('is-gallery-focus')
   }, [roomBusy])
+
+  // Smooth first open — stage + HUD ease in
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setIntroReady(true)
+      return undefined
+    }
+    const id = window.setTimeout(() => setIntroReady(true), 40)
+    return () => window.clearTimeout(id)
+  }, [])
 
   useEffect(() => {
     function measure() {
@@ -1531,7 +1542,7 @@ export default function PosterWall() {
   return (
     <section
       ref={sectionRef}
-      className={`poster-wall${spotlightOn ? ' is-spotlight' : ''}${roomBusy ? ' is-room-busy' : ''}${roomZooming ? ' is-room-zooming' : ''}${roomOpen ? ' is-room-open' : ''}`}
+      className={`poster-wall${spotlightOn ? ' is-spotlight' : ''}${roomBusy ? ' is-room-busy' : ''}${roomZooming ? ' is-room-zooming' : ''}${roomOpen ? ' is-room-open' : ''}${introReady ? ' is-ready' : ' is-booting'}`}
       aria-label="Interactive 3D film gallery"
     >
       {/* HUD first so the stage (later sibling) paints above film copy while opening */}

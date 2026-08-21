@@ -17,6 +17,7 @@ function prefersReducedMotion() {
 export default function PhotoStudies({ items }) {
   const [active, setActive] = useState(null)
   const [closing, setClosing] = useState(false)
+  const [revealed, setRevealed] = useState(() => new Set())
   const pieceRefs = useRef([])
   const overlayImgRef = useRef(null)
   const closeTimerRef = useRef(0)
@@ -24,6 +25,15 @@ export default function PhotoStudies({ items }) {
   const open = active !== null && !closing
   const visible = active !== null
   const current = visible ? items[active] : null
+
+  const markRevealed = useCallback((index) => {
+    setRevealed((prev) => {
+      if (prev.has(index)) return prev
+      const next = new Set(prev)
+      next.add(index)
+      return next
+    })
+  }, [])
 
   const goTo = useCallback(
     (i) => {
@@ -233,6 +243,43 @@ export default function PhotoStudies({ items }) {
     return () => window.clearTimeout(closeTimerRef.current)
   }, [])
 
+  // First-look: fade pieces up as they enter the viewport
+  useEffect(() => {
+    const nodes = pieceRefs.current
+      .map((el, i) => (el ? { el, i } : null))
+      .filter(Boolean)
+    if (!nodes.length) return undefined
+
+    if (prefersReducedMotion()) {
+      setRevealed(new Set(nodes.map(({ i }) => i)))
+      return undefined
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return
+          const index = Number(entry.target.getAttribute('data-study-index'))
+          if (Number.isFinite(index)) markRevealed(index)
+          observer.unobserve(entry.target)
+        })
+      },
+      { threshold: 0.08, rootMargin: '0px 0px -8% 0px' }
+    )
+
+    nodes.forEach(({ el, i }) => {
+      el.setAttribute('data-study-index', String(i))
+      observer.observe(el)
+      const rect = el.getBoundingClientRect()
+      if (rect.top < window.innerHeight * 0.92 && rect.bottom > 0) {
+        markRevealed(i)
+        observer.unobserve(el)
+      }
+    })
+
+    return () => observer.disconnect()
+  }, [items, markRevealed])
+
   useEffect(() => {
     if (!open) return undefined
 
@@ -365,9 +412,13 @@ export default function PhotoStudies({ items }) {
               role="listitem"
               className={cx(
                 'photo-studies__piece',
+                'look',
                 `photo-studies__piece--${item.span || 'square'}`,
+                revealed.has(i) && 'is-in',
                 isOrigin && 'is-origin'
               )}
+              style={{ '--look-delay': `${(i % 5) * 70}ms` }}
+              data-study-index={i}
               onClick={() => goTo(i)}
               aria-label={`Open ${item.title}`}
             >
