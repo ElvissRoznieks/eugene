@@ -73,6 +73,7 @@ function filmGallery(folder, title) {
 export const FILMS = [
   {
     title: 'The Nephew',
+    titleLines: ['The', 'Nephew'],
     year: '1998',
     index: '01',
     imdb: 'https://pro.imdb.com/title/tt0119772/?ref_=nmovr_t_1',
@@ -89,6 +90,7 @@ export const FILMS = [
   },
   {
     title: 'Missing Brendan',
+    titleLines: ['Missing', 'Brendan'],
     year: '2003',
     index: '02',
     imdb: 'https://pro.imdb.com/title/tt0311530/?ref_=nmovr_i_2',
@@ -105,6 +107,7 @@ export const FILMS = [
   },
   {
     title: 'The Girl Who Stayed',
+    titleLines: ['The Girl', 'Who Stayed'],
     year: 'In Development',
     index: '03',
     imdb: null,

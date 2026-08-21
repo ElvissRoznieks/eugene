@@ -271,8 +271,8 @@ function useWallVideoTexture(src, enabled) {
   return { map, ready }
 }
 
-const FRAME_DEPTH = 0.055
-const FRAME_LIP = 0.055
+const FRAME_DEPTH = 0.04
+const FRAME_LIP = 0.028
 const FRAME_MAT = {
   color: '#1c1c1c',
   roughness: 0.58,
@@ -304,10 +304,10 @@ function createBevelFrameGeometry(innerW, innerH) {
   const geo = new THREE.ExtrudeGeometry(shape, {
     depth: FRAME_DEPTH,
     bevelEnabled: true,
-    bevelThickness: 0.012,
-    bevelSize: 0.01,
+    bevelThickness: 0.008,
+    bevelSize: 0.006,
     bevelOffset: 0,
-    bevelSegments: 3,
+    bevelSegments: 2,
     curveSegments: 1,
   })
   geo.translate(0, 0, -FRAME_DEPTH / 2)
@@ -662,9 +662,9 @@ function FramedPoster({
         />
       </mesh>
 
-      {/* Inner mat */}
+      {/* Inner mat — thin so the print isn’t boxed in */}
       <mesh position={[0, 0, 0.012]}>
-        <planeGeometry args={[POSTER_W + 0.012, POSTER_H + 0.012]} />
+        <planeGeometry args={[POSTER_W + 0.004, POSTER_H + 0.004]} />
         <meshStandardMaterial color="#0a0a0a" roughness={0.95} metalness={0} />
       </mesh>
 
@@ -1629,11 +1629,18 @@ export default function PosterWall() {
               )}
             </div>
 
-            <p className="poster-wall__meta">
+            {/* <p className="poster-wall__meta">
               Inducted {active.year} · Entry {active.index}
-            </p>
-            <h2 className="poster-wall__title">{active.title}</h2>
-            <p className="poster-wall__credits">{active.credits}</p>
+            </p> */}
+            <h2 className="poster-wall__title">
+              {(active.titleLines || [active.title]).map((line, i, lines) => (
+                <span key={line}>
+                  {line}
+                  {i < lines.length - 1 ? <br /> : null}
+                </span>
+              ))}
+            </h2>
+            {/* <p className="poster-wall__credits">{active.credits}</p> */}
 
             {active.imdb ? (
               <a
