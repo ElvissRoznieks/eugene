@@ -91,41 +91,27 @@ body {
 
 .hero-name {
   margin: 0;
-  font-family: var(--film-display);
-  font-size: clamp(4.5rem, 18vw, 12.5rem);
-  font-weight: 400;
-  line-height: 0.86;
-  text-transform: uppercase;
-  color: #fff;
+  max-width: min(100%, 52rem);
 }
 
-.hero-name__word {
-  letter-spacing: 0.08em;
-}
-
-.hero-name__dot {
-  margin-left: 0.02em;
-  letter-spacing: 0;
-  color: var(--accent);
+.hero-name__signature {
+  display: block;
+  width: 100%;
+  height: auto;
+  mix-blend-mode: screen;
+  user-select: none;
+  pointer-events: none;
 }
 
 @media (min-width: 810px) and (max-width: 1199.98px) {
   .hero-name {
-    font-size: clamp(6.5rem, 14vw, 9rem);
-  }
-
-  .hero-name__word {
-    letter-spacing: 0.07em;
+    max-width: min(100%, 44rem);
   }
 }
 
 @media (min-width: 1200px) {
   .hero-name {
-    font-size: 200px;
-  }
-
-  .hero-name__word {
-    letter-spacing: 0.09em;
+    max-width: 52rem;
   }
 }
 

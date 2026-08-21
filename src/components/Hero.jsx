@@ -1,8 +1,7 @@
 import { Link } from 'react-router-dom'
 import { IMDB_URL, SITE_NAME } from '../data/site'
 import useReveal from '../hooks/useReveal'
-
-const FIRST_NAME = SITE_NAME.split(' ')[0]
+import signature from '../assets/brand/eugene-brady-signature-white.png'
 
 export default function Hero() {
   const nameReveal = useReveal(0.35, { immediate: true })
@@ -18,8 +17,15 @@ export default function Hero() {
                 nameReveal.visible ? 'is-visible' : ''
               }`}
             >
-              <span className="hero-name__word">{FIRST_NAME}</span>
-              <span className="hero-name__dot">.</span>
+              <span className="sr-only">{SITE_NAME}</span>
+              <img
+                src={signature}
+                alt=""
+                className="hero-name__signature"
+                width={992}
+                height={280}
+                decoding="async"
+              />
             </h1>
           </div>
 

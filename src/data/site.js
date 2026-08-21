@@ -1,4 +1,4 @@
-import heroSea from '../assets/hero-sea.png'
+import heroHome from '../assets/home.webp'
 import missingBrendanPoster from '../assets/posters/missing-brendan.png'
 import theNephewPoster from '../assets/posters/the-nephew.png'
 import theGirlWhoStayedPoster from '../assets/posters/the-girl-who-stayed.png'
@@ -23,7 +23,7 @@ export const SOCIAL_LINKS = [
   { id: 'imdb', label: 'IMDb', href: IMDB_PRO_URL },
 ]
 
-export const CONTACT_EMAIL = 'hello@eugenebrady.com'
+export const CONTACT_EMAIL = 'info@eugenebrady.com'
 /** Update with the real number when available */
 export const CONTACT_PHONE = '+353 87 000 0000'
 export const CONTACT_PHONE_HREF = `tel:${CONTACT_PHONE.replace(/\s+/g, '')}`
@@ -39,8 +39,8 @@ export const SITE_LOCATION_LINE = 'Based · Ireland · International'
 export const SITE_OG_IMAGE = `${SITE_URL}/og-image.png`
 
 /** Full-bleed home still */
-export const HERO_IMAGE = heroSea
-export const HERO_IMAGE_ALT = 'Ocean waves under open sky'
+export const HERO_IMAGE = heroHome
+export const HERO_IMAGE_ALT = 'Eugene Brady — cinematic opening still'
 
 export const DEFAULT_ATMOSPHERE = '/audio/default-atmosphere.m4a'
 
@@ -72,26 +72,9 @@ function filmGallery(folder, title) {
 
 export const FILMS = [
   {
-    title: 'The Girl Who Stayed',
-    year: 'In Development',
-    index: '01',
-    imdb: null,
-    synopsis:
-      'A grieving mother, a broken writer, and the ghost of the daughter he never knew must confront the truth that binds them before she can finally move on.',
-    credits: 'Currently in Development',
-    inDevelopment: true,
-    rating: null,
-    ratingOutOf: 10,
-    audio: null,
-    poster: theGirlWhoStayedPoster,
-    imageAlt:
-      'The Girl Who Stayed concept art — coastal path under storm light',
-    gallery: filmGallery('The Girl Who Stayed', 'The Girl Who Stayed'),
-  },
-  {
     title: 'The Nephew',
     year: '1998',
-    index: '02',
+    index: '01',
     imdb: 'https://pro.imdb.com/title/tt0119772/?ref_=nmovr_t_1',
     synopsis:
       'A young Black American arrives on a remote Irish island to honour his mother’s dying wish, forcing a family—and a community built on buried secrets—to confront the past.',
@@ -107,7 +90,7 @@ export const FILMS = [
   {
     title: 'Missing Brendan',
     year: '2003',
-    index: '03',
+    index: '02',
     imdb: 'https://pro.imdb.com/title/tt0311530/?ref_=nmovr_i_2',
     synopsis:
       'Thirty years after the Vietnam War, an aging father returns to Vietnam with his reluctant family to uncover the fate of the son he never stopped searching for—only to discover that some truths are harder to live with than never knowing.',
@@ -119,6 +102,23 @@ export const FILMS = [
     imageAlt:
       'Missing Brendan movie poster — Edward Asner, Adam Brody, Illeana Douglas',
     gallery: filmGallery('Missing Brendan', 'Missing Brendan'),
+  },
+  {
+    title: 'The Girl Who Stayed',
+    year: 'In Development',
+    index: '03',
+    imdb: null,
+    synopsis:
+      'A grieving mother, a broken writer, and the ghost of the daughter he never knew must confront the truth that binds them before she can finally move on.',
+    credits: 'Currently in Development',
+    inDevelopment: true,
+    rating: null,
+    ratingOutOf: 10,
+    audio: null,
+    poster: theGirlWhoStayedPoster,
+    imageAlt:
+      'The Girl Who Stayed concept art — coastal path under storm light',
+    gallery: filmGallery('The Girl Who Stayed', 'The Girl Who Stayed'),
   },
 ]
 

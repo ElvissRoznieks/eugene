@@ -1,6 +1,9 @@
 import { useEffect, useRef } from 'react'
 import { HERO_IMAGE, HERO_IMAGE_ALT } from '../data/site'
 
+// Water effect disabled — set to `true` to restore mouse-following ripples
+const HERO_WATER_ENABLED = false
+
 const VERT = `
 attribute vec2 a_pos;
 varying vec2 v_uv;
@@ -73,6 +76,8 @@ export default function HeroBackground() {
   const wrapRef = useRef(null)
 
   useEffect(() => {
+    if (!HERO_WATER_ENABLED) return undefined
+
     const canvas = canvasRef.current
     const img = imgRef.current
     if (!canvas || !img) return undefined
@@ -208,7 +213,10 @@ export default function HeroBackground() {
         decoding="async"
         fetchPriority="high"
       />
-      <canvas ref={canvasRef} className="hero-water__canvas" />
+      {/* Water canvas kept — toggle HERO_WATER_ENABLED above to restore */}
+      {HERO_WATER_ENABLED ? (
+        <canvas ref={canvasRef} className="hero-water__canvas" />
+      ) : null}
       <div className="absolute inset-0 z-[2] bg-black/15" />
     </div>
   )

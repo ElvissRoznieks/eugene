@@ -208,17 +208,6 @@ export default function Navbar({ variant = 'hero' }) {
           ))}
         </nav>
 
-        <a
-          href={`mailto:${CONTACT_EMAIL}`}
-          className={cx(
-            'hidden text-sm font-medium uppercase leading-none tracking-[0.04em] transition-opacity hover:opacity-70 not-mobile:inline-flex',
-            ink
-          )}
-          style={{ fontFamily: 'var(--film-display)', fontWeight: 400 }}
-        >
-          {CONTACT_EMAIL}
-        </a>
-
         <button
           type="button"
           className={cx(
