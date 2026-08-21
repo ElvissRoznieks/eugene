@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Source / delivery dumps (never commit originals)
+eugene.zip
+assets/Elvis - Website Images (Pages 1,2,3)/
+assets/Elvis - Website Images (Pages 4,5)/
