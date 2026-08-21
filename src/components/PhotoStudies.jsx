@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { ChevronLeft, ChevronRight, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Download, X } from 'lucide-react'
 import {
   useBodyScrollLock,
   useHorizontalSwipe,
@@ -52,8 +52,24 @@ export default function PhotoStudies({ items }) {
     const img = overlayImgRef.current
     if (img) {
       img.style.cssText = ''
+      img.style.objectFit = ''
     }
   }, [])
+
+  // Keep lightbox image letterboxed to the viewport (never cover/crop)
+  useEffect(() => {
+    if (!open) return
+    const img = overlayImgRef.current
+    if (!img) return
+    img.style.width = ''
+    img.style.height = ''
+    img.style.maxWidth = ''
+    img.style.maxHeight = ''
+    img.style.objectFit = 'contain'
+    img.style.position = ''
+    img.style.left = ''
+    img.style.top = ''
+  }, [open, active])
 
   const close = useCallback(() => {
     if (active === null || closing) return
@@ -131,6 +147,36 @@ export default function PhotoStudies({ items }) {
     })
   }, [active, closing, finishClose])
 
+  const downloadCurrent = useCallback(async () => {
+    if (active === null || closing) return
+    const item = items[active]
+    if (!item?.image) return
+
+    const base = (item.title || `study-${item.id || active + 1}`)
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '')
+    const extMatch = String(item.image).match(/\.(webp|jpe?g|png|gif)(?:\?|$)/i)
+    const ext = (extMatch?.[1] || 'webp').toLowerCase()
+    const filename = `${base}.${ext}`
+
+    try {
+      const res = await fetch(item.image)
+      const blob = await res.blob()
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = filename
+      a.rel = 'noopener'
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      URL.revokeObjectURL(url)
+    } catch {
+      window.open(item.image, '_blank', 'noopener,noreferrer')
+    }
+  }, [active, closing, items])
+
   const swipe = useHorizontalSwipe(step)
   useBodyScrollLock(open)
 
@@ -184,15 +230,27 @@ export default function PhotoStudies({ items }) {
           onClick={closing ? undefined : close}
         />
 
-        <button
-          type="button"
-          className="photo-studies__close"
-          onClick={close}
-          aria-label="Close study"
-          disabled={closing}
-        >
-          <X size={18} strokeWidth={1.75} />
-        </button>
+        <div className="photo-studies__tools">
+          <button
+            type="button"
+            className="photo-studies__tool"
+            onClick={downloadCurrent}
+            aria-label="Download image"
+            title="Download"
+            disabled={closing}
+          >
+            <Download size={16} strokeWidth={1.75} />
+          </button>
+          <button
+            type="button"
+            className="photo-studies__close"
+            onClick={close}
+            aria-label="Close study"
+            disabled={closing}
+          >
+            <X size={18} strokeWidth={1.75} />
+          </button>
+        </div>
 
         <div className="photo-studies__stage">
           <img
