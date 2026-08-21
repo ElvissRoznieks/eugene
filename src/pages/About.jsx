@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import Layout from '../components/Layout'
 import Reveal from '../components/Reveal'
 import SeoHead, { personJsonLd } from '../components/SeoHead'
+import useWaterRipple from '../hooks/useWaterRipple'
 import {
   ABOUT_CHAPTERS,
   ABOUT_HEADSHOT,
@@ -21,7 +22,11 @@ const PULL_LINE =
 
 export default function About() {
   const [filmIndex, setFilmIndex] = useState(0)
+  const [portraitHover, setPortraitHover] = useState(false)
   const sectionRefs = useRef([])
+  const portraitWrapRef = useRef(null)
+  const portraitImgRef = useRef(null)
+  const portraitCanvasRef = useRef(null)
   const jsonLd = useMemo(
     () =>
       personJsonLd({
@@ -30,6 +35,15 @@ export default function About() {
       }),
     []
   )
+
+  useWaterRipple({
+    enabled: portraitHover,
+    canvasRef: portraitCanvasRef,
+    imgRef: portraitImgRef,
+    wrapRef: portraitWrapRef,
+    intensity: 0.5,
+    objectPosition: 'center 18%',
+  })
 
   const activeFilm = FILMS[filmIndex] || FILMS[0]
 
@@ -69,8 +83,14 @@ export default function About() {
             immediate
             delay={40}
           >
-            <div className="about-essay__frame">
+            <div
+              ref={portraitWrapRef}
+              className="about-essay__frame"
+              onPointerEnter={() => setPortraitHover(true)}
+              onPointerLeave={() => setPortraitHover(false)}
+            >
               <img
+                ref={portraitImgRef}
                 src={ABOUT_HEADSHOT}
                 alt={ABOUT_HEADSHOT_ALT}
                 className="about-essay__img"
@@ -78,6 +98,13 @@ export default function About() {
                 height={1500}
                 decoding="async"
               />
+              {portraitHover ? (
+                <canvas
+                  ref={portraitCanvasRef}
+                  className="about-essay__water"
+                  aria-hidden="true"
+                />
+              ) : null}
               <div className="about-essay__scrim" aria-hidden="true" />
               <div className="about-essay__place">
                 <p>{SITE_LOCATION_LINE}</p>

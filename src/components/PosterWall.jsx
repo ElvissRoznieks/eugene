@@ -16,7 +16,7 @@ import {
   X,
 } from 'lucide-react'
 import * as THREE from 'three'
-import { FILMS, DEFAULT_ATMOSPHERE, pageKicker } from '../data/site'
+import { FILMS, DEFAULT_ATMOSPHERE } from '../data/site'
 import usePosterAudio from '../hooks/usePosterAudio'
 import { useHorizontalSwipe } from '../hooks/usePointerSwipe'
 import { cx } from '../utils/dom'
@@ -1547,13 +1547,6 @@ export default function PosterWall() {
     >
       {/* HUD first so the stage (later sibling) paints above film copy while opening */}
       <div className="poster-wall__hud page-shell">
-        <div className="poster-wall__hud-top">
-          <p className="poster-wall__kicker">
-            {pageKicker('/film')} · Wall of Fame
-          </p>
-          <p className="poster-wall__hint">DRAG</p>
-        </div>
-
         {!roomBusy && pageScrollable && (
           <div className="poster-wall__side-nav" aria-label="Film navigation">
             <button

@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { ChevronLeft, ChevronRight, Download, X } from 'lucide-react'
 import {
   useBodyScrollLock,
   useHorizontalSwipe,
 } from '../hooks/usePointerSwipe'
+import useWaterRipple from '../hooks/useWaterRipple'
 import { cx } from '../utils/dom'
 
 const CLOSE_MS = 520
@@ -14,6 +15,95 @@ function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
+function PhotoStudyPiece({
+  item,
+  index,
+  revealed,
+  isOrigin,
+  onOpen,
+  setPieceRef,
+}) {
+  const wrapRef = useRef(null)
+  const imgRef = useRef(null)
+  const canvasRef = useRef(null)
+  const [hovered, setHovered] = useState(false)
+
+  useWaterRipple({
+    enabled: hovered && !isOrigin,
+    canvasRef,
+    imgRef,
+    wrapRef,
+  })
+
+  const alt =
+    item.imageAlt || `${item.title} — ${item.category} photograph`
+
+  return (
+    <button
+      ref={(el) => {
+        wrapRef.current = el
+        setPieceRef(index, el)
+      }}
+      type="button"
+      role="listitem"
+      className={cx(
+        'photo-studies__piece',
+        'look',
+        `photo-studies__piece--${item.span || 'square'}`,
+        revealed && 'is-in',
+        isOrigin && 'is-origin',
+        hovered && 'is-water'
+      )}
+      style={{ '--look-delay': `${(index % 5) * 70}ms` }}
+      data-study-index={index}
+      onClick={() => onOpen(index)}
+      onPointerEnter={() => setHovered(true)}
+      onPointerLeave={() => setHovered(false)}
+      aria-label={`Open ${item.title}`}
+    >
+      <img
+        ref={imgRef}
+        src={item.image}
+        alt={alt}
+        className="photo-studies__img"
+        loading="lazy"
+        draggable={false}
+      />
+      {hovered && !isOrigin ? (
+        <canvas
+          ref={canvasRef}
+          className="photo-studies__water"
+          aria-hidden="true"
+        />
+      ) : null}
+    </button>
+  )
+}
+
+/** Column count for LTR masonry (matches Page 4 light table reading order). */
+function useGalleryColumns() {
+  const [cols, setCols] = useState(3)
+
+  useEffect(() => {
+    const mobile = window.matchMedia('(max-width: 809.98px)')
+    const tablet = window.matchMedia('(max-width: 1199.98px)')
+    const update = () => {
+      if (mobile.matches) setCols(1)
+      else if (tablet.matches) setCols(2)
+      else setCols(3)
+    }
+    update()
+    mobile.addEventListener('change', update)
+    tablet.addEventListener('change', update)
+    return () => {
+      mobile.removeEventListener('change', update)
+      tablet.removeEventListener('change', update)
+    }
+  }, [])
+
+  return cols
+}
+
 export default function PhotoStudies({ items }) {
   const [active, setActive] = useState(null)
   const [closing, setClosing] = useState(false)
@@ -21,6 +111,15 @@ export default function PhotoStudies({ items }) {
   const pieceRefs = useRef([])
   const overlayImgRef = useRef(null)
   const closeTimerRef = useRef(0)
+  const colCount = useGalleryColumns()
+
+  const columns = useMemo(() => {
+    const cols = Array.from({ length: colCount }, () => [])
+    items.forEach((item, i) => {
+      cols[i % colCount].push({ item, i })
+    })
+    return cols
+  }, [items, colCount])
 
   const open = active !== null && !closing
   const visible = active !== null
@@ -195,50 +294,6 @@ export default function PhotoStudies({ items }) {
     return () => document.documentElement.classList.remove('is-gallery-focus')
   }, [visible])
 
-  // Column-speed parallax — images drift at different rates while the wall scrolls
-  useEffect(() => {
-    if (visible) return undefined
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return undefined
-    }
-
-    let raf = 0
-    const speeds = [0.14, -0.06, 0.2]
-
-    const update = () => {
-      const vh = window.innerHeight || 1
-      pieceRefs.current.forEach((el, i) => {
-        if (!el) return
-        const img = el.querySelector('.photo-studies__img')
-        if (!img) return
-        const rect = el.getBoundingClientRect()
-        if (rect.bottom < -80 || rect.top > vh + 80) return
-        const progress = (rect.top + rect.height * 0.5 - vh * 0.5) / vh
-        const speed = speeds[i % speeds.length]
-        const y = progress * speed * -90
-        img.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0) scale(1.12)`
-      })
-    }
-
-    const onScroll = () => {
-      cancelAnimationFrame(raf)
-      raf = requestAnimationFrame(update)
-    }
-
-    update()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll, { passive: true })
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-      cancelAnimationFrame(raf)
-      pieceRefs.current.forEach((el) => {
-        const img = el?.querySelector?.('.photo-studies__img')
-        if (img) img.style.transform = ''
-      })
-    }
-  }, [items, visible])
-
   useEffect(() => {
     return () => window.clearTimeout(closeTimerRef.current)
   }, [])
@@ -278,7 +333,7 @@ export default function PhotoStudies({ items }) {
     })
 
     return () => observer.disconnect()
-  }, [items, markRevealed])
+  }, [items, markRevealed, colCount])
 
   useEffect(() => {
     if (!open) return undefined
@@ -313,13 +368,16 @@ export default function PhotoStudies({ items }) {
         role="dialog"
         aria-modal="true"
         aria-label={current.title}
+        onClick={(e) => {
+          if (closing) return
+          if (e.target.closest('.photo-studies__overlay-img')) return
+          if (e.target.closest('.photo-studies__tools')) return
+          if (e.target.closest('.photo-studies__nav')) return
+          close()
+        }}
         {...(closing ? {} : swipe)}
       >
-        <div
-          className="photo-studies__backdrop"
-          aria-hidden="true"
-          onClick={closing ? undefined : close}
-        />
+        <div className="photo-studies__backdrop" aria-hidden="true" />
 
         <div className="photo-studies__tools">
           <button
@@ -354,6 +412,7 @@ export default function PhotoStudies({ items }) {
             }
             className="photo-studies__overlay-img"
             draggable={false}
+            onClick={(e) => e.stopPropagation()}
           />
         </div>
 
@@ -398,44 +457,23 @@ export default function PhotoStudies({ items }) {
   return (
     <div className="photo-studies">
       <div className="photo-studies__wall" role="list">
-        {items.map((item, i) => {
-          const alt =
-            item.imageAlt || `${item.title} — ${item.category} photograph`
-          const isOrigin = active === i
-          return (
-            <button
-              key={item.id}
-              ref={(el) => {
-                pieceRefs.current[i] = el
-              }}
-              type="button"
-              role="listitem"
-              className={cx(
-                'photo-studies__piece',
-                'look',
-                `photo-studies__piece--${item.span || 'square'}`,
-                revealed.has(i) && 'is-in',
-                isOrigin && 'is-origin'
-              )}
-              style={{ '--look-delay': `${(i % 5) * 70}ms` }}
-              data-study-index={i}
-              onClick={() => goTo(i)}
-              aria-label={`Open ${item.title}`}
-            >
-              <img
-                src={item.image}
-                alt={alt}
-                className="photo-studies__img"
-                loading="lazy"
-                draggable={false}
+        {columns.map((col, ci) => (
+          <div key={ci} className="photo-studies__column">
+            {col.map(({ item, i }) => (
+              <PhotoStudyPiece
+                key={item.id}
+                item={item}
+                index={i}
+                revealed={revealed.has(i)}
+                isOrigin={active === i}
+                onOpen={goTo}
+                setPieceRef={(index, el) => {
+                  pieceRefs.current[index] = el
+                }}
               />
-              <span className="photo-studies__meta">
-                <span className="photo-studies__id">{item.id}</span>
-                <span className="photo-studies__title">{item.title}</span>
-              </span>
-            </button>
-          )
-        })}
+            ))}
+          </div>
+        ))}
       </div>
 
       {overlay}

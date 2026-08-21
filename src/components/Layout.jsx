@@ -83,7 +83,7 @@ export default function Layout({ children, variant = 'light' }) {
         <div className="site-dock-spacer" aria-hidden="true" />
       ) : null}
 
-      <ImdbFab />
+      {variant === 'hero' ? null : <ImdbFab />}
     </div>
   )
 }

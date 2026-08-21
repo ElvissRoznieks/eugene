@@ -122,21 +122,27 @@ export const FILMS = [
   },
 ]
 
-/** Photography selects: assets/gallery/{n}.webp */
+/** Photography selects: assets/gallery/{n}.webp — order matches Page 4 light table */
 const photoModules = import.meta.glob('../../assets/gallery/*.webp', {
   eager: true,
   import: 'default',
 })
 
+const PHOTO_ORDER = [
+  13, 10, 6, 3, 5, 17, 11, 7, 18, 16, 9, 1, 12, 14, 8, 15, 2, 4,
+]
+
 const PHOTO_SPANS = ['tall', 'wide', 'square', 'tall', 'wide', 'square']
 
-export const GALLERY = Object.entries(photoModules)
-  .sort(([a], [b]) => {
-    const na = Number((a.match(/(\d+)\.webp$/i) || [])[1] || 0)
-    const nb = Number((b.match(/(\d+)\.webp$/i) || [])[1] || 0)
-    return na - nb
-  })
-  .map(([, image], i) => {
+const photoByNumber = Object.fromEntries(
+  Object.entries(photoModules).map(([path, image]) => {
+    const n = Number((path.match(/(\d+)\.webp$/i) || [])[1] || 0)
+    return [n, image]
+  }),
+)
+
+export const GALLERY = PHOTO_ORDER.filter((n) => photoByNumber[n]).map(
+  (fileN, i) => {
     const n = String(i + 1).padStart(2, '0')
     return {
       id: n,
@@ -146,9 +152,10 @@ export const GALLERY = Object.entries(photoModules)
       note: null,
       span: PHOTO_SPANS[i % PHOTO_SPANS.length],
       imageAlt: `Portrait study ${n} by ${SITE_NAME}`,
-      image,
+      image: photoByNumber[fileN],
     }
-  })
+  },
+)
 
 export const ABOUT_HEADSHOT = bradyHeadshot
 export const ABOUT_HEADSHOT_ALT =

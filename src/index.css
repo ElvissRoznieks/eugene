@@ -91,7 +91,7 @@ body {
 
 .hero-name {
   margin: 0;
-  max-width: min(100%, 52rem);
+  max-width: min(100%, 46.8rem);
 }
 
 .hero-name__signature {
@@ -105,13 +105,13 @@ body {
 
 @media (min-width: 810px) and (max-width: 1199.98px) {
   .hero-name {
-    max-width: min(100%, 44rem);
+    max-width: min(100%, 39.6rem);
   }
 }
 
 @media (min-width: 1200px) {
   .hero-name {
-    max-width: 52rem;
+    max-width: 46.8rem;
   }
 }
 
@@ -119,6 +119,34 @@ body {
   .hero-water__canvas {
     display: none !important;
   }
+}
+
+.hero-imdb {
+  display: inline-flex;
+  align-items: center;
+  line-height: 0;
+  border-radius: 0.35rem;
+  text-decoration: none;
+  box-shadow:
+    0 1px 0 rgba(10, 10, 10, 0.08),
+    0 10px 28px rgba(10, 10, 10, 0.22);
+  transition:
+    transform 0.28s var(--ease-spring),
+    box-shadow 0.28s var(--ease-spring);
+}
+
+.hero-imdb:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow:
+    0 1px 0 rgba(10, 10, 10, 0.06),
+    0 14px 32px rgba(10, 10, 10, 0.28);
+}
+
+.hero-imdb__logo {
+  display: block;
+  width: 4.25rem;
+  height: auto;
+  border-radius: 0.28rem;
 }
 
 html {
@@ -246,7 +274,6 @@ img {
   filter: blur(6px);
 }
 
-.poster-wall.is-booting .poster-wall__hud-top,
 .poster-wall.is-booting .poster-wall__rails,
 .poster-wall.is-booting .poster-wall__progress,
 .poster-wall.is-booting .poster-wall__side-nav,
@@ -262,11 +289,6 @@ img {
     opacity 1.05s var(--ease-spring),
     transform 1.15s var(--ease-spring),
     filter 1.05s var(--ease-spring);
-}
-
-.poster-wall.is-ready .poster-wall__hud-top {
-  opacity: 1;
-  transition: opacity 0.85s var(--ease-spring) 0.12s;
 }
 
 .poster-wall.is-ready .poster-wall__rails {
@@ -1209,7 +1231,6 @@ html.is-gallery-focus header {
 }
 
 /* Spotlight mode â€” poster owns the stage; copy falls into background */
-.poster-wall.is-spotlight .poster-wall__hud-top,
 .poster-wall.is-spotlight .poster-wall__rail--west,
 .poster-wall.is-spotlight .poster-wall__rail-label,
 .poster-wall.is-spotlight .poster-wall__synopsis,
@@ -1221,7 +1242,6 @@ html.is-gallery-focus header {
   pointer-events: none;
 }
 
-.poster-wall .poster-wall__hud-top,
 .poster-wall .poster-wall__rail--west,
 .poster-wall .poster-wall__rail-label,
 .poster-wall .poster-wall__synopsis,
@@ -1298,31 +1318,6 @@ html.is-gallery-focus header {
   justify-content: space-between;
   padding-top: 5.5rem;
   padding-bottom: 1.75rem;
-}
-
-.poster-wall__hud-top {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-
-.poster-wall__kicker {
-  margin: 0;
-  font-size: 8px;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(26, 18, 12, 0.72);
-}
-
-.poster-wall__hint {
-  margin: 0;
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  color: rgba(26, 18, 12, 0.62);
 }
 
 /* Bottom copy band â€” landscape frames sit above */
@@ -1670,7 +1665,6 @@ html.is-gallery-focus header {
   transform: none;
 }
 
-.poster-wall.is-room-busy .poster-wall__hud-top,
 .poster-wall.is-room-busy .poster-wall__rails,
 .poster-wall.is-room-busy .poster-wall__progress,
 .poster-wall.is-room-busy .poster-wall__side-nav,
@@ -2131,7 +2125,6 @@ html.is-gallery-focus header {
   }
 
   .poster-wall.is-booting .poster-wall__stage,
-  .poster-wall.is-booting .poster-wall__hud-top,
   .poster-wall.is-booting .poster-wall__rails,
   .poster-wall.is-booting .poster-wall__progress,
   .poster-wall.is-booting .poster-wall__side-nav,
@@ -2230,15 +2223,24 @@ html.is-gallery-focus header {
 }
 
 .photo-studies__wall {
-  column-count: 3;
-  column-gap: clamp(0.75rem, 2vw, 1.35rem);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.75rem, 2vw, 1.35rem);
+  align-items: start;
+}
+
+.photo-studies__column {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 2vw, 1.35rem);
+  min-width: 0;
 }
 
 .photo-studies__piece {
   position: relative;
   display: block;
   width: 100%;
-  margin: 0 0 clamp(0.75rem, 2vw, 1.35rem);
+  margin: 0;
   padding: 0;
   border: none;
   background: #0c0a08;
@@ -2247,9 +2249,6 @@ html.is-gallery-focus header {
   text-align: left;
   color: #f3ece2;
   isolation: isolate;
-  break-inside: avoid;
-  -webkit-column-break-inside: avoid;
-  page-break-inside: avoid;
 }
 
 .photo-studies__piece--tall,
@@ -2263,60 +2262,21 @@ html.is-gallery-focus header {
   height: auto;
   display: block;
   object-fit: cover;
-  will-change: transform;
-  transition:
-    opacity 0.45s var(--ease-spring),
-    filter 0.45s var(--ease-spring);
-  filter: saturate(0.92) brightness(0.92);
 }
 
-.photo-studies__piece:hover .photo-studies__img,
-.photo-studies__piece:focus-visible .photo-studies__img {
-  filter: saturate(1) brightness(1);
-}
-
-.photo-studies__meta {
-  pointer-events: none;
+.photo-studies__water {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-  padding: 2.5rem 0.9rem 0.85rem;
-  background: linear-gradient(
-    to top,
-    rgba(18, 16, 14, 0.78) 0%,
-    rgba(18, 16, 14, 0.2) 55%,
-    transparent 100%
-  );
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
   opacity: 0;
-  transform: translateY(6px);
-  transition:
-    opacity 0.4s var(--ease-spring),
-    transform 0.4s var(--ease-spring);
+  pointer-events: none;
+  transition: opacity 0.35s var(--ease-spring);
 }
 
-.photo-studies__piece:hover .photo-studies__meta,
-.photo-studies__piece:focus-visible .photo-studies__meta {
+.photo-studies__water.is-live {
   opacity: 1;
-  transform: translateY(0);
-}
-
-.photo-studies__id {
-  font-size: 8px;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(243, 236, 226, 0.55);
-}
-
-.photo-studies__title {
-  font-family: var(--film-sans, inherit);
-  font-size: 0.95rem;
-  font-weight: 500;
-  letter-spacing: -0.02em;
 }
 
 .photo-studies__overlay {
@@ -2328,6 +2288,7 @@ html.is-gallery-focus header {
   color: #f3ece2;
   animation: photo-studies-in 420ms var(--ease-spring) both;
   touch-action: pan-y;
+  cursor: zoom-out;
 }
 
 .photo-studies__overlay.is-closing {
@@ -2360,7 +2321,6 @@ html.is-gallery-focus header {
   position: absolute;
   inset: 0;
   z-index: 0;
-  cursor: zoom-out;
 }
 
 .photo-studies__stage {
@@ -2374,7 +2334,6 @@ html.is-gallery-focus header {
   padding: clamp(3.5rem, 8vh, 5rem) clamp(1rem, 4vw, 3rem)
     clamp(6.5rem, 14vh, 8.5rem);
   overflow: hidden;
-  pointer-events: none;
   /* Let max-height % resolve against this box */
   min-height: 0;
   min-width: 0;
@@ -2395,6 +2354,8 @@ html.is-gallery-focus header {
   -webkit-user-drag: none;
   animation: photo-studies-img 560ms var(--ease-spring) both;
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+  cursor: default;
+  pointer-events: auto;
 }
 
 /* While open (not closing), force contain even if inline styles linger */
@@ -2557,16 +2518,11 @@ html.is-gallery-focus header {
   }
 
   .photo-studies__wall {
-    column-count: 1;
+    grid-template-columns: 1fr;
   }
 
   .photo-studies__piece {
-    margin-bottom: 1.15rem;
-  }
-
-  .photo-studies__meta {
-    opacity: 1;
-    transform: none;
+    margin-bottom: 0;
   }
 
   .photo-studies__stage {
@@ -2580,7 +2536,7 @@ html.is-gallery-focus header {
 
 @media (min-width: 810px) and (max-width: 1199.98px) {
   .photo-studies__wall {
-    column-count: 2;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -2676,10 +2632,26 @@ html.is-gallery-focus header {
   object-position: center 18%;
 }
 
+.about-essay__water {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s var(--ease-spring);
+}
+
+.about-essay__water.is-live {
+  opacity: 1;
+}
+
 .about-essay__scrim {
   pointer-events: none;
   position: absolute;
   inset: 0;
+  z-index: 2;
   background: linear-gradient(
     to top,
     rgba(12, 10, 8, 0.78) 0%,
@@ -2934,7 +2906,6 @@ html.is-gallery-focus header {
   justify-content: center;
   padding-top: 3rem;
   padding-bottom: 4rem;
-  max-width: 1100px;
 }
 
 .contact-signal__kicker {
@@ -3173,7 +3144,6 @@ html.is-gallery-focus header {
 
 @media (prefers-reduced-motion: reduce) {
   .photo-studies__img,
-  .photo-studies__meta,
   .photo-studies__overlay,
   .photo-studies__overlay-img,
   .about-essay__role,

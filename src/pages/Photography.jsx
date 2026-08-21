@@ -56,7 +56,7 @@ export default function Photography() {
             immediate
             delay={80}
           >
-            Portraiture
+            Photography
             <span className="text-[var(--accent)]">.</span>
           </Reveal>
           <Reveal

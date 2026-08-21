@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom'
 import { IMDB_URL, SITE_NAME } from '../data/site'
 import useReveal from '../hooks/useReveal'
 import signature from '../assets/brand/eugene-brady-signature-white.png'
+import imdbLogo from '../assets/imdb-logo.png'
 
 export default function Hero() {
   const nameReveal = useReveal(0.35, { immediate: true })
@@ -33,34 +33,45 @@ export default function Hero() {
             className="flex flex-1 flex-col gap-6 pl-[50px] mobile:max-w-[420px] mobile:pl-0 md-tablet:pl-6"
             ref={copyReveal.ref}
           >
-            <p
-              className={`animate-reveal-right text-base font-medium leading-6 tracking-[-0.16px] text-white/90 ${
+            <div
+              className={`animate-reveal-right flex flex-col gap-4 text-base font-medium leading-6 tracking-[-0.16px] text-white/90 ${
                 copyReveal.visible ? 'is-visible' : ''
               }`}
             >
-              Irish director and photographer exploring grief, family, identity
-              and memory through cinematic storytelling and photographic
-              portraiture.
-            </p>
+              <p className="text-xs font-medium uppercase tracking-[0.18em] text-white/70">
+                Director / Photographer
+              </p>
+              <p>
+                Feature films include The Nephew, starring Pierce Brosnan, and
+                Missing Brendan, starring Adam Brody.
+              </p>
+              <p>
+                Exploring grief, family, identity and memory through cinematic
+                storytelling and photographic portraiture.
+              </p>
+            </div>
 
             <div
               className={`animate-reveal-right delay-cta flex flex-wrap gap-3 ${
                 copyReveal.visible ? 'is-visible' : ''
               }`}
             >
-              <Link
-                to="/contact"
-                className="project-btn inline-flex items-center px-6 py-3 text-xs font-medium uppercase tracking-[-0.12px]"
-              >
-                <span>start a project</span>
-              </Link>
               <a
                 href={IMDB_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center border border-white/40 px-6 py-3 text-xs font-medium uppercase tracking-[-0.12px] transition-colors hover:border-white hover:bg-white hover:text-black"
+                className="hero-imdb"
+                aria-label={`${SITE_NAME} on IMDb`}
+                title="IMDb"
               >
-                IMDb
+                <img
+                  src={imdbLogo}
+                  alt=""
+                  className="hero-imdb__logo"
+                  width={128}
+                  height={64}
+                  decoding="async"
+                />
               </a>
             </div>
           </div>

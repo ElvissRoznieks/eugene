@@ -84,7 +84,6 @@ export default function Navbar({ variant = 'hero' }) {
   const darkText =
     variant === 'light' || variant === 'immersive' || variant === 'paper'
   const ink = darkText ? 'text-black' : 'text-white'
-  const muted = darkText ? 'text-black/45' : 'text-white/70'
 
   useBodyScrollLock(open)
 
@@ -198,12 +197,7 @@ export default function Navbar({ variant = 'hero' }) {
               end={link.path === '/'}
               className="nav-link-underline"
             >
-              <span className={cx('nav-link__index uppercase', muted)}>
-                {link.index}
-              </span>
-              <span className="nav-link__label uppercase">
-                / {link.label}
-              </span>
+              <span className="nav-link__label uppercase">{link.label}</span>
             </NavLink>
           ))}
         </nav>
