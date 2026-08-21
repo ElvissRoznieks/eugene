@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useEffect, useRef } from 'react'
 import Layout from '../components/Layout'
 import PhotoStudies from '../components/PhotoStudies'
 import SeoHead from '../components/SeoHead'
@@ -10,19 +10,49 @@ import { GALLERY, PAGE_SEO, PHOTO_LEDE, pageKicker } from '../data/site'
 
 export default function Photography() {
   const jsonLd = useMemo(() => photoCollectionJsonLd(), [])
+  const heroRef = useRef(null)
+
+  useEffect(() => {
+    const hero = heroRef.current
+    if (!hero) return undefined
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return undefined
+    }
+
+    let raf = 0
+    const onScroll = () => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => {
+        const y = window.scrollY
+        const fade = Math.max(0, 1 - y / 280)
+        const shift = Math.min(y * 0.35, 72)
+        hero.style.setProperty('--hero-fade', String(fade))
+        hero.style.setProperty('--hero-shift', `${shift}px`)
+      })
+    }
+
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      cancelAnimationFrame(raf)
+    }
+  }, [])
 
   return (
     <Layout variant="dark">
       <SeoHead {...PAGE_SEO.photography} jsonLd={jsonLd} />
       <PhotoSeoCatalog />
 
-      <header className="photo-hero page-shell">
-        <p className="photo-hero__kicker">{pageKicker('/photography')}</p>
-        <h1 className="photo-hero__title">
-          Portraiture
-          <span className="text-[var(--accent)]">.</span>
-        </h1>
-        <p className="photo-hero__lede">{PHOTO_LEDE}</p>
+      <header ref={heroRef} className="photo-hero page-shell">
+        <div className="photo-hero__sticky">
+          <p className="photo-hero__kicker">{pageKicker('/photography')}</p>
+          <h1 className="photo-hero__title">
+            Portraiture
+            <span className="text-[var(--accent)]">.</span>
+          </h1>
+          <p className="photo-hero__lede">{PHOTO_LEDE}</p>
+        </div>
       </header>
 
       <div className="page-shell pb-16">

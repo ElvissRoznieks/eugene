@@ -1631,8 +1631,27 @@ html.is-gallery-focus header {
 
 /* —— Photography studies (darkroom) —— */
 .photo-hero {
+  position: relative;
+  z-index: 3;
   padding-top: 3.5rem;
-  padding-bottom: 2.25rem;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.25rem;
+  --hero-fade: 1;
+  --hero-shift: 0px;
+}
+
+.photo-hero__sticky {
+  position: sticky;
+  top: 5.25rem;
+  padding-bottom: 1.5rem;
+  opacity: var(--hero-fade);
+  transform: translate3d(0, var(--hero-shift), 0);
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+.photo-hero__sticky > * {
+  pointer-events: auto;
 }
 
 .photo-hero__kicker {
@@ -1665,6 +1684,11 @@ html.is-gallery-focus header {
   color: rgba(243, 236, 226, 0.58);
 }
 
+.photo-studies {
+  position: relative;
+  z-index: 1;
+}
+
 .photo-studies__wall {
   column-count: 3;
   column-gap: clamp(0.75rem, 2vw, 1.35rem);
@@ -1677,7 +1701,7 @@ html.is-gallery-focus header {
   margin: 0 0 clamp(0.75rem, 2vw, 1.35rem);
   padding: 0;
   border: none;
-  background: transparent;
+  background: #0c0a08;
   cursor: pointer;
   overflow: hidden;
   text-align: left;
@@ -1691,7 +1715,6 @@ html.is-gallery-focus header {
 .photo-studies__piece--tall,
 .photo-studies__piece--wide,
 .photo-studies__piece--square {
-  /* masonry uses natural image height — spans kept for markup only */
   aspect-ratio: auto;
 }
 
@@ -1700,8 +1723,8 @@ html.is-gallery-focus header {
   height: auto;
   display: block;
   object-fit: cover;
+  will-change: transform;
   transition:
-    transform 0.7s var(--ease-spring),
     opacity 0.45s var(--ease-spring),
     filter 0.45s var(--ease-spring);
   filter: saturate(0.92) brightness(0.92);
@@ -1709,8 +1732,6 @@ html.is-gallery-focus header {
 
 .photo-studies__piece:hover .photo-studies__img,
 .photo-studies__piece:focus-visible .photo-studies__img {
-  transform: scale(1.03);
-  opacity: 1;
   filter: saturate(1) brightness(1);
 }
 
@@ -1985,7 +2006,14 @@ html.is-gallery-focus header {
 @media (max-width: 809.98px) {
   .photo-hero {
     padding-top: 2.75rem;
-    padding-bottom: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .photo-hero__sticky {
+    position: relative;
+    top: auto;
+    transform: none;
+    opacity: 1;
   }
 
   .photo-studies__wall {

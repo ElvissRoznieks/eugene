@@ -185,6 +185,50 @@ export default function PhotoStudies({ items }) {
     return () => document.documentElement.classList.remove('is-gallery-focus')
   }, [visible])
 
+  // Column-speed parallax — images drift at different rates while the wall scrolls
+  useEffect(() => {
+    if (visible) return undefined
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return undefined
+    }
+
+    let raf = 0
+    const speeds = [0.14, -0.06, 0.2]
+
+    const update = () => {
+      const vh = window.innerHeight || 1
+      pieceRefs.current.forEach((el, i) => {
+        if (!el) return
+        const img = el.querySelector('.photo-studies__img')
+        if (!img) return
+        const rect = el.getBoundingClientRect()
+        if (rect.bottom < -80 || rect.top > vh + 80) return
+        const progress = (rect.top + rect.height * 0.5 - vh * 0.5) / vh
+        const speed = speeds[i % speeds.length]
+        const y = progress * speed * -90
+        img.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0) scale(1.12)`
+      })
+    }
+
+    const onScroll = () => {
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(update)
+    }
+
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      cancelAnimationFrame(raf)
+      pieceRefs.current.forEach((el) => {
+        const img = el?.querySelector?.('.photo-studies__img')
+        if (img) img.style.transform = ''
+      })
+    }
+  }, [items, visible])
+
   useEffect(() => {
     return () => window.clearTimeout(closeTimerRef.current)
   }, [])
