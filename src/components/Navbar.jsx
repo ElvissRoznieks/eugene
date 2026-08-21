@@ -1,13 +1,7 @@
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
-import {
-  NAV_LINKS,
-  CONTACT_EMAIL,
-  IMDB_URL,
-  SITE_CITY,
-} from '../data/site'
-import useDublinClock from '../hooks/useDublinClock'
+import { NAV_LINKS, CONTACT_EMAIL, IMDB_URL } from '../data/site'
 import { cx } from '../utils/dom'
 
 const HEADER = {
@@ -29,7 +23,6 @@ const PANEL = {
 
 export default function Navbar({ variant = 'hero' }) {
   const [open, setOpen] = useState(false)
-  const time = useDublinClock()
   const darkText =
     variant === 'light' || variant === 'immersive' || variant === 'paper'
   const ink = darkText ? 'text-black' : 'text-white'
@@ -37,9 +30,12 @@ export default function Navbar({ variant = 'hero' }) {
 
   return (
     <header className={HEADER[variant] || HEADER.hero}>
-      <div className="mx-auto flex max-w-[1340px] items-start justify-between py-7 px-[15px] mobile:px-[18px] mobile:py-5 md-tablet:px-[18px] md-tablet:py-6">
+      <div className="mx-auto flex max-w-[1340px] items-center justify-between py-7 px-[15px] mobile:px-[18px] mobile:py-5 md-tablet:px-[18px] md-tablet:py-6">
         <nav
-          className={cx('hidden items-center gap-7 not-mobile:flex md-tablet:gap-4', ink)}
+          className={cx(
+            'hidden items-center gap-8 not-mobile:flex md-tablet:gap-5',
+            ink
+          )}
           aria-label="Primary"
         >
           {NAV_LINKS.map((link) => (
@@ -49,44 +45,26 @@ export default function Navbar({ variant = 'hero' }) {
               end={link.path === '/'}
               className="nav-link-underline"
             >
-              <span
-                className={cx(
-                  'text-[8px] font-medium uppercase leading-3 tracking-[-0.08px]',
-                  muted
-                )}
-              >
+              <span className={cx('nav-link__index uppercase', muted)}>
                 {link.index}
               </span>
-              <span className="text-xs font-medium uppercase leading-4 tracking-[-0.12px]">
+              <span className="nav-link__label uppercase">
                 / {link.label}
               </span>
             </NavLink>
           ))}
         </nav>
 
-        <div
+        <a
+          href={`mailto:${CONTACT_EMAIL}`}
           className={cx(
-            'hidden flex-col items-end gap-1 not-mobile:flex',
+            'hidden text-sm font-medium uppercase leading-none tracking-[0.04em] transition-opacity hover:opacity-70 not-mobile:inline-flex',
             ink
           )}
+          style={{ fontFamily: 'var(--film-display)', fontWeight: 400 }}
         >
-          <a
-            href={`mailto:${CONTACT_EMAIL}`}
-            className="text-xs font-medium uppercase leading-4 tracking-[-0.12px] transition-opacity hover:opacity-70"
-          >
-            {CONTACT_EMAIL}
-          </a>
-          <p
-            className={cx(
-              'text-[8px] font-medium uppercase leading-3 tracking-[-0.08px]',
-              muted
-            )}
-            aria-live="polite"
-            aria-label={`${SITE_CITY} time`}
-          >
-            {SITE_CITY.slice(0, 3).toUpperCase()} {time}
-          </p>
-        </div>
+          {CONTACT_EMAIL}
+        </a>
 
         <button
           type="button"
@@ -122,7 +100,7 @@ export default function Navbar({ variant = 'hero' }) {
                 to={link.path}
                 end={link.path === '/'}
                 onClick={() => setOpen(false)}
-                className="text-[28px] font-medium uppercase leading-8 tracking-[-0.84px]"
+                className="mobile-nav-link text-[40px] uppercase leading-none"
               >
                 <span
                   className={cx(
@@ -143,7 +121,8 @@ export default function Navbar({ variant = 'hero' }) {
             >
               <a
                 href={`mailto:${CONTACT_EMAIL}`}
-                className="text-sm font-medium uppercase tracking-[-0.12px]"
+                className="text-base uppercase tracking-[0.04em]"
+                style={{ fontFamily: 'var(--film-display)', fontWeight: 400 }}
               >
                 {CONTACT_EMAIL}
               </a>
@@ -152,20 +131,13 @@ export default function Navbar({ variant = 'hero' }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={cx(
-                  'text-sm font-medium uppercase tracking-[-0.12px]',
+                  'text-base uppercase tracking-[0.04em]',
                   darkText ? 'text-black/55' : 'text-white/70'
                 )}
+                style={{ fontFamily: 'var(--film-display)', fontWeight: 400 }}
               >
                 IMDb Profile
               </a>
-              <p
-                className={cx(
-                  'text-[10px] font-medium uppercase tracking-[-0.08px]',
-                  darkText ? 'text-black/40' : 'text-white/50'
-                )}
-              >
-                {SITE_CITY.slice(0, 3).toUpperCase()} {time}
-              </p>
             </div>
           </nav>
         </div>

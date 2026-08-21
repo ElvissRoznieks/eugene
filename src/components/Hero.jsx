@@ -10,29 +10,14 @@ export default function Hero() {
 
   return (
     <main className="relative z-[2] flex h-full min-h-screen w-full flex-col">
-      <div className="mx-auto flex h-full w-full max-w-[1340px] flex-1 flex-col justify-end items-end gap-[150px] pt-[190px] px-[15px] mobile:items-start mobile:gap-[72px] mobile:px-[18px] mobile:pt-[140px] md-tablet:px-[18px]">
-        <section
-          className="flex w-full items-end justify-end gap-10 mobile:justify-start"
-          aria-label="Availability"
-        >
-          <div
-            className="flex items-center gap-2.5"
-            role="status"
-            aria-label="Availability"
-          >
-            <span className="availability-dot is-accent" />
-            <span className="text-xs font-medium uppercase leading-4 tracking-[-0.12px]">
-              Available for work
-            </span>
-          </div>
-        </section>
-
+      <div className="mx-auto flex h-full w-full max-w-[1340px] flex-1 flex-col justify-end items-end pt-[190px] px-[15px] mobile:items-start mobile:px-[18px] mobile:pt-[140px] md-tablet:px-[18px]">
         <section className="flex w-full items-end justify-between gap-[50px] pb-[100px] mobile:flex-col mobile:items-start mobile:gap-8 mobile:pb-24 md-tablet:gap-7 md-tablet:pb-[88px]">
           <div className="flex-[2]" ref={nameReveal.ref}>
             <h1
-              className={`animate-reveal-up font-medium uppercase text-[200px] leading-[81%] tracking-[-6px] mobile:text-[clamp(68px,21vw,80px)] mobile:leading-[0.96] mobile:tracking-[-4.8px] md-tablet:text-[129.6px] md-tablet:leading-[113.4px] md-tablet:tracking-[-7.7px] ${
+              className={`animate-reveal-up uppercase text-[200px] leading-[81%] tracking-[0.02em] mobile:text-[clamp(72px,22vw,88px)] mobile:leading-[0.92] md-tablet:text-[140px] md-tablet:leading-[0.88] ${
                 nameReveal.visible ? 'is-visible' : ''
               }`}
+              style={{ fontFamily: 'var(--film-display)', fontWeight: 400 }}
             >
               {FIRST_NAME}
               <span className="text-[var(--accent)]">.</span>

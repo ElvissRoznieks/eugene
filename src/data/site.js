@@ -14,6 +14,15 @@ export const NAV_LINKS = [
 
 export const IMDB_URL = 'https://www.imdb.com/name/nm0103622/'
 export const IMDB_PRO_URL = 'https://pro.imdb.com/name/nm0103622/'
+export const LINKEDIN_URL = 'https://www.linkedin.com/in/eugene-brady-a89b1278/'
+export const INSTAGRAM_URL = 'https://www.instagram.com/eugene.brady/'
+
+export const SOCIAL_LINKS = [
+  { id: 'linkedin', label: 'LinkedIn', href: LINKEDIN_URL },
+  { id: 'instagram', label: 'Instagram', href: INSTAGRAM_URL },
+  { id: 'imdb', label: 'IMDb', href: IMDB_PRO_URL },
+]
+
 export const CONTACT_EMAIL = 'hello@eugenebrady.com'
 /** Update with the real number when available */
 export const CONTACT_PHONE = '+353 87 000 0000'

@@ -18,6 +18,8 @@
   --muted: #6b6b6b;
   --line: rgba(10, 10, 10, 0.1);
   --dock-h: 3.5rem;
+  --film-sans: 'Outfit', 'Figtree', sans-serif;
+  --film-display: 'Bebas Neue', 'Syne', sans-serif;
 }
 
 .layout-shell--immersive {
@@ -270,7 +272,34 @@ img {
   position: relative;
   display: inline-flex;
   align-items: baseline;
-  gap: 0.35rem;
+  gap: 0.4rem;
+  font-family: var(--film-display);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+.nav-link-underline .nav-link__index,
+.nav-link-underline .nav-link__label {
+  font-family: inherit;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+.nav-link-underline .nav-link__index {
+  font-size: 0.7rem;
+  line-height: 1;
+  opacity: 0.7;
+}
+
+.nav-link-underline .nav-link__label {
+  font-size: 1.05rem;
+  line-height: 1;
+}
+
+.mobile-nav-link {
+  font-family: var(--film-display);
+  font-weight: 400;
+  letter-spacing: 0.04em;
 }
 
 .nav-link-underline::after {
@@ -706,18 +735,12 @@ img {
   pointer-events: none;
 }
 
-.site-dock--hero .site-dock__brand,
-.site-dock--hero .site-dock__top {
+.site-dock--hero .site-dock__brand {
   pointer-events: auto;
 }
 
 .site-dock--hero .site-dock__copy {
   color: rgba(247, 244, 239, 0.55);
-}
-
-.site-dock--hero .site-dock__top {
-  border-color: rgba(247, 244, 239, 0.35);
-  background: transparent;
 }
 
 /* Film / gallery — light, no heavy ink plate */
@@ -727,7 +750,6 @@ img {
   color: rgba(10, 10, 10, 0.52);
 }
 
-.site-dock--gallery .site-dock__mark,
 .site-dock--gallery .site-dock__script {
   mix-blend-mode: normal;
   filter: invert(1);
@@ -735,18 +757,6 @@ img {
 
 .site-dock--gallery .site-dock__copy {
   color: rgba(10, 10, 10, 0.45);
-}
-
-.site-dock--gallery .site-dock__top {
-  border-color: rgba(10, 10, 10, 0.22);
-  background: transparent;
-  color: #0a0a0a;
-}
-
-.site-dock--gallery .site-dock__top:hover {
-  background: rgba(10, 10, 10, 0.06);
-  border-color: rgba(10, 10, 10, 0.4);
-  color: #0a0a0a;
 }
 
 .site-dock--light,
@@ -758,8 +768,9 @@ img {
 }
 
 .site-dock__row {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr) auto;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: center;
   min-height: var(--dock-h);
   gap: 0.75rem 1.25rem;
@@ -775,32 +786,28 @@ img {
   text-decoration: none;
   color: inherit;
   min-width: 0;
+  justify-self: start;
+  z-index: 1;
 }
 
-.site-dock__mark,
 .site-dock__script {
   display: block;
   /* White art on black plate → blend so plate disappears on ink bar */
   mix-blend-mode: screen;
-}
-
-.site-dock__mark {
-  width: 1.85rem;
-  height: 1.85rem;
-  object-fit: contain;
-  flex: 0 0 auto;
-}
-
-.site-dock__script {
-  height: 1.15rem;
+  height: 1.25rem;
   width: auto;
-  max-width: min(11rem, 42vw);
+  max-width: min(14rem, 48vw);
   object-fit: contain;
   object-position: left center;
 }
 
 .site-dock__copy {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   margin: 0;
+  max-width: min(28rem, 46%);
   text-align: center;
   opacity: 0.72;
   font-size: 10px;
@@ -808,29 +815,46 @@ img {
   letter-spacing: 0.02em;
   line-height: 1.35;
   color: rgba(247, 244, 239, 0.7);
+  pointer-events: none;
+  z-index: 0;
 }
 
-.site-dock__top {
+.site-dock__socials {
   justify-self: end;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  z-index: 1;
+}
+
+.site-dock__social {
   display: grid;
   place-items: center;
   width: 2rem;
   height: 2rem;
-  margin: 0;
-  padding: 0;
-  border: 1px solid rgba(247, 244, 239, 0.28);
-  background: rgba(247, 244, 239, 0.06);
-  color: #f7f4ef;
-  cursor: pointer;
+  color: inherit;
+  opacity: 0.78;
+  text-decoration: none;
+  border-radius: 0.3rem;
   transition:
-    background 0.28s var(--ease-spring),
-    border-color 0.28s var(--ease-spring);
+    opacity 0.25s var(--ease-spring),
+    color 0.25s var(--ease-spring),
+    background 0.25s var(--ease-spring);
 }
 
-.site-dock__top:hover {
-  background: rgba(201, 166, 107, 0.22);
-  border-color: var(--accent);
-  color: #fff;
+.site-dock__social:hover {
+  opacity: 1;
+  color: var(--accent);
+  background: rgba(247, 244, 239, 0.08);
+}
+
+.site-dock__social svg {
+  display: block;
+}
+
+.site-dock--gallery .site-dock__social:hover {
+  color: #0a0a0a;
+  background: rgba(10, 10, 10, 0.06);
 }
 
 .site-dock__link {
@@ -911,9 +935,9 @@ html.is-gallery-focus header {
 /* —— 3D horizontal poster wall ——
    Locked to the viewport: drag/scroll is horizontal only, no page scroll. */
 .poster-wall {
-  /* Film gallery type — swap these to try other looks; Figtree stays site-wide */
+  /* Film gallery type — Bebas Neue for titles; Outfit/Figtree for UI */
   --film-sans: 'Outfit', 'Figtree', sans-serif;
-  --film-display: 'Syne', 'Outfit', sans-serif;
+  --film-display: 'Bebas Neue', 'Syne', sans-serif;
   position: relative;
   width: 100%;
   height: 100dvh;
@@ -1204,12 +1228,12 @@ html.is-gallery-focus header {
 
 .poster-wall__title {
   margin: 0 0 0.4rem;
-  max-width: 18ch;
+  max-width: 20ch;
   font-family: var(--film-display);
-  font-size: clamp(34px, 4.6vw, 54px);
-  font-weight: 700;
+  font-size: clamp(38px, 5.2vw, 62px);
+  font-weight: 400;
   line-height: 0.92;
-  letter-spacing: -0.045em;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   color: #0f0b08;
 }
@@ -1781,19 +1805,45 @@ html.is-gallery-focus header {
   }
 
   .site-dock__row {
+    position: relative;
     min-height: var(--dock-h, 3.25rem);
     font-size: 10px;
-    gap: 0.5rem;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 0.45rem 0.75rem;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      'brand socials'
+      'copy copy';
   }
 
-  .site-dock__script {
-    display: none;
+  .site-dock__brand {
+    grid-area: brand;
   }
 
   .site-dock__copy {
+    position: static;
+    left: auto;
+    top: auto;
+    transform: none;
+    max-width: none;
+    grid-area: copy;
     font-size: 9px;
-    text-align: left;
+    text-align: center;
+    pointer-events: auto;
+  }
+
+  .site-dock__socials {
+    grid-area: socials;
+    gap: 0.2rem;
+  }
+
+  .site-dock__social {
+    width: 1.85rem;
+    height: 1.85rem;
+  }
+
+  .site-dock__script {
+    height: 1rem;
+    max-width: min(9.5rem, 46vw);
   }
 
   .site-dock__link:not(.site-dock__link--end) {
@@ -1908,10 +1958,10 @@ html.is-gallery-focus header {
 .photo-hero__title {
   margin: 0 0 1rem;
   font-family: var(--film-display, inherit);
-  font-size: clamp(42px, 8vw, 96px);
-  font-weight: 500;
-  line-height: 0.88;
-  letter-spacing: -0.04em;
+  font-size: clamp(48px, 9vw, 104px);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   color: #f3ece2;
 }
@@ -2468,10 +2518,11 @@ html.is-gallery-focus header {
 
 .about-essay__title {
   margin: 0;
-  font-size: clamp(42px, 7vw, 92px);
-  font-weight: 500;
-  line-height: 0.88;
-  letter-spacing: -0.04em;
+  font-family: var(--film-display);
+  font-size: clamp(48px, 8vw, 100px);
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 
@@ -2651,7 +2702,7 @@ html.is-gallery-focus header {
   display: inline-block;
   width: fit-content;
   max-width: 100%;
-  font-family: var(--film-display, inherit);
+  font-family: 'Syne', 'Outfit', sans-serif;
   font-size: clamp(1.85rem, 7.5vw, 5.5rem);
   font-weight: 500;
   line-height: 0.95;
