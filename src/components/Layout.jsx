@@ -4,22 +4,29 @@ import ImdbBar from './ImdbBar'
 import ImdbFab from './ImdbFab'
 import PageFade from './PageFade'
 
+/**
+ * Reveal footer: dock is fixed to the viewport bottom (z behind content).
+ * Opaque chrome scrolls over it; a transparent spacer at the end uncovers it.
+ */
 const SHELL = {
   hero: {
     root: 'relative h-screen overflow-hidden bg-black text-white',
     nav: 'hero',
-    dock: 'light',
+    dock: null,
     fade: false,
     heroBg: true,
-    mainClass: 'relative z-[2] h-screen',
+    revealDock: false,
+    chromeClass: 'relative z-[2] h-screen bg-transparent',
   },
   immersive: {
-    root: 'layout-shell layout-shell--immersive relative min-h-screen',
+    root: 'layout-shell layout-shell--immersive relative h-screen overflow-hidden',
     nav: 'immersive',
-    dock: 'light',
+    dock: null,
     fade: false,
     heroBg: false,
-    mainClass: 'relative z-[1]',
+    revealDock: false,
+    chromeClass: 'relative z-[2] h-screen overflow-hidden bg-[var(--gallery-plaster)]',
+    mainClass: 'h-full overflow-hidden',
   },
   dark: {
     root: 'layout-shell layout-shell--dark flow-site relative min-h-screen',
@@ -27,7 +34,9 @@ const SHELL = {
     dock: 'dark',
     fade: true,
     heroBg: false,
-    mainClass: 'pb-24',
+    revealDock: true,
+    chromeClass: 'relative z-[2] bg-[var(--darkroom)]',
+    mainClass: undefined,
   },
   paper: {
     root: 'layout-shell layout-shell--paper flow-site relative min-h-screen',
@@ -35,7 +44,9 @@ const SHELL = {
     dock: 'light',
     fade: true,
     heroBg: false,
-    mainClass: 'pb-24',
+    revealDock: true,
+    chromeClass: 'relative z-[2] bg-[var(--paper-warm)]',
+    mainClass: undefined,
   },
   light: {
     root: 'layout-shell layout-shell--light flow-site relative min-h-screen',
@@ -43,7 +54,9 @@ const SHELL = {
     dock: 'light',
     fade: true,
     heroBg: false,
-    mainClass: 'pb-24',
+    revealDock: true,
+    chromeClass: 'relative z-[2] bg-[var(--paper)]',
+    mainClass: undefined,
   },
 }
 
@@ -52,17 +65,25 @@ export default function Layout({ children, variant = 'light' }) {
 
   return (
     <div className={shell.root}>
-      {shell.heroBg ? <HeroBackground /> : null}
-      <Navbar variant={shell.nav} />
-      {shell.heroBg ? (
-        <div className={shell.mainClass}>{children}</div>
-      ) : (
-        <main className={shell.mainClass}>
-          {shell.fade ? <PageFade>{children}</PageFade> : children}
-        </main>
-      )}
+      {shell.dock ? <ImdbBar variant={shell.dock} /> : null}
+
+      <div className={shell.chromeClass}>
+        {shell.heroBg ? <HeroBackground /> : null}
+        <Navbar variant={shell.nav} />
+        {shell.heroBg ? (
+          <div className="relative z-[2] h-screen">{children}</div>
+        ) : (
+          <main className={shell.mainClass}>
+            {shell.fade ? <PageFade>{children}</PageFade> : children}
+          </main>
+        )}
+      </div>
+
+      {shell.revealDock ? (
+        <div className="site-dock-spacer" aria-hidden="true" />
+      ) : null}
+
       <ImdbFab />
-      <ImdbBar variant={shell.dock} />
     </div>
   )
 }
