@@ -34,11 +34,11 @@ export default function Hero() {
             ref={copyReveal.ref}
           >
             <div
-              className={`animate-reveal-right flex flex-col gap-4 text-base font-medium leading-6 tracking-[-0.16px] text-white/90 ${
+              className={`animate-reveal-right flex flex-col gap-4 text-base font-normal leading-6 tracking-[-0.16px] text-white/90 ${
                 copyReveal.visible ? 'is-visible' : ''
               }`}
             >
-              <p className="text-xs font-medium uppercase tracking-[0.18em] text-white/70">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-white">
                 Director / Photographer
               </p>
               <p>
