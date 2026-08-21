@@ -1,8 +1,18 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { NavLink } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
-import { NAV_LINKS, CONTACT_EMAIL, IMDB_URL } from '../data/site'
+import {
+  NAV_LINKS,
+  CONTACT_EMAIL,
+  SOCIAL_LINKS,
+  SITE_NAME,
+  SITE_TAGLINE,
+  HERO_IMAGE,
+} from '../data/site'
+import { useBodyScrollLock } from '../hooks/usePointerSwipe'
 import { cx } from '../utils/dom'
+import ebMark from '../assets/brand/eb-mark.png'
 
 const HEADER = {
   light: 'sticky top-0 z-40 border-b border-black/10 bg-white/85 backdrop-blur-md',
@@ -13,12 +23,60 @@ const HEADER = {
   hero: 'absolute inset-x-0 top-0 z-10',
 }
 
-const PANEL = {
-  light: 'border-black/10 bg-white',
-  paper: 'border-black/10 bg-[var(--paper-warm)]',
-  dark: 'border-white/10 bg-[color-mix(in_srgb,var(--darkroom)_95%,transparent)] backdrop-blur-md',
-  immersive: 'border-white/10 bg-black/90 backdrop-blur-md',
-  hero: 'border-white/10 bg-black/90 backdrop-blur-md',
+function LinkedinIcon({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        fill="currentColor"
+        d="M4.98 3.5C4.98 4.88 3.88 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8.5h4V23h-4V8.5zM8.5 8.5h3.8v2h.06c.53-1 1.82-2.05 3.75-2.05 4.01 0 4.75 2.64 4.75 6.07V23h-4v-6.6c0-1.57-.03-3.59-2.19-3.59-2.19 0-2.53 1.71-2.53 3.48V23h-4V8.5z"
+        transform="translate(1.2 0.5) scale(0.9)"
+      />
+    </svg>
+  )
+}
+
+function InstagramIcon({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect
+        x="3.5"
+        y="3.5"
+        width="17"
+        height="17"
+        rx="5"
+        stroke="currentColor"
+        strokeWidth="1.7"
+      />
+      <circle cx="12" cy="12" r="4.1" stroke="currentColor" strokeWidth="1.7" />
+      <circle cx="17.35" cy="6.65" r="1.15" fill="currentColor" />
+    </svg>
+  )
+}
+
+function ImdbGlyph({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="2.5" y="5.5" width="19" height="13" rx="2.2" fill="#f5c518" />
+      <text
+        x="12"
+        y="14.6"
+        textAnchor="middle"
+        fill="#0a0a0a"
+        fontFamily="Arial Black, Arial, sans-serif"
+        fontSize="7.2"
+        fontWeight="800"
+        letterSpacing="-0.4"
+      >
+        IMDb
+      </text>
+    </svg>
+  )
+}
+
+const SOCIAL_ICONS = {
+  linkedin: LinkedinIcon,
+  instagram: InstagramIcon,
+  imdb: ImdbGlyph,
 }
 
 export default function Navbar({ variant = 'hero' }) {
@@ -27,6 +85,101 @@ export default function Navbar({ variant = 'hero' }) {
     variant === 'light' || variant === 'immersive' || variant === 'paper'
   const ink = darkText ? 'text-black' : 'text-white'
   const muted = darkText ? 'text-black/45' : 'text-white/70'
+
+  useBodyScrollLock(open)
+
+  useEffect(() => {
+    if (!open) return undefined
+    function onKey(e) {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [open])
+
+  const menu =
+    typeof document !== 'undefined' &&
+    createPortal(
+      <div
+        id="mobile-nav"
+        className={cx('mobile-menu', open && 'is-open')}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Menu"
+        aria-hidden={!open}
+      >
+        <div className="mobile-menu__bg" aria-hidden="true">
+          <img src={HERO_IMAGE} alt="" decoding="async" />
+          <div className="mobile-menu__scrim" />
+        </div>
+
+        <div className="mobile-menu__top">
+          <img
+            src={ebMark}
+            alt={SITE_NAME}
+            className="mobile-menu__mark"
+            width={44}
+            height={44}
+            decoding="async"
+          />
+          <button
+            type="button"
+            className="mobile-menu__close"
+            onClick={() => setOpen(false)}
+            aria-label="Close menu"
+          >
+            <X size={26} strokeWidth={1.5} />
+          </button>
+        </div>
+
+        <div className="mobile-menu__brand" aria-hidden="true">
+          <p className="mobile-menu__name">
+            {SITE_NAME.split(' ')[0]}
+            <br />
+            {SITE_NAME.split(' ').slice(1).join(' ')}
+          </p>
+          <p className="mobile-menu__role">{SITE_TAGLINE.split(' / ')[0]}</p>
+          <div className="mobile-menu__socials">
+            {SOCIAL_LINKS.map((link) => {
+              const Icon = SOCIAL_ICONS[link.id]
+              return (
+                <a
+                  key={link.id}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={link.label}
+                  title={link.label}
+                >
+                  {Icon ? <Icon size={16} /> : link.label}
+                </a>
+              )
+            })}
+          </div>
+        </div>
+
+        <nav className="mobile-menu__nav" aria-label="Mobile">
+          {NAV_LINKS.map((link) => (
+            <NavLink
+              key={link.path}
+              to={link.path}
+              end={link.path === '/'}
+              onClick={() => setOpen(false)}
+              className={({ isActive }) =>
+                cx('mobile-menu__link', isActive && 'is-active')
+              }
+            >
+              {link.label}
+            </NavLink>
+          ))}
+        </nav>
+
+        <a href={`mailto:${CONTACT_EMAIL}`} className="mobile-menu__email">
+          {CONTACT_EMAIL}
+        </a>
+      </div>,
+      document.body
+    )
 
   return (
     <header className={HEADER[variant] || HEADER.hero}>
@@ -72,76 +225,16 @@ export default function Navbar({ variant = 'hero' }) {
             'ml-auto flex h-10 w-10 items-center justify-center not-mobile:hidden',
             ink
           )}
-          onClick={() => setOpen((v) => !v)}
+          onClick={() => setOpen(true)}
           aria-expanded={open}
           aria-controls="mobile-nav"
-          aria-label={open ? 'Close menu' : 'Open menu'}
+          aria-label="Open menu"
         >
-          {open ? <X size={22} /> : <Menu size={22} />}
+          <Menu size={22} />
         </button>
       </div>
 
-      <div
-        id="mobile-nav"
-        className={cx(
-          'mobile-panel border-t',
-          PANEL[variant] || PANEL.hero,
-          open && 'is-open'
-        )}
-      >
-        <div className="mobile-panel-inner" inert={!open ? true : undefined}>
-          <nav
-            className={cx('flex flex-col gap-5 px-[18px] py-8', ink)}
-            aria-label="Mobile"
-          >
-            {NAV_LINKS.map((link) => (
-              <NavLink
-                key={link.path}
-                to={link.path}
-                end={link.path === '/'}
-                onClick={() => setOpen(false)}
-                className="mobile-nav-link text-[40px] uppercase leading-none"
-              >
-                <span
-                  className={cx(
-                    'mr-3',
-                    darkText ? 'text-black/35' : 'text-white/40'
-                  )}
-                >
-                  {link.index}
-                </span>
-                {link.label}
-              </NavLink>
-            ))}
-            <div
-              className={cx(
-                'mt-4 flex flex-col gap-2 border-t pt-5',
-                darkText ? 'border-black/10' : 'border-white/10'
-              )}
-            >
-              <a
-                href={`mailto:${CONTACT_EMAIL}`}
-                className="text-base uppercase tracking-[0.04em]"
-                style={{ fontFamily: 'var(--film-display)', fontWeight: 400 }}
-              >
-                {CONTACT_EMAIL}
-              </a>
-              <a
-                href={IMDB_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cx(
-                  'text-base uppercase tracking-[0.04em]',
-                  darkText ? 'text-black/55' : 'text-white/70'
-                )}
-                style={{ fontFamily: 'var(--film-display)', fontWeight: 400 }}
-              >
-                IMDb Profile
-              </a>
-            </div>
-          </nav>
-        </div>
-      </div>
+      {menu}
     </header>
   )
 }
