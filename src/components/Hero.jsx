@@ -14,13 +14,12 @@ export default function Hero() {
         <section className="flex w-full items-end justify-between gap-[50px] pb-[100px] mobile:flex-col mobile:items-start mobile:gap-8 mobile:pb-24 md-tablet:gap-7 md-tablet:pb-[88px]">
           <div className="flex-[2]" ref={nameReveal.ref}>
             <h1
-              className={`animate-reveal-up uppercase text-[200px] leading-[81%] tracking-[0.02em] mobile:text-[clamp(72px,22vw,88px)] mobile:leading-[0.92] md-tablet:text-[140px] md-tablet:leading-[0.88] ${
+              className={`hero-name animate-reveal-up ${
                 nameReveal.visible ? 'is-visible' : ''
               }`}
-              style={{ fontFamily: 'var(--film-display)', fontWeight: 400 }}
             >
-              {FIRST_NAME}
-              <span className="text-[var(--accent)]">.</span>
+              <span className="hero-name__word">{FIRST_NAME}</span>
+              <span className="hero-name__dot">.</span>
             </h1>
           </div>
 
