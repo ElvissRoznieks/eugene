@@ -2942,17 +2942,17 @@ html.is-gallery-focus header {
 
 /* —— Contact signal (dark cinematic) —— */
 .contact-signal {
-  min-height: calc(100vh - 6rem);
+  min-height: calc(100dvh - 6rem);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-top: 4rem;
-  padding-bottom: 5rem;
+  padding-top: 3rem;
+  padding-bottom: 4rem;
   max-width: 1100px;
 }
 
 .contact-signal__kicker {
-  margin: 0 0 1.75rem;
+  margin: 0 0 1.1rem;
   font-size: 8px;
   font-weight: 600;
   letter-spacing: 0.16em;
@@ -2964,11 +2964,11 @@ html.is-gallery-focus header {
   display: inline-block;
   width: fit-content;
   max-width: 100%;
-  font-family: 'Syne', 'Outfit', sans-serif;
-  font-size: clamp(1.85rem, 7.5vw, 5.5rem);
-  font-weight: 500;
+  font-family: var(--film-display);
+  font-size: clamp(2.6rem, 10vw, 6.75rem);
+  font-weight: 400;
   line-height: 0.95;
-  letter-spacing: -0.05em;
+  letter-spacing: 0.04em;
   text-transform: lowercase;
   text-decoration: none;
   color: #f3ece2;
@@ -2993,7 +2993,7 @@ html.is-gallery-focus header {
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.65rem 1.5rem;
-  margin-top: 1.35rem;
+  margin-top: 0.85rem;
 }
 
 .contact-signal__phone {
@@ -3031,7 +3031,7 @@ html.is-gallery-focus header {
   display: flex;
   flex-wrap: wrap;
   gap: 1.25rem 1.75rem;
-  margin-top: 3.25rem;
+  margin-top: 2rem;
 }
 
 .contact-signal__enquiry {
@@ -3062,7 +3062,7 @@ html.is-gallery-focus header {
 }
 
 .contact-signal__prompt {
-  margin: 1.5rem 0 0;
+  margin: 1.1rem 0 0;
   max-width: 26rem;
   font-size: 1.05rem;
   font-weight: 500;
@@ -3075,8 +3075,8 @@ html.is-gallery-focus header {
 .contact-signal__form {
   display: flex;
   flex-direction: column;
-  gap: 1.35rem;
-  margin-top: 3rem;
+  gap: 1.1rem;
+  margin-top: 2rem;
   max-width: 28rem;
 }
 

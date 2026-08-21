@@ -6,7 +6,7 @@
     <link rel="icon" href="/favicon.png" type="image/png" sizes="32x32" />
     <link rel="icon" href="/favicon-48.png" type="image/png" sizes="48x48" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
-    <meta name="theme-color" content="#2a241c" />
+    <meta name="theme-color" content="#f7f4ef" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
@@ -34,10 +34,55 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Figtree:wght@400;500;600&family=Outfit:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Beau+Rivage&family=Bebas+Neue&family=Figtree:wght@400;500;600&family=Outfit:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap"
       rel="stylesheet"
     />
     <title>Eugene Brady — Director / Photographer</title>
+    <style>
+      #preloader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: grid;
+        place-items: center;
+        background: #f7f4ef;
+        transition:
+          opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+          visibility 0.65s;
+      }
+      #preloader.is-done {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      #preloader .preloader__mark {
+        width: 4.5rem;
+        height: 4.5rem;
+        object-fit: contain;
+        /* white-on-black → dark mark on light paper */
+        filter: invert(1);
+        mix-blend-mode: multiply;
+        animation: preloader-breathe 1.6s ease-in-out infinite;
+      }
+      @keyframes preloader-breathe {
+        0%,
+        100% {
+          opacity: 0.72;
+          transform: scale(0.98);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #preloader .preloader__mark {
+          animation: none;
+          opacity: 1;
+          transform: none;
+        }
+      }
+    </style>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -55,6 +100,22 @@
     </script>
   </head>
   <body>
+    <div
+      id="preloader"
+      class="preloader"
+      role="status"
+      aria-live="polite"
+      aria-label="Loading"
+    >
+      <img
+        class="preloader__mark"
+        src="/brand/eb-mark.png"
+        alt=""
+        width="72"
+        height="72"
+        decoding="async"
+      />
+    </div>
     <div id="root"></div>
     <noscript>
       <main style="max-width:40rem;margin:2rem auto;padding:0 1rem;font-family:system-ui,sans-serif">

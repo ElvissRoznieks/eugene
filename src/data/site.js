@@ -159,7 +159,6 @@ export const PHOTO_LEDE =
 
 export const CONTACT_ENQUIRIES = [
   { id: 'Directing', prompt: 'For directing and narrative enquiries.' },
-  { id: 'Photography', prompt: 'For portrait and photographic commissions.' },
   { id: 'Development', prompt: 'For development, financing and partnership notes.' },
 ]
 
