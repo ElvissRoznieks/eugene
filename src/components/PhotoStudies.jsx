@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import {
   useBodyScrollLock,
@@ -60,6 +61,82 @@ export default function PhotoStudies({ items }) {
 
   if (!items?.length) return null
 
+  const overlay =
+    current &&
+    createPortal(
+      <div
+        className="photo-studies__overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-label={current.title}
+        {...swipe}
+      >
+        <div
+          className="photo-studies__backdrop"
+          aria-hidden="true"
+          onClick={close}
+        />
+
+        <button
+          type="button"
+          className="photo-studies__close"
+          onClick={close}
+          aria-label="Close study"
+        >
+          <X size={18} strokeWidth={1.75} />
+        </button>
+
+        <div className="photo-studies__stage">
+          <img
+            key={current.id}
+            src={current.image}
+            alt={
+              current.imageAlt ||
+              `${current.title} — ${current.category} photograph`
+            }
+            className="photo-studies__overlay-img"
+            draggable={false}
+          />
+        </div>
+
+        <div className="photo-studies__caption">
+          <p className="photo-studies__caption-id">
+            {current.id} · {current.category}
+            {current.year ? ` · ${current.year}` : ''}
+          </p>
+          <h2 className="photo-studies__caption-title">{current.title}</h2>
+          {current.note ? (
+            <p className="photo-studies__caption-note">{current.note}</p>
+          ) : null}
+        </div>
+
+        <div className="photo-studies__nav">
+          <button
+            type="button"
+            className="photo-studies__nav-btn"
+            onClick={() => step(-1)}
+            disabled={active <= 0}
+            aria-label="Previous study"
+          >
+            <ChevronLeft size={20} strokeWidth={1.75} />
+          </button>
+          <span className="photo-studies__count">
+            {active + 1} / {items.length}
+          </span>
+          <button
+            type="button"
+            className="photo-studies__nav-btn"
+            onClick={() => step(1)}
+            disabled={active >= items.length - 1}
+            aria-label="Next study"
+          >
+            <ChevronRight size={20} strokeWidth={1.75} />
+          </button>
+        </div>
+      </div>,
+      document.body
+    )
+
   return (
     <div className="photo-studies">
       <div className="photo-studies__wall" role="list">
@@ -94,70 +171,7 @@ export default function PhotoStudies({ items }) {
         })}
       </div>
 
-      {current ? (
-        <div
-          className="photo-studies__overlay"
-          role="dialog"
-          aria-modal="true"
-          aria-label={current.title}
-          {...swipe}
-        >
-          <button
-            type="button"
-            className="photo-studies__close"
-            onClick={close}
-            aria-label="Close study"
-          >
-            <X size={18} strokeWidth={1.75} />
-          </button>
-
-          <img
-            key={current.id}
-            src={current.image}
-            alt={
-              current.imageAlt ||
-              `${current.title} — ${current.category} photograph`
-            }
-            className="photo-studies__overlay-img"
-            draggable={false}
-          />
-
-          <div className="photo-studies__caption">
-            <p className="photo-studies__caption-id">
-              {current.id} · {current.category}
-              {current.year ? ` · ${current.year}` : ''}
-            </p>
-            <h2 className="photo-studies__caption-title">{current.title}</h2>
-            {current.note ? (
-              <p className="photo-studies__caption-note">{current.note}</p>
-            ) : null}
-          </div>
-
-          <div className="photo-studies__nav">
-            <button
-              type="button"
-              className="photo-studies__nav-btn"
-              onClick={() => step(-1)}
-              disabled={active <= 0}
-              aria-label="Previous study"
-            >
-              <ChevronLeft size={20} strokeWidth={1.75} />
-            </button>
-            <span className="photo-studies__count">
-              {active + 1} / {items.length}
-            </span>
-            <button
-              type="button"
-              className="photo-studies__nav-btn"
-              onClick={() => step(1)}
-              disabled={active >= items.length - 1}
-              aria-label="Next study"
-            >
-              <ChevronRight size={20} strokeWidth={1.75} />
-            </button>
-          </div>
-        </div>
-      ) : null}
+      {overlay}
     </div>
   )
 }

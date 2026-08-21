@@ -16,7 +16,7 @@ import {
   X,
 } from 'lucide-react'
 import * as THREE from 'three'
-import { FILMS, DEFAULT_ATMOSPHERE, GALLERY, pageKicker } from '../data/site'
+import { FILMS, DEFAULT_ATMOSPHERE, pageKicker } from '../data/site'
 import usePosterAudio from '../hooks/usePosterAudio'
 import { useHorizontalSwipe } from '../hooks/usePointerSwipe'
 import { cx } from '../utils/dom'
@@ -1199,14 +1199,12 @@ export default function PosterWall() {
       caption: active.credits,
       alt: active.imageAlt || `${active.title} film poster`,
     }
-    const rest = GALLERY.map((item) => ({
+    const rest = (active.gallery || []).map((item) => ({
       id: item.id,
-      src: item.image,
+      src: item.src,
       title: item.title,
-      caption: `${item.id} / ${item.category}`,
-      alt:
-        item.imageAlt ||
-        `${item.title} — ${item.category} photograph`,
+      caption: item.caption,
+      alt: item.alt,
     }))
     return [head, ...rest]
   }, [active])

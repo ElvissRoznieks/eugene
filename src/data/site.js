@@ -35,6 +35,32 @@ export const HERO_IMAGE_ALT = 'Ocean waves under open sky'
 
 export const DEFAULT_ATMOSPHERE = '/audio/default-atmosphere.m4a'
 
+/** Top-level stills only: assets/movies/{Film Name}/{n}.webp */
+const movieStillModules = import.meta.glob('../../assets/movies/*/*.webp', {
+  eager: true,
+  import: 'default',
+})
+
+function filmGallery(folder, title) {
+  return Object.entries(movieStillModules)
+    .filter(([path]) => path.includes(`/movies/${folder}/`))
+    .sort(([a], [b]) => {
+      const na = Number((a.match(/(\d+)\.webp$/i) || [])[1] || 0)
+      const nb = Number((b.match(/(\d+)\.webp$/i) || [])[1] || 0)
+      return na - nb
+    })
+    .map(([, src], i) => {
+      const n = String(i + 1).padStart(2, '0')
+      return {
+        id: n,
+        src,
+        title: `${title} · ${n}`,
+        caption: `Still ${n}`,
+        alt: `${title} — production still ${n}`,
+      }
+    })
+}
+
 export const FILMS = [
   {
     title: 'The Girl Who Stayed',
@@ -51,6 +77,7 @@ export const FILMS = [
     poster: theGirlWhoStayedPoster,
     imageAlt:
       'The Girl Who Stayed concept art — coastal path under storm light',
+    gallery: filmGallery('The Girl Who Stayed', 'The Girl Who Stayed'),
   },
   {
     title: 'The Nephew',
@@ -66,6 +93,7 @@ export const FILMS = [
     poster: theNephewPoster,
     imageAlt:
       'The Nephew movie poster — Donal McCann, Pierce Brosnan, Sinead Cusack',
+    gallery: filmGallery('The Nephew', 'The Nephew'),
   },
   {
     title: 'Missing Brendan',
@@ -81,78 +109,37 @@ export const FILMS = [
     poster: missingBrendanPoster,
     imageAlt:
       'Missing Brendan movie poster — Edward Asner, Adam Brody, Illeana Douglas',
+    gallery: filmGallery('Missing Brendan', 'Missing Brendan'),
   },
 ]
 
-export const GALLERY = [
-  {
-    id: '01',
-    title: 'Man Reaching',
-    category: 'Study',
-    year: 'Select',
-    note: 'Gesture as character.',
-    span: 'tall',
-    imageAlt:
-      'Photographic study Man Reaching — figure extending an arm in dramatic light',
-    image:
-      'https://images.unsplash.com/photo-1531384441138-2736e62e0919?auto=format&fit=crop&w=1200&q=80',
-  },
-  {
-    id: '02',
-    title: 'Clock',
-    category: 'Still Life',
-    year: 'Select',
-    note: 'Time held in frame.',
-    span: 'wide',
-    imageAlt: 'Still life photograph of a clock face — time held in frame',
-    image:
-      'https://images.unsplash.com/photo-1501139083538-0139583c060f?auto=format&fit=crop&w=1400&q=80',
-  },
-  {
-    id: '03',
-    title: 'Statue',
-    category: 'Form',
-    year: 'Select',
-    note: 'Weight and stillness.',
-    span: 'square',
-    imageAlt: 'Photograph of a statue emphasizing form, weight and stillness',
-    image:
-      'https://images.unsplash.com/photo-1578301978693-85fa9c0320b9?auto=format&fit=crop&w=1200&q=80',
-  },
-  {
-    id: '04',
-    title: 'Quiet Gaze',
-    category: 'Portrait',
-    year: 'Select',
-    note: 'A scene in a look.',
-    span: 'tall',
-    imageAlt: 'Quiet Gaze portrait study — subject looking toward camera',
-    image:
-      'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=1200&q=80',
-  },
-  {
-    id: '05',
-    title: 'Threshold',
-    category: 'Atmosphere',
-    year: 'Select',
-    note: 'Light before the cut.',
-    span: 'wide',
-    imageAlt: 'Atmospheric landscape photograph Threshold — light over a ridge',
-    image:
-      'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1400&q=80',
-  },
-  {
-    id: '06',
-    title: 'Hands',
-    category: 'Detail',
-    year: 'Select',
-    note: 'Story in the edges.',
-    span: 'square',
-    imageAlt: 'Detail photograph of hands — intimate character study',
-    image:
-      'https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=1200&q=80',
-  },
-]
+/** Photography selects: assets/gallery/{n}.webp */
+const photoModules = import.meta.glob('../../assets/gallery/*.webp', {
+  eager: true,
+  import: 'default',
+})
+
+const PHOTO_SPANS = ['tall', 'wide', 'square', 'tall', 'wide', 'square']
+
+export const GALLERY = Object.entries(photoModules)
+  .sort(([a], [b]) => {
+    const na = Number((a.match(/(\d+)\.webp$/i) || [])[1] || 0)
+    const nb = Number((b.match(/(\d+)\.webp$/i) || [])[1] || 0)
+    return na - nb
+  })
+  .map(([, image], i) => {
+    const n = String(i + 1).padStart(2, '0')
+    return {
+      id: n,
+      title: `Study ${n}`,
+      category: 'Portrait',
+      year: 'Select',
+      note: null,
+      span: PHOTO_SPANS[i % PHOTO_SPANS.length],
+      imageAlt: `Portrait study ${n} by ${SITE_NAME}`,
+      image,
+    }
+  })
 
 export const ABOUT_HEADSHOT = bradyHeadshot
 export const ABOUT_HEADSHOT_ALT =
