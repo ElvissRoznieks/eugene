@@ -2,14 +2,12 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Layout from '../components/Layout'
 import SeoHead, { personJsonLd } from '../components/SeoHead'
-import useDublinClock from '../hooks/useDublinClock'
 import {
   ABOUT_CHAPTERS,
   ABOUT_HEADSHOT,
   ABOUT_HEADSHOT_ALT,
   FILMS,
   PAGE_SEO,
-  SITE_CITY,
   SITE_LOCATION_LINE,
   SITE_NAME,
   SITE_TAGLINE,
@@ -21,9 +19,8 @@ const PULL_LINE =
   'Frames that feel lived-in before a line is spoken.'
 
 export default function About() {
-  const time = useDublinClock()
-  const [role, setRole] = useState(ABOUT_CHAPTERS[0].role)
-  const chapterRefs = useRef([])
+  const [filmIndex, setFilmIndex] = useState(0)
+  const sectionRefs = useRef([])
   const jsonLd = useMemo(
     () =>
       personJsonLd({
@@ -33,9 +30,12 @@ export default function About() {
     []
   )
 
+  const activeFilm = FILMS[filmIndex] || FILMS[0]
+
+  // One film per scroll section — all three titles are reachable
   useEffect(() => {
-    const nodes = chapterRefs.current.filter(Boolean)
-    if (!nodes.length) return undefined
+    const nodes = sectionRefs.current.filter(Boolean)
+    if (!nodes.length || !FILMS.length) return undefined
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -44,11 +44,13 @@ export default function About() {
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
         const top = visible[0]
         if (!top) return
-        const id = top.target.getAttribute('data-chapter')
-        const chapter = ABOUT_CHAPTERS.find((c) => c.id === id)
-        if (chapter) setRole(chapter.role)
+        const raw = top.target.getAttribute('data-film-index')
+        const idx = Number(raw)
+        if (Number.isFinite(idx)) {
+          setFilmIndex(Math.min(FILMS.length - 1, Math.max(0, idx)))
+        }
       },
-      { root: null, rootMargin: '-28% 0px -42% 0px', threshold: [0.2, 0.45, 0.7] }
+      { root: null, rootMargin: '-30% 0px -40% 0px', threshold: [0.15, 0.4, 0.65] }
     )
 
     nodes.forEach((n) => observer.observe(n))
@@ -59,26 +61,28 @@ export default function About() {
     <Layout variant="paper">
       <SeoHead {...PAGE_SEO.about} jsonLd={jsonLd} />
       <div className="about-essay">
-        <aside className="about-essay__portrait">
-          <div className="about-essay__frame">
-            <img
-              src={ABOUT_HEADSHOT}
-              alt={ABOUT_HEADSHOT_ALT}
-              className="about-essay__img"
-              width={1200}
-              height={1500}
-              decoding="async"
-            />
-            <div className="about-essay__scrim" aria-hidden="true" />
-            <div className="about-essay__place">
-              <p>{SITE_LOCATION_LINE}</p>
-              <p aria-live="polite">
-                {SITE_CITY} {time}
-              </p>
+        <aside className="about-essay__rail">
+          <div className="about-essay__portrait">
+            <div className="about-essay__frame">
+              <img
+                src={ABOUT_HEADSHOT}
+                alt={ABOUT_HEADSHOT_ALT}
+                className="about-essay__img"
+                width={1200}
+                height={1500}
+                decoding="async"
+              />
+              <div className="about-essay__scrim" aria-hidden="true" />
+              <div className="about-essay__place">
+                <p>{SITE_LOCATION_LINE}</p>
+              </div>
+              <div className="about-essay__credit" aria-live="polite">
+                <p className="about-essay__directed">Directed</p>
+                <p key={activeFilm.title} className="about-essay__role">
+                  {activeFilm.title}
+                </p>
+              </div>
             </div>
-            <p key={role} className="about-essay__role">
-              {role}
-            </p>
           </div>
         </aside>
 
@@ -95,30 +99,42 @@ export default function About() {
             <p className="about-essay__pull">{PULL_LINE}</p>
           </header>
 
-          {ABOUT_CHAPTERS.map((chapter, i) => (
-            <section
-              key={chapter.id}
-              ref={(el) => {
-                chapterRefs.current[i] = el
-              }}
-              data-chapter={chapter.id}
-              className={`about-chapter${i === 0 ? ' about-chapter--lead' : ''}`}
-            >
-              <p className="about-chapter__label">{chapter.label}</p>
-              {chapter.paragraphs.map((text) => (
-                <p key={text.slice(0, 24)} className="about-chapter__body">
-                  {text}
-                </p>
-              ))}
-            </section>
-          ))}
+          {ABOUT_CHAPTERS.map((chapter, i) => {
+            const filmIdx = Math.min(i, FILMS.length - 1)
+            return (
+              <section
+                key={chapter.id}
+                ref={(el) => {
+                  sectionRefs.current[i] = el
+                }}
+                data-film-index={filmIdx}
+                className={`about-chapter${i === 0 ? ' about-chapter--lead' : ''}`}
+              >
+                <p className="about-chapter__label">{chapter.label}</p>
+                {chapter.paragraphs.map((text) => (
+                  <p key={text.slice(0, 24)} className="about-chapter__body">
+                    {text}
+                  </p>
+                ))}
+              </section>
+            )
+          })}
 
-          <section className="about-chapter about-chapter--films">
+          <section
+            ref={(el) => {
+              sectionRefs.current[ABOUT_CHAPTERS.length] = el
+            }}
+            data-film-index={FILMS.length - 1}
+            className="about-chapter about-chapter--films"
+          >
             <p className="about-chapter__label">04 / Selected films</p>
             <ul className="about-essay__films">
-              {FILMS.map((film) => (
+              {FILMS.map((film, i) => (
                 <li key={film.title}>
-                  <Link to="/film" className="about-essay__film-link">
+                  <Link
+                    to="/film"
+                    className={`about-essay__film-link${filmIndex === i ? ' is-active' : ''}`}
+                  >
                     <span
                       className={
                         film.inDevelopment

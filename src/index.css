@@ -387,11 +387,9 @@ img {
 @keyframes pageFlowIn {
   from {
     opacity: 0;
-    transform: translateY(32px);
   }
   to {
     opacity: 1;
-    transform: none;
   }
 }
 
@@ -588,6 +586,7 @@ img {
 .site-dock--light {
   color: rgba(26, 18, 12, 0.62);
   border-top: 1px solid rgba(26, 18, 12, 0.12);
+  background: var(--paper-warm);
 }
 
 .site-dock--dark {
@@ -2046,17 +2045,26 @@ html.is-gallery-focus header {
 
 /* —— About essay (warm paper) —— */
 .about-essay {
+  --about-dock-clear: 2.75rem;
+  --about-portrait-w: 42vw;
   display: grid;
   gap: 0;
-  padding-bottom: 4.5rem;
+  padding-bottom: 0;
 }
 
 @media (min-width: 810px) {
   .about-essay {
-    grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+    grid-template-columns: var(--about-portrait-w) minmax(0, 1fr);
     align-items: start;
     gap: 0;
   }
+}
+
+/* Spacer column — fixed portrait overlays this exact width */
+.about-essay__rail {
+  display: block;
+  min-height: 0;
+  pointer-events: none;
 }
 
 .about-essay__portrait {
@@ -2064,14 +2072,31 @@ html.is-gallery-focus header {
   flex-direction: column;
   gap: 0.85rem;
   padding: 2.5rem 18px 0;
+  pointer-events: auto;
 }
 
 @media (min-width: 810px) {
   .about-essay__portrait {
-    position: sticky;
+    position: fixed;
+    left: 0;
     top: 0;
+    bottom: var(--about-dock-clear);
+    z-index: 1;
+    width: var(--about-portrait-w);
+    height: auto;
+    max-height: none;
     padding: 0;
-    min-height: 100vh;
+    gap: 0;
+  }
+
+  .about-essay__rail {
+    /* Reserve column width; height follows text via grid */
+    min-height: calc(100dvh - var(--about-dock-clear));
+  }
+
+  /* Nav sits above the fixed portrait */
+  .layout-shell--paper > header {
+    z-index: 40;
   }
 }
 
@@ -2085,14 +2110,11 @@ html.is-gallery-focus header {
 @media (min-width: 810px) {
   .about-essay__frame {
     aspect-ratio: auto;
-    flex: 1;
-    min-height: calc(100vh - 3.5rem);
+    flex: none;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
   }
-
-  .about-essay__portrait {
-    gap: 0;
-  }
-
 }
 
 .about-essay__img {
@@ -2115,13 +2137,30 @@ html.is-gallery-focus header {
   );
 }
 
-.about-essay__role {
+.about-essay__credit {
   position: absolute;
   left: 1.15rem;
   right: 1.15rem;
   bottom: 1.15rem;
+  z-index: 2;
+}
+
+.about-essay__directed {
+  margin: 0 0 0.35rem;
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(247, 244, 239, 0.55);
+}
+
+.about-essay__role {
+  position: static;
+  left: auto;
+  right: auto;
+  bottom: auto;
   margin: 0;
-  font-size: clamp(1.5rem, 3.2vw, 2.15rem);
+  font-size: clamp(1.35rem, 2.8vw, 1.95rem);
   font-weight: 600;
   letter-spacing: -0.03em;
   text-transform: uppercase;
@@ -2133,7 +2172,8 @@ html.is-gallery-focus header {
   position: absolute;
   left: 1.15rem;
   right: 1.15rem;
-  bottom: 3.85rem;
+  bottom: auto;
+  top: 1.15rem;
   z-index: 2;
   display: flex;
   flex-wrap: wrap;
@@ -2158,8 +2198,9 @@ html.is-gallery-focus header {
 @media (min-width: 810px) {
   .about-essay__copy {
     padding-top: 5.5rem;
-    padding-bottom: 5rem;
+    padding-bottom: calc(4.5rem + var(--about-dock-clear));
     padding-left: clamp(2rem, 4vw, 4.5rem);
+    padding-right: clamp(1rem, 2vw, 1.5rem);
   }
 }
 
@@ -2269,6 +2310,15 @@ html.is-gallery-focus header {
 
 .about-essay__film-link:hover {
   border-bottom-color: rgba(26, 18, 12, 0.22);
+}
+
+.about-essay__film-link.is-active {
+  border-bottom-color: rgba(26, 18, 12, 0.35);
+  opacity: 1;
+}
+
+.about-essay__film-link.is-active span:first-child {
+  color: var(--accent);
 }
 
 .about-essay__film-year {
