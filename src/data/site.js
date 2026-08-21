@@ -15,6 +15,9 @@ export const NAV_LINKS = [
 export const IMDB_URL = 'https://www.imdb.com/name/nm0103622/'
 export const IMDB_PRO_URL = 'https://pro.imdb.com/name/nm0103622/'
 export const CONTACT_EMAIL = 'hello@eugenebrady.com'
+/** Update with the real number when available */
+export const CONTACT_PHONE = '+353 87 000 0000'
+export const CONTACT_PHONE_HREF = `tel:${CONTACT_PHONE.replace(/\s+/g, '')}`
 
 export const SITE_URL = 'https://eugenebrady.com'
 export const SITE_HOST = 'eugenebrady.com'

@@ -17,6 +17,9 @@ import {
   sitePath,
 } from '../data/site'
 
+const PULL_LINE =
+  'Frames that feel lived-in before a line is spoken.'
+
 export default function About() {
   const time = useDublinClock()
   const [role, setRole] = useState(ABOUT_CHAPTERS[0].role)
@@ -55,40 +58,41 @@ export default function About() {
   return (
     <Layout variant="paper">
       <SeoHead {...PAGE_SEO.about} jsonLd={jsonLd} />
-      <div className="about-treatment page-shell">
-        <aside className="about-treatment__portrait">
-          <div className="about-treatment__frame">
+      <div className="about-essay">
+        <aside className="about-essay__portrait">
+          <div className="about-essay__frame">
             <img
               src={ABOUT_HEADSHOT}
               alt={ABOUT_HEADSHOT_ALT}
-              className="about-treatment__img"
+              className="about-essay__img"
               width={1200}
               height={1500}
               decoding="async"
             />
-            <div className="about-treatment__scrim" aria-hidden="true" />
-            <p key={role} className="about-treatment__role">
+            <div className="about-essay__scrim" aria-hidden="true" />
+            <div className="about-essay__place">
+              <p>{SITE_LOCATION_LINE}</p>
+              <p aria-live="polite">
+                {SITE_CITY} {time}
+              </p>
+            </div>
+            <p key={role} className="about-essay__role">
               {role}
-            </p>
-          </div>
-          <div className="about-treatment__place">
-            <p>{SITE_LOCATION_LINE}</p>
-            <p aria-live="polite">
-              {SITE_CITY} {time}
             </p>
           </div>
         </aside>
 
-        <div className="about-treatment__copy">
-          <header className="about-treatment__head">
-            <p className="about-treatment__kicker">{pageKicker('/about')}</p>
-            <h1 className="about-treatment__title">
+        <div className="about-essay__copy page-shell">
+          <header className="about-essay__head">
+            <p className="about-essay__kicker">{pageKicker('/about')}</p>
+            <h1 className="about-essay__title">
               {SITE_NAME}
               <span className="text-[var(--accent)]">.</span>
             </h1>
-            <p className="about-treatment__subtitle">
+            <p className="about-essay__subtitle">
               {SITE_TAGLINE} · BAFTA Member
             </p>
+            <p className="about-essay__pull">{PULL_LINE}</p>
           </header>
 
           {ABOUT_CHAPTERS.map((chapter, i) => (
@@ -98,7 +102,7 @@ export default function About() {
                 chapterRefs.current[i] = el
               }}
               data-chapter={chapter.id}
-              className="about-chapter"
+              className={`about-chapter${i === 0 ? ' about-chapter--lead' : ''}`}
             >
               <p className="about-chapter__label">{chapter.label}</p>
               {chapter.paragraphs.map((text) => (
@@ -111,10 +115,10 @@ export default function About() {
 
           <section className="about-chapter about-chapter--films">
             <p className="about-chapter__label">04 / Selected films</p>
-            <ul className="about-treatment__films">
+            <ul className="about-essay__films">
               {FILMS.map((film) => (
                 <li key={film.title}>
-                  <Link to="/film" className="about-treatment__film-link">
+                  <Link to="/film" className="about-essay__film-link">
                     <span
                       className={
                         film.inDevelopment
@@ -124,16 +128,14 @@ export default function About() {
                     >
                       {film.title}
                     </span>
-                    <span className="about-treatment__film-year">
-                      {film.year}
-                    </span>
+                    <span className="about-essay__film-year">{film.year}</span>
                   </Link>
                 </li>
               ))}
             </ul>
           </section>
 
-          <div className="about-treatment__actions">
+          <div className="about-essay__actions">
             <Link
               to="/film"
               className="project-btn-dark inline-flex px-5 py-3 text-xs font-medium uppercase tracking-[-0.12px]"
@@ -142,7 +144,7 @@ export default function About() {
             </Link>
             <Link
               to="/contact"
-              className="about-treatment__ghost inline-flex px-5 py-3 text-xs font-medium uppercase tracking-[-0.12px]"
+              className="about-essay__ghost inline-flex px-5 py-3 text-xs font-medium uppercase tracking-[-0.12px]"
             >
               get in touch
             </Link>

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import Layout from '../components/Layout'
-import LightTable from '../components/LightTable'
+import PhotoStudies from '../components/PhotoStudies'
 import SeoHead from '../components/SeoHead'
 import {
   PhotoSeoCatalog,
@@ -25,8 +25,8 @@ export default function Photography() {
         <p className="photo-hero__lede">{PHOTO_LEDE}</p>
       </header>
 
-      <div className="page-shell pb-10">
-        <LightTable items={GALLERY} />
+      <div className="page-shell pb-16">
+        <PhotoStudies items={GALLERY} />
       </div>
     </Layout>
   )
