@@ -1782,6 +1782,31 @@ html.is-gallery-focus header {
   touch-action: pan-y;
 }
 
+.photo-studies__overlay.is-closing {
+  animation: none;
+  pointer-events: none;
+}
+
+.photo-studies__overlay.is-closing .photo-studies__backdrop {
+  transition: opacity 420ms var(--ease-spring);
+  opacity: 0;
+}
+
+.photo-studies__overlay.is-closing .photo-studies__close,
+.photo-studies__overlay.is-closing .photo-studies__caption,
+.photo-studies__overlay.is-closing .photo-studies__nav {
+  transition: opacity 220ms var(--ease-spring);
+  opacity: 0;
+}
+
+.photo-studies__overlay.is-closing .photo-studies__stage {
+  padding: 0;
+}
+
+.photo-studies__piece.is-origin .photo-studies__img {
+  opacity: 0.35;
+}
+
 .photo-studies__backdrop {
   position: absolute;
   inset: 0;
@@ -2523,6 +2548,13 @@ html.is-gallery-focus header {
 
   .photo-studies__piece:nth-child(n) {
     transform: none;
+  }
+
+  .photo-studies__overlay.is-closing .photo-studies__backdrop,
+  .photo-studies__overlay.is-closing .photo-studies__close,
+  .photo-studies__overlay.is-closing .photo-studies__caption,
+  .photo-studies__overlay.is-closing .photo-studies__nav {
+    transition: none !important;
   }
 
   .about-essay__role,
