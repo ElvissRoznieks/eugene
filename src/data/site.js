@@ -141,7 +141,7 @@ const photoModules = import.meta.glob('../../assets/gallery/*.webp', {
 })
 
 const PHOTO_ORDER = [
-  19, 20, 21, 3, 5, 17, 13, 10, 6, 16, 9, 1, 11, 7, 18, 15, 2, 4, 12, 14, 8,
+  21, 19, 20, 3, 5, 17, 13, 10, 6, 16, 9, 1, 11, 7, 18, 15, 2, 4, 12, 14, 8,
 ]
 
 const PHOTO_SPANS = ['tall', 'wide', 'square', 'tall', 'wide', 'square']
