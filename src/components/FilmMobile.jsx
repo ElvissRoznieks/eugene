@@ -196,14 +196,21 @@ export default function FilmMobile() {
             <ChevronLeft size={16} strokeWidth={1.75} />
           </button>
 
-          <div className="film-mobile__dots" aria-hidden="true">
+          <div
+            className="film-mobile__dots"
+            role="tablist"
+            aria-label="Choose film"
+          >
             {FILMS.map((film, i) => (
               <button
                 key={film.title}
                 type="button"
+                role="tab"
                 className={cx('film-mobile__dot', i === activeIndex && 'is-on')}
                 onClick={() => setActiveIndex(i)}
                 aria-label={film.title}
+                aria-selected={i === activeIndex}
+                tabIndex={i === activeIndex ? 0 : -1}
               />
             ))}
           </div>

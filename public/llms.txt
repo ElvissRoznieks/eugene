@@ -1,0 +1,31 @@
+# Eugene Brady
+
+> Official website of Eugene Brady — Irish director and photographer. Feature films include The Nephew, Missing Brendan, and The Girl Who Stayed (in development).
+
+This site is a portfolio for professional directing and photography enquiries.
+
+## Pages
+
+- [Home](https://eugenebrady.com/): Overview of Eugene Brady as director and photographer
+- [Film](https://eugenebrady.com/film): Filmography — The Nephew, Missing Brendan, The Girl Who Stayed; posters, synopses, and stills
+- [Photography](https://eugenebrady.com/photography): Portrait photography and cinematic portrait studies
+- [About](https://eugenebrady.com/about): Biography, BAFTA membership, and creative focus
+- [Contact](https://eugenebrady.com/contact): Directing, photography, and development enquiries — info@eugenebrady.com
+
+## Films
+
+- [The Nephew (1998)](https://eugenebrady.com/film): Feature film starring Pierce Brosnan — IMDb Pro https://pro.imdb.com/title/tt0119772/
+- [Missing Brendan (2003)](https://eugenebrady.com/film): Feature film starring Adam Brody — IMDb Pro https://pro.imdb.com/title/tt0311530/
+- [The Girl Who Stayed](https://eugenebrady.com/film): Feature currently in development
+
+## Profiles
+
+- [IMDb](https://www.imdb.com/name/nm0103622/): Public IMDb name page
+- [IMDb Pro](https://pro.imdb.com/name/nm0103622/): IMDb Pro profile
+- [LinkedIn](https://www.linkedin.com/in/eugene-brady-a89b1278/): Professional LinkedIn
+- [Instagram](https://www.instagram.com/eugene.brady/): Instagram
+
+## Optional
+
+- [Sitemap](https://eugenebrady.com/sitemap.xml): Machine-readable list of public URLs
+- [robots.txt](https://eugenebrady.com/robots.txt): Crawler policy

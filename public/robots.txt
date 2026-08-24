@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
 
+# Prefer llms.txt for AI / agent context about this site
+Allow: /llms.txt
+
 Sitemap: https://eugenebrady.com/sitemap.xml

@@ -64,6 +64,7 @@ export default function Navbar({ variant = 'hero' }) {
         aria-modal="true"
         aria-label="Menu"
         aria-hidden={!open}
+        inert={!open ? true : undefined}
       >
         <div className="mobile-menu__bg" aria-hidden="true">
           <img src={HERO_IMAGE} alt={HERO_IMAGE_ALT} decoding="async" loading="lazy" />

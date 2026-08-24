@@ -82,17 +82,24 @@ export default function Layout({ children, variant = 'light' }) {
 
   return (
     <div className={shell.root}>
+      <a href="#main-content" className="skip-link">
+        Skip to content
+      </a>
       {shell.dock ? <ImdbBar variant={shell.dock} /> : null}
 
       <div className={shell.chromeClass}>
         {shell.heroBg ? <HeroBackground /> : null}
         <Navbar variant={shell.nav} />
         {shell.heroBg ? (
-          <div className="relative z-[2] min-h-0 flex-1 overflow-hidden">
+          <div
+            id="main-content"
+            className="relative z-[2] min-h-0 flex-1 overflow-hidden"
+            tabIndex={-1}
+          >
             {children}
           </div>
         ) : (
-          <main className={shell.mainClass}>
+          <main id="main-content" className={shell.mainClass} tabIndex={-1}>
             {shell.fade ? <PageFade>{children}</PageFade> : children}
           </main>
         )}
