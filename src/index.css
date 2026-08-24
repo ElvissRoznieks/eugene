@@ -996,7 +996,7 @@ img {
   bottom: 0;
   z-index: 1;
   min-height: var(--dock-h);
-  background: #2a241c;
+  background: var(--darkroom);
   color: rgba(247, 244, 239, 0.78);
   border-top: 1px solid rgba(247, 244, 239, 0.1);
 }
@@ -1011,7 +1011,7 @@ img {
 }
 
 .site-dock--ink {
-  background: #2a241c;
+  background: var(--darkroom);
   color: rgba(247, 244, 239, 0.78);
 }
 
@@ -1050,10 +1050,25 @@ img {
 
 .site-dock--light,
 .site-dock--dark {
-  /* legacy hooks → same soft brand bar */
-  background: #2a241c;
+  background: var(--darkroom);
   color: rgba(247, 244, 239, 0.78);
   border-top: 1px solid rgba(247, 244, 239, 0.1);
+}
+
+/* About / light pages — match warm paper page background */
+.site-dock--paper {
+  background: var(--paper-warm);
+  color: rgba(10, 10, 10, 0.62);
+  border-top: 1px solid rgba(10, 10, 10, 0.08);
+}
+
+.site-dock--paper .site-dock__script {
+  mix-blend-mode: normal;
+  filter: none;
+}
+
+.site-dock--paper .site-dock__copy {
+  color: rgba(10, 10, 10, 0.45);
 }
 
 .site-dock__row {
@@ -1129,6 +1144,27 @@ img {
     opacity 0.25s var(--ease-spring),
     color 0.25s var(--ease-spring),
     background 0.25s var(--ease-spring);
+}
+
+.site-dock__social--imdb {
+  width: auto;
+  height: auto;
+  padding: 0.15rem 0;
+  opacity: 1;
+  background: transparent;
+}
+
+.site-dock__social--imdb:hover {
+  color: inherit;
+  background: transparent;
+  opacity: 0.88;
+}
+
+.site-dock__imdb-logo {
+  display: block;
+  width: auto;
+  height: 1.35rem;
+  border-radius: 0.2rem;
 }
 
 .site-dock__social:hover {
@@ -2165,6 +2201,15 @@ html.is-gallery-focus header {
     height: 1.85rem;
   }
 
+  .site-dock__social--imdb {
+    width: auto;
+    height: auto;
+  }
+
+  .site-dock__imdb-logo {
+    height: 1.2rem;
+  }
+
   .site-dock__script {
     height: 1rem;
     max-width: min(9.5rem, 46vw);
@@ -2387,7 +2432,8 @@ html.is-gallery-focus header {
 .photo-studies__overlay.is-closing .photo-studies__close,
 .photo-studies__overlay.is-closing .photo-studies__tool,
 .photo-studies__overlay.is-closing .photo-studies__caption,
-.photo-studies__overlay.is-closing .photo-studies__nav {
+.photo-studies__overlay.is-closing .photo-studies__nav-btn,
+.photo-studies__overlay.is-closing .photo-studies__count {
   transition: opacity 220ms var(--ease-spring);
   opacity: 0;
 }
@@ -2525,17 +2571,53 @@ html.is-gallery-focus header {
   color: rgba(243, 236, 226, 0.72);
 }
 
-.photo-studies__nav {
+.photo-studies__nav-btn {
   position: absolute;
-  right: clamp(1rem, 4vw, 2.5rem);
-  bottom: max(1.25rem, calc(env(safe-area-inset-bottom) + 1rem));
+  top: 50%;
+  transform: translateY(-50%);
   z-index: 3;
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(243, 236, 226, 0.28);
+  background: rgba(7, 6, 5, 0.55);
+  color: #f3ece2;
+  cursor: pointer;
+  transition:
+    border-color 0.28s var(--ease-spring),
+    color 0.28s ease,
+    transform 0.28s var(--ease-spring),
+    opacity 0.28s ease;
+}
+
+.photo-studies__nav-btn--prev {
+  left: clamp(0.75rem, 2.5vw, 1.5rem);
+}
+
+.photo-studies__nav-btn--next {
+  right: clamp(0.75rem, 2.5vw, 1.5rem);
+}
+
+.photo-studies__nav-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(calc(-50% - 1px));
+}
+
+.photo-studies__nav-btn:disabled {
+  opacity: 0.28;
+  cursor: default;
 }
 
 .photo-studies__count {
+  position: absolute;
+  left: 50%;
+  bottom: max(1.25rem, calc(env(safe-area-inset-bottom) + 1rem));
+  transform: translateX(-50%);
+  z-index: 3;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 0.14em;
@@ -2543,30 +2625,7 @@ html.is-gallery-focus header {
   color: rgba(243, 236, 226, 0.5);
   min-width: 3.5rem;
   text-align: center;
-}
-
-.photo-studies__nav-btn {
-  display: grid;
-  place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  margin: 0;
-  padding: 0;
-  border: 1px solid rgba(243, 236, 226, 0.28);
-  background: rgba(7, 6, 5, 0.45);
-  color: #f3ece2;
-  cursor: pointer;
-  transition: border-color 0.28s var(--ease-spring), color 0.28s ease;
-}
-
-.photo-studies__nav-btn:hover:not(:disabled) {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.photo-studies__nav-btn:disabled {
-  opacity: 0.28;
-  cursor: default;
+  pointer-events: none;
 }
 
 @keyframes photo-studies-in {

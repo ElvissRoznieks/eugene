@@ -1,7 +1,6 @@
 import Navbar from './Navbar'
 import HeroBackground from './HeroBackground'
 import ImdbBar from './ImdbBar'
-import ImdbFab from './ImdbFab'
 import PageFade from './PageFade'
 
 /**
@@ -82,8 +81,6 @@ export default function Layout({ children, variant = 'light' }) {
       {shell.revealDock ? (
         <div className="site-dock-spacer" aria-hidden="true" />
       ) : null}
-
-      {variant === 'hero' || variant === 'immersive' ? null : <ImdbFab />}
     </div>
   )
 }

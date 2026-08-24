@@ -374,7 +374,7 @@ export default function PhotoStudies({ items }) {
           if (closing) return
           if (e.target.closest('.photo-studies__overlay-img')) return
           if (e.target.closest('.photo-studies__tools')) return
-          if (e.target.closest('.photo-studies__nav')) return
+          if (e.target.closest('.photo-studies__nav-btn')) return
           close()
         }}
         {...(closing ? {} : swipe)}
@@ -431,29 +431,27 @@ export default function PhotoStudies({ items }) {
           ) : null}
         </div>
 
-        <div className="photo-studies__nav">
-          <button
-            type="button"
-            className="photo-studies__nav-btn"
-            onClick={() => step(-1)}
-            disabled={closing || active <= 0}
-            aria-label="Previous study"
-          >
-            <ChevronLeft size={20} strokeWidth={1.75} />
-          </button>
-          <span className="photo-studies__count">
-            {active + 1} / {items.length}
-          </span>
-          <button
-            type="button"
-            className="photo-studies__nav-btn"
-            onClick={() => step(1)}
-            disabled={closing || active >= items.length - 1}
-            aria-label="Next study"
-          >
-            <ChevronRight size={20} strokeWidth={1.75} />
-          </button>
-        </div>
+        <button
+          type="button"
+          className="photo-studies__nav-btn photo-studies__nav-btn--prev"
+          onClick={() => step(-1)}
+          disabled={closing || active <= 0}
+          aria-label="Previous study"
+        >
+          <ChevronLeft size={20} strokeWidth={1.75} />
+        </button>
+        <button
+          type="button"
+          className="photo-studies__nav-btn photo-studies__nav-btn--next"
+          onClick={() => step(1)}
+          disabled={closing || active >= items.length - 1}
+          aria-label="Next study"
+        >
+          <ChevronRight size={20} strokeWidth={1.75} />
+        </button>
+        <span className="photo-studies__count">
+          {active + 1} / {items.length}
+        </span>
       </div>,
       document.body
     )
