@@ -3128,23 +3128,15 @@ html.is-gallery-focus header {
   text-transform: lowercase;
   text-decoration: none;
   color: #f3ece2;
-  opacity: 1;
-  transition: opacity 0.28s ease;
+  transition:
+    opacity 0.28s ease,
+    color 0.28s ease;
   word-break: break-word;
-  animation: contact-email-in 640ms var(--ease-spring) both;
 }
 
-.contact-signal__email::after {
-  content: '';
-  display: block;
-  width: 2.75rem;
-  height: 1px;
-  margin-top: 0.85rem;
-  background: var(--accent);
-}
-
+.look.is-in.contact-signal__email:hover,
 .contact-signal__email:hover {
-  opacity: 0.72;
+  opacity: 0.65;
 }
 
 .contact-signal__lede {
@@ -3313,17 +3305,6 @@ html.is-gallery-focus header {
 
 .contact-signal__submit:hover {
   color: var(--accent);
-}
-
-@keyframes contact-email-in {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 @media (max-width: 809.98px) {
