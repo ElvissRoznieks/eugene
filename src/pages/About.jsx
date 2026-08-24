@@ -8,7 +8,7 @@ import {
   ABOUT_BIO,
   ABOUT_HEADSHOT,
   ABOUT_HEADSHOT_ALT,
-  FILMS,
+  // FILMS,
   PAGE_SEO,
   SITE_LOCATION_LINE,
   SITE_NAME,
@@ -16,8 +16,8 @@ import {
   sitePath,
 } from '../data/site'
 
-const FEATURED_FILM =
-  FILMS.find((film) => film.inDevelopment) || FILMS[FILMS.length - 1]
+// const FEATURED_FILM =
+//   FILMS.find((film) => film.inDevelopment) || FILMS[FILMS.length - 1]
 
 export default function About() {
   const [portraitHover, setPortraitHover] = useState(false)
@@ -79,10 +79,10 @@ export default function About() {
               <div className="about-essay__place">
                 <p>{SITE_LOCATION_LINE}</p>
               </div>
-              <div className="about-essay__credit">
+              {/* <div className="about-essay__credit">
                 <p className="about-essay__directed">In development</p>
                 <p className="about-essay__role">{FEATURED_FILM.title}</p>
-              </div>
+              </div> */}
             </div>
           </Reveal>
         </aside>
@@ -97,7 +97,6 @@ export default function About() {
               delay={90}
             >
               {SITE_NAME}
-              <span className="text-[var(--accent)]">.</span>
             </Reveal>
             <Reveal
               as="p"
