@@ -123,6 +123,13 @@ body {
 @media (max-width: 809.98px) {
   .hero-name {
     max-width: min(100%, 17.5rem);
+    align-self: flex-start;
+    margin-inline: 0;
+  }
+
+  .hero-name__signature {
+    align-self: flex-start;
+    margin-inline: 0;
   }
 
   .hero-imdb__logo {

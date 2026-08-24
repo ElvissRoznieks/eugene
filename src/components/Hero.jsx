@@ -11,7 +11,7 @@ export default function Hero() {
     <main className="relative z-[2] flex h-full min-h-0 w-full flex-col mobile:overflow-hidden">
       <div className="mx-auto flex h-full w-full max-w-[1340px] flex-1 flex-col justify-end items-end pt-[190px] px-[15px] mobile:items-start mobile:justify-end mobile:px-[18px] mobile:pt-[4.75rem] mobile:pb-[max(0.85rem,env(safe-area-inset-bottom))] md-tablet:px-[18px]">
         <section className="flex w-full items-end justify-between gap-[50px] pb-[3.35rem] mobile:flex-col mobile:items-start mobile:gap-4 mobile:pb-0 md-tablet:gap-7 md-tablet:pb-11">
-          <div className="flex-[2] self-center mobile:w-full mobile:max-w-[17.5rem]" ref={nameReveal.ref}>
+          <div className="flex-[2] self-center mobile:w-full mobile:max-w-[17.5rem] mobile:self-start" ref={nameReveal.ref}>
             <h1
               className={`hero-name animate-reveal-up ${
                 nameReveal.visible ? 'is-visible' : ''
