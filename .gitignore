@@ -8,8 +8,6 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-dist
-dist-ssr
 *.local
 
 # Editor directories and files
@@ -18,12 +16,14 @@ dist-ssr
 .idea
 .DS_Store
 *.suo
+*.docx
+*.doc
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
 # Source / delivery dumps (never commit originals)
-eugene.zip
+*.zip
 assets/Elvis - Website Images (Pages 1,2,3)/
 assets/Elvis - Website Images (Pages 4,5)/

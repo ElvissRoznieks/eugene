@@ -4,8 +4,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Download,
-  ExternalLink,
-  Film,
   LayoutGrid,
   Lightbulb,
   LogIn,
@@ -20,9 +18,11 @@ import { FILMS, DEFAULT_ATMOSPHERE } from '../data/site'
 import usePosterAudio from '../hooks/usePosterAudio'
 import { useHorizontalSwipe } from '../hooks/usePointerSwipe'
 import { cx } from '../utils/dom'
-import wallWhiteTex from '../assets/wall-white.jpg'
+// import wallWhiteTex from '../assets/wall-white.jpg'
+import imdbLogo from '../assets/imdb-logo.png'
 
-const GALLERY_BG_VIDEO = '/video/gallery-bg.mp4'
+// const GALLERY_BG_VIDEO = '/video/gallery-bg.mp4'
+const GALLERY_WALL_COLOR = '#f7f4ef'
 
 const WALL_H = 6.2
 // Match supplied posters (1024×717 ≈ 1.428)
@@ -721,12 +721,15 @@ function GalleryWorld({
   motionLite,
 }) {
   const { camera, size, gl } = useThree()
-  const plasterMap = useWallTexture(wallWhiteTex)
-  const { map: videoMap, ready: videoReady } = useWallVideoTexture(
-    GALLERY_BG_VIDEO,
-    wallVideo,
-  )
-  const wallMap = wallVideo ? videoMap || plasterMap : plasterMap
+  // Plain cream wall — image/video BG commented out
+  // const plasterMap = useWallTexture(wallWhiteTex)
+  // const { map: videoMap, ready: videoReady } = useWallVideoTexture(
+  //   GALLERY_BG_VIDEO,
+  //   wallVideo,
+  // )
+  // const wallMap = wallVideo ? videoMap || plasterMap : plasterMap
+  const wallMap = null
+  const videoReady = false
   const spotRef = useRef()
   const spotTarget = useRef()
   const keyLight = useRef()
@@ -961,8 +964,8 @@ function GalleryWorld({
 
   return (
     <>
-      <color attach="background" args={['#faf9f7']} />
-      <fog attach="fog" args={['#faf9f7', 18, 38]} />
+      <color attach="background" args={[GALLERY_WALL_COLOR]} />
+      <fog attach="fog" args={[GALLERY_WALL_COLOR, 18, 38]} />
 
       <ambientLight ref={ambientRef} intensity={0.85} color="#f7f2eb" />
 
@@ -1045,16 +1048,15 @@ function GalleryWorld({
       <object3D ref={spotTarget} position={[focusX, CAM_Y, 0.02]} />
 
       <mesh
-        key={wallVideo ? 'wall-video' : wallMap ? 'wall-plaster' : 'wall-flat'}
+        key="wall-cream"
         position={[0, CAM_Y + 0.35, 0]}
         receiveShadow
       >
         <planeGeometry args={[wallWidth, WALL_H]} />
         <meshStandardMaterial
-          map={wallMap}
-          color="#ffffff"
-          roughness={wallVideo ? 0.88 : 0.94}
-          metalness={0.02}
+          color={GALLERY_WALL_COLOR}
+          roughness={0.96}
+          metalness={0}
         />
       </mesh>
 
@@ -1067,7 +1069,7 @@ function GalleryWorld({
         receiveShadow
       >
         <planeGeometry args={[wallWidth + 4, 9]} />
-        <meshStandardMaterial color="#f7f5f2" roughness={0.92} />
+        <meshStandardMaterial color={GALLERY_WALL_COLOR} roughness={0.96} />
       </mesh>
 
       {posters.map((p) => (
@@ -1172,7 +1174,9 @@ export default function PosterWall() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [spotlightOn, setSpotlightOn] = useState(false)
   const [soundOn, setSoundOn] = useState(true)
-  const [wallVideo, setWallVideo] = useState(false)
+  // BG video feature disabled — keep state for easy restore
+  // const [wallVideo, setWallVideo] = useState(false)
+  const wallVideo = false
   const [canvasKey, setCanvasKey] = useState(0)
   const [webglOk, setWebglOk] = useState(true)
   const [pageScrollable, setPageScrollable] = useState(false)
@@ -1647,10 +1651,18 @@ export default function PosterWall() {
                 href={active.imdb}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="poster-wall__cta"
+                className="poster-wall__imdb"
+                aria-label={`${active.title} on IMDb`}
+                title="IMDb"
               >
-                View on IMDb
-                <ExternalLink size={14} strokeWidth={1.75} />
+                <img
+                  src={imdbLogo}
+                  alt=""
+                  className="poster-wall__imdb-logo"
+                  width={128}
+                  height={64}
+                  decoding="async"
+                />
               </a>
             ) : (
               <span className="poster-wall__cta poster-wall__cta--muted">
@@ -1694,6 +1706,7 @@ export default function PosterWall() {
                 )}
               </button>
 
+              {/* BG video feature commented out
               <button
                 type="button"
                 className={`poster-wall__spot-btn${wallVideo ? ' is-on' : ''}`}
@@ -1704,6 +1717,7 @@ export default function PosterWall() {
                 <Film size={16} strokeWidth={1.75} />
                 <span>{wallVideo ? 'BG video' : 'BG image'}</span>
               </button>
+              */}
             </div>
           </aside>
         </div>
@@ -1772,7 +1786,7 @@ export default function PosterWall() {
                 depth: true,
               }}
               onCreated={({ gl, size }) => {
-                gl.setClearColor('#faf9f7', 1)
+                gl.setClearColor(GALLERY_WALL_COLOR, 1)
                 gl.toneMapping = THREE.ACESFilmicToneMapping
                 gl.toneMappingExposure = 1.38
                 // Cap drawing buffer — tall stages + retina DPR can exhaust

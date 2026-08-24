@@ -152,6 +152,10 @@ body {
   border-radius: 0.28rem;
 }
 
+.italic {
+  font-style: italic;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -1214,7 +1218,7 @@ html.is-gallery-focus header {
   height: 100dvh;
   max-height: 100dvh;
   overflow: hidden;
-  background: #faf9f7;
+  background: #f7f4ef;
   touch-action: none;
   cursor: grab;
   font-family: var(--film-sans);
@@ -1542,6 +1546,35 @@ html.is-gallery-focus header {
 .poster-wall__cta--muted {
   border-bottom-color: rgba(36, 25, 16, 0.25);
   color: rgba(42, 32, 24, 0.45);
+}
+
+.poster-wall__imdb {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 0.35rem;
+  line-height: 0;
+  border-radius: 0.35rem;
+  text-decoration: none;
+  box-shadow:
+    0 1px 0 rgba(10, 10, 10, 0.08),
+    0 10px 28px rgba(10, 10, 10, 0.12);
+  transition:
+    transform 0.28s var(--ease-spring),
+    box-shadow 0.28s var(--ease-spring);
+}
+
+.poster-wall__imdb:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow:
+    0 1px 0 rgba(10, 10, 10, 0.06),
+    0 14px 32px rgba(10, 10, 10, 0.16);
+}
+
+.poster-wall__imdb-logo {
+  display: block;
+  width: 3.75rem;
+  height: auto;
+  border-radius: 0.28rem;
 }
 
 .poster-wall__progress {

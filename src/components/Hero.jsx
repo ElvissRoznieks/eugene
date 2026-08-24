@@ -42,8 +42,10 @@ export default function Hero() {
                 Director / Photographer
               </p>
               <p>
-                Feature films include The Nephew, starring Pierce Brosnan, and
-                Missing Brendan, starring Adam Brody.
+                Feature films include{' '}
+                <span className="italic">The Nephew</span>, starring Pierce
+                Brosnan, and <span className="italic">Missing Brendan</span>,
+                starring Adam Brody.
               </p>
               <p>
                 Exploring grief, family, identity and memory through cinematic

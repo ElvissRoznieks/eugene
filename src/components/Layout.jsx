@@ -25,7 +25,7 @@ const SHELL = {
     fade: false,
     heroBg: false,
     revealDock: false,
-    chromeClass: 'relative z-[2] h-screen overflow-hidden bg-[var(--gallery-plaster)]',
+    chromeClass: 'relative z-[2] h-screen overflow-hidden bg-[var(--paper-warm)]',
     mainClass: 'h-full overflow-hidden',
   },
   dark: {
@@ -83,7 +83,7 @@ export default function Layout({ children, variant = 'light' }) {
         <div className="site-dock-spacer" aria-hidden="true" />
       ) : null}
 
-      {variant === 'hero' ? null : <ImdbFab />}
+      {variant === 'hero' || variant === 'immersive' ? null : <ImdbFab />}
     </div>
   )
 }
