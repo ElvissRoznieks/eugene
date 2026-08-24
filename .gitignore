@@ -25,5 +25,5 @@ node_modules
 
 # Source / delivery dumps (never commit originals)
 *.zip
-assets/Elvis - Website Images (Pages 1,2,3)/
-assets/Elvis - Website Images (Pages 4,5)/
+# Entire root assets/ folder (gallery, movies, dumps) — site builds use copies in src/assets/
+assets/
