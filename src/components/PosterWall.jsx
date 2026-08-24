@@ -9,13 +9,13 @@ import {
   LogIn,
   Rows3,
   Star,
-  Volume2,
-  VolumeX,
+  // Volume2,
+  // VolumeX,
   X,
 } from 'lucide-react'
 import * as THREE from 'three'
-import { FILMS, DEFAULT_ATMOSPHERE } from '../data/site'
-import usePosterAudio from '../hooks/usePosterAudio'
+import { FILMS /*, DEFAULT_ATMOSPHERE */ } from '../data/site'
+// import usePosterAudio from '../hooks/usePosterAudio'
 import { useHorizontalSwipe } from '../hooks/usePointerSwipe'
 import { cx } from '../utils/dom'
 // import wallWhiteTex from '../assets/wall-white.jpg'
@@ -1173,7 +1173,8 @@ export default function PosterWall() {
   }
   const [activeIndex, setActiveIndex] = useState(0)
   const [spotlightOn, setSpotlightOn] = useState(false)
-  const [soundOn, setSoundOn] = useState(true)
+  // Sound feature disabled — keep for easy restore
+  // const [soundOn, setSoundOn] = useState(true)
   // BG video feature disabled — keep state for easy restore
   // const [wallVideo, setWallVideo] = useState(false)
   const wallVideo = false
@@ -1189,8 +1190,8 @@ export default function PosterWall() {
   const slideIndexRef = useRef(0)
   slideIndexRef.current = slideIndex
   const active = FILMS[activeIndex]
-  const trackSrc = active.audio || DEFAULT_ATMOSPHERE
-  const isCustomTrack = Boolean(active.audio)
+  // const trackSrc = active.audio || DEFAULT_ATMOSPHERE
+  // const isCustomTrack = Boolean(active.audio)
   const roomBusy = roomPhase !== 'idle'
   const roomZooming =
     roomPhase === 'zooming-in' || roomPhase === 'zooming-out'
@@ -1214,7 +1215,7 @@ export default function PosterWall() {
     return [head, ...rest]
   }, [active])
 
-  usePosterAudio(trackSrc, soundOn)
+  // usePosterAudio(trackSrc, soundOn)
 
   useEffect(() => {
     roomLockRef.current = roomBusy
@@ -1687,6 +1688,7 @@ export default function PosterWall() {
                 <Lightbulb size={16} strokeWidth={1.75} />
               </button>
 
+              {/* Sound feature commented out
               <button
                 type="button"
                 className={`poster-wall__spot-btn poster-wall__spot-btn--icon${soundOn ? ' is-on' : ''}`}
@@ -1705,6 +1707,7 @@ export default function PosterWall() {
                   <VolumeX size={16} strokeWidth={1.75} />
                 )}
               </button>
+              */}
 
               {/* BG video feature commented out
               <button
