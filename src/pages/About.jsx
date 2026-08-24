@@ -13,12 +13,8 @@ import {
   SITE_LOCATION_LINE,
   SITE_NAME,
   SITE_TAGLINE,
-  pageKicker,
   sitePath,
 } from '../data/site'
-
-const PULL_LINE =
-  'Frames that feel lived-in before a line is spoken.'
 
 export default function About() {
   const [filmIndex, setFilmIndex] = useState(0)
@@ -121,9 +117,11 @@ export default function About() {
 
         <div className="about-essay__copy page-shell">
           <header className="about-essay__head">
+            {/* Kicker commented out
             <Reveal as="p" className="about-essay__kicker" immediate delay={0}>
               {pageKicker('/about')}
             </Reveal>
+            */}
             <Reveal
               as="h1"
               className="about-essay__title look--title"
@@ -141,14 +139,6 @@ export default function About() {
               delay={200}
             >
               {SITE_TAGLINE} · BAFTA Member
-            </Reveal>
-            <Reveal
-              as="p"
-              className="about-essay__pull"
-              immediate
-              delay={300}
-            >
-              {PULL_LINE}
             </Reveal>
           </header>
 
@@ -175,6 +165,7 @@ export default function About() {
             )
           })}
 
+          {/* Selected films list commented out
           <Reveal
             as="section"
             ref={(el) => {
@@ -183,7 +174,7 @@ export default function About() {
             data-film-index={FILMS.length - 1}
             className="about-chapter about-chapter--films"
           >
-            <p className="about-chapter__label">04 / Selected films</p>
+            <p className="about-chapter__label">05 / Selected films</p>
             <ul className="about-essay__films">
               {FILMS.map((film, i) => (
                 <li key={film.title}>
@@ -206,6 +197,7 @@ export default function About() {
               ))}
             </ul>
           </Reveal>
+          */}
 
           <Reveal className="about-essay__actions" delay={80}>
             <Link

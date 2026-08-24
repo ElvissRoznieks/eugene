@@ -174,7 +174,7 @@ export const ABOUT_HEADSHOT_ALT =
   'Outdoor portrait of Eugene Brady against a blue sky, looking toward the light'
 
 export const PHOTO_LEDE =
-  'Portrait studies approached as characters—still frames that carry the weight of a scene.'
+  'Photographic portrait studies that approach their subjects as characters, blurring the line between photography and cinema.'
 
 export const CONTACT_ENQUIRIES = [
   { id: 'Directing', prompt: 'For directing and narrative enquiries.' },
@@ -187,25 +187,32 @@ export const ABOUT_CHAPTERS = [
     role: 'Director',
     label: '01 / Voice',
     paragraphs: [
-      `${SITE_NAME} is an Irish director and photographer whose work explores grief, identity, family and the quiet moments that shape our lives.`,
-      'Working between narrative cinema and portraiture, Brady is drawn to stories that balance emotional realism with strong visual atmosphere.',
-    ],
-  },
-  {
-    id: 'approach',
-    role: 'Photographer',
-    label: '02 / Approach',
-    paragraphs: [
-      'His films are often grounded in performance, stillness and character—frames that feel lived-in before a line is spoken.',
-      'Alongside filmmaking, he develops photographic portrait studies that approach subjects as characters—blurring photography and cinema.',
+      'Eugene Brady is an Irish filmmaker and photographer whose work explores grief, family, identity and memory through intimate character drama and cinematic portraiture.',
+      'Drawn to emotionally authentic stories with a strong visual atmosphere, his films are grounded in performance and stillness, revealing the tensions that exist beneath everyday life.',
     ],
   },
   {
     id: 'work',
     role: 'BAFTA member',
-    label: '03 / Work',
+    label: '02 / Work',
     paragraphs: [
-      `A BAFTA member, Brady directed The Nephew, starring Pierce Brosnan, and Missing Brendan, starring Adam Brody. He has worked internationally across the United States, Europe and Australia and is currently developing The Girl Who Stayed.`,
+      'A BAFTA member, Brady directed The Nephew, starring Pierce Brosnan, and Missing Brendan, starring Adam Brody. He has worked internationally across the United States, Europe and Australia, and is currently developing his next feature film, The Girl Who Stayed.',
+    ],
+  },
+  {
+    id: 'quote',
+    role: 'Director',
+    label: '03 / Note',
+    paragraphs: [
+      '“I make films about the families we inherit, the people we lose, and the memories that continue to shape us.”',
+    ],
+  },
+  {
+    id: 'portraiture',
+    role: 'Photographer',
+    label: '04 / Portraiture',
+    paragraphs: [
+      'His photographic portrait studies approach their subjects as characters, blurring the line between photography and cinema.',
     ],
   },
 ]
