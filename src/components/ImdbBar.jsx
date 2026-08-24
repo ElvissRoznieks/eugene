@@ -27,6 +27,7 @@ export default function ImdbBar({ variant = 'hero' }) {
             width={92}
             height={22}
             decoding="async"
+            loading="lazy"
           />
         </Link>
 
@@ -50,6 +51,7 @@ export default function ImdbBar({ variant = 'hero' }) {
               width={575}
               height={290}
               decoding="async"
+              loading="lazy"
             />
           </a>
         </nav>

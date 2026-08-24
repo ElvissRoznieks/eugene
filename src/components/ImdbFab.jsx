@@ -19,6 +19,7 @@ export default function ImdbFab() {
         width={575}
         height={290}
         decoding="async"
+        loading="lazy"
       />
     </a>
   )

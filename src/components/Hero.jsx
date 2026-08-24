@@ -71,10 +71,11 @@ export default function Hero() {
                   src={imdbLogo}
                   alt="IMDb"
                   className="hero-imdb__logo"
-                width={575}
-                height={290}
-                decoding="async"
-              />
+                  width={575}
+                  height={290}
+                  decoding="async"
+                  loading="lazy"
+                />
               </a>
             </div>
           </div>

@@ -117,6 +117,7 @@ function GalleryLightbox({ slides, open, onClose }) {
                     alt={slide.alt || slide.title}
                     draggable={false}
                     decoding="async"
+                    loading={i === index ? 'eager' : 'lazy'}
                   />
                 </div>
               ) : null}
@@ -177,6 +178,8 @@ export default function FilmMobile() {
                 alt={active.imageAlt || active.title}
                 draggable={false}
                 decoding="async"
+                loading="eager"
+                fetchPriority="high"
               />
             </div>
           </div>
@@ -249,6 +252,7 @@ export default function FilmMobile() {
                 width={575}
                 height={290}
                 decoding="async"
+                loading="lazy"
               />
             </a>
           ) : (

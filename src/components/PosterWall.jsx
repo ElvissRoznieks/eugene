@@ -1645,6 +1645,7 @@ export default function PosterWall() {
                     width={575}
                     height={290}
                     decoding="async"
+                    loading="lazy"
                   />
                 </a>
               ) : (

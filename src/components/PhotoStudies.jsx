@@ -65,7 +65,9 @@ function PhotoStudyPiece({
         src={item.image}
         alt={alt}
         className="photo-studies__img"
-        loading="lazy"
+        loading={index < 3 ? 'eager' : 'lazy'}
+        fetchPriority={index === 0 ? 'high' : 'auto'}
+        decoding="async"
         draggable={false}
       />
       {hovered && !isOrigin ? (
@@ -460,6 +462,8 @@ export default function PhotoStudies({ items }) {
               `${current.title} — ${current.category} photograph`
             }
             className="photo-studies__overlay-img"
+            loading="eager"
+            decoding="async"
             draggable={false}
             onClick={(e) => e.stopPropagation()}
           />

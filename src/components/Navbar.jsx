@@ -32,6 +32,8 @@ function EbLogo({ className, invert = false }) {
       width={44}
       height={44}
       decoding="async"
+      loading="eager"
+      fetchPriority="low"
     />
   )
 }
@@ -64,7 +66,7 @@ export default function Navbar({ variant = 'hero' }) {
         aria-hidden={!open}
       >
         <div className="mobile-menu__bg" aria-hidden="true">
-          <img src={HERO_IMAGE} alt={HERO_IMAGE_ALT} decoding="async" />
+          <img src={HERO_IMAGE} alt={HERO_IMAGE_ALT} decoding="async" loading="lazy" />
           <div className="mobile-menu__scrim" />
         </div>
 
