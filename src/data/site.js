@@ -163,7 +163,7 @@ export const GALLERY = PHOTO_ORDER.filter((n) => photoByNumber[n]).map(
       year: 'Select',
       note: null,
       span: PHOTO_SPANS[i % PHOTO_SPANS.length],
-      imageAlt: `Portrait study ${n} by ${SITE_NAME}`,
+      imageAlt: `Photographic portrait study ${n} by ${SITE_NAME}`,
       image: photoByNumber[fileN],
     }
   },
@@ -171,7 +171,7 @@ export const GALLERY = PHOTO_ORDER.filter((n) => photoByNumber[n]).map(
 
 export const ABOUT_HEADSHOT = bradyHeadshot
 export const ABOUT_HEADSHOT_ALT =
-  'Outdoor portrait of Eugene Brady against a blue sky, looking toward the light'
+  'Portrait of Eugene Brady, Irish director and photographer'
 
 export const PHOTO_LEDE =
   'Photographic portrait studies that approach their subjects as characters, blurring the line between photography and cinema.'
@@ -211,6 +211,8 @@ export const FILM_TITLES_INLINE = formatTitleList(FILMS.map((f) => f.title))
 
 export const SITE_DEFAULT_DESCRIPTION = `${SITE_NAME} — ${SITE_NATIONALITY.toLowerCase()} director and photographer exploring grief, family, identity and memory. Films include ${FILM_TITLES_INLINE}.`
 
+export const SITE_OG_IMAGE_ALT = `${SITE_NAME} — ${SITE_TAGLINE}`
+
 export function navByPath(path) {
   return NAV_LINKS.find((link) => link.path === path)
 }
@@ -235,29 +237,34 @@ export const PAGE_SEO = {
     description: SITE_DEFAULT_DESCRIPTION,
     path: '/',
     image: SITE_OG_IMAGE,
+    imageAlt: SITE_OG_IMAGE_ALT,
   },
   film: {
     title: 'Film',
-    description: `Wall of Fame — films by ${SITE_NAME} including ${FILM_TITLES_INLINE}. Interactive gallery with posters, synopses and credits.`,
+    description: `Films by ${SITE_NAME} — ${FILM_TITLES_INLINE}. Synopses, posters and stills from features including The Nephew and Missing Brendan.`,
     path: '/film',
     image: SITE_OG_IMAGE,
+    imageAlt: `Film posters by ${SITE_NAME}`,
   },
   photography: {
     title: 'Photography',
-    description: `Portraiture by ${SITE_NAME} — ${PHOTO_LEDE}`,
+    description: `Photography by ${SITE_NAME} — ${PHOTO_LEDE}`,
     path: '/photography',
-    image: GALLERY[0]?.image,
+    image: SITE_OG_IMAGE,
+    imageAlt: `Portrait photography by ${SITE_NAME}`,
   },
   about: {
     title: 'About',
     description: `About ${SITE_NAME} — ${SITE_NATIONALITY} director and photographer, BAFTA member. Films include ${FILM_TITLES_INLINE}.`,
     path: '/about',
     image: SITE_OG_IMAGE,
+    imageAlt: ABOUT_HEADSHOT_ALT,
   },
   contact: {
     title: 'Contact',
-    description: `Contact ${SITE_NAME} for directing, photography or development enquiries — ${CONTACT_EMAIL}`,
+    description: `Contact ${SITE_NAME} for directing, photography and development enquiries — ${CONTACT_EMAIL}`,
     path: '/contact',
     image: SITE_OG_IMAGE,
+    imageAlt: SITE_OG_IMAGE_ALT,
   },
 }

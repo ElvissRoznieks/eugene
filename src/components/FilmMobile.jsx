@@ -244,7 +244,7 @@ export default function FilmMobile() {
             >
               <img
                 src={imdbLogo}
-                alt=""
+                alt="IMDb"
                 className="film-mobile__imdb-logo"
                 width={128}
                 height={64}

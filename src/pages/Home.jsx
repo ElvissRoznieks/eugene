@@ -1,6 +1,6 @@
 import Layout from '../components/Layout'
 import Hero from '../components/Hero'
-import SeoHead, { personJsonLd } from '../components/SeoHead'
+import SeoHead, { personJsonLd, websiteJsonLd } from '../components/SeoHead'
 import { PAGE_SEO, SITE_OG_IMAGE } from '../data/site'
 
 export default function Home() {
@@ -8,14 +8,18 @@ export default function Home() {
     <Layout variant="hero">
       <SeoHead
         {...PAGE_SEO.home}
-        jsonLd={personJsonLd({
-          image: SITE_OG_IMAGE,
-          knowsAbout: [
-            'Film directing',
-            'Portrait photography',
-            'Narrative cinema',
-          ],
-        })}
+        jsonLd={[
+          websiteJsonLd(),
+          personJsonLd({
+            image: SITE_OG_IMAGE,
+            knowsAbout: [
+              'Film directing',
+              'Portrait photography',
+              'Narrative cinema',
+              'Feature film',
+            ],
+          }),
+        ]}
       />
       <Hero />
     </Layout>

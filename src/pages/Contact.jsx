@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import Layout from '../components/Layout'
 import Reveal from '../components/Reveal'
-import SeoHead from '../components/SeoHead'
-import { CONTACT_EMAIL, PAGE_SEO, mailSubject } from '../data/site'
+import SeoHead, { contactPageJsonLd } from '../components/SeoHead'
+import { CONTACT_EMAIL, PAGE_SEO, SITE_NAME, mailSubject } from '../data/site'
 
 export default function Contact() {
   const [form, setForm] = useState({
@@ -11,6 +11,7 @@ export default function Contact() {
     message: '',
   })
   const [sent, setSent] = useState(false)
+  const jsonLd = useMemo(() => contactPageJsonLd(), [])
 
   function handleChange(e) {
     const { name, value } = e.target
@@ -29,8 +30,8 @@ export default function Contact() {
 
   return (
     <Layout variant="dark">
-      <SeoHead {...PAGE_SEO.contact} />
-      <h1 className="seo-sr">Contact</h1>
+      <SeoHead {...PAGE_SEO.contact} jsonLd={jsonLd} />
+      <h1 className="seo-sr">Contact {SITE_NAME}</h1>
       <div className="contact-signal page-shell">
         <Reveal
           as="a"

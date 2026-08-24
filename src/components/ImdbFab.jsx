@@ -14,7 +14,7 @@ export default function ImdbFab() {
     >
       <img
         src={imdbLogo}
-        alt=""
+        alt="IMDb"
         className="imdb-fab__logo"
         width={128}
         height={64}

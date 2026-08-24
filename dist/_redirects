@@ -1,2 +1,3 @@
 # Cloudflare Pages / Netlify-style SPA fallback
+/films  /film  301
 /*    /index.html   200

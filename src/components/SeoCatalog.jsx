@@ -32,8 +32,8 @@ export function FilmSeoCatalog() {
               <img
                 src={film.poster}
                 alt={film.imageAlt || `${film.title} film poster`}
-                width={800}
-                height={1200}
+                width={1024}
+                height={717}
                 loading="lazy"
                 decoding="async"
               />
@@ -52,6 +52,22 @@ export function FilmSeoCatalog() {
                     {film.title} on IMDb
                   </a>
                 </p>
+              ) : null}
+              {film.gallery?.length ? (
+                <ul>
+                  {film.gallery.map((still) => (
+                    <li key={still.id}>
+                      <img
+                        src={still.src}
+                        alt={still.alt || `${film.title} — production still ${still.id}`}
+                        width={1280}
+                        height={720}
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </li>
+                  ))}
+                </ul>
               ) : null}
             </article>
           </li>
@@ -141,6 +157,22 @@ export function photoCollectionJsonLd() {
     name: `Photography by ${SITE_NAME}`,
     description: `Portraiture and photographic studies by ${SITE_NAME}. ${PHOTO_LEDE}`,
     url: sitePath('/photography'),
-    image: GALLERY.map((item) => item.image),
+    creator: {
+      '@type': 'Person',
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+    image: GALLERY.map((item) => ({
+      '@type': 'ImageObject',
+      contentUrl: absoluteUrl(item.image, SITE_URL),
+      name: item.title,
+      description:
+        item.imageAlt ||
+        `${item.title} — ${item.category} photograph by ${SITE_NAME}`,
+      creator: {
+        '@type': 'Person',
+        name: SITE_NAME,
+      },
+    })),
   }
 }

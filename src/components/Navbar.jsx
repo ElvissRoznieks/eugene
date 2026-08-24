@@ -8,6 +8,7 @@ import {
   SITE_NAME,
   SITE_TAGLINE,
   HERO_IMAGE,
+  HERO_IMAGE_ALT,
 } from '../data/site'
 import { useBodyScrollLock } from '../hooks/usePointerSwipe'
 import { cx } from '../utils/dom'
@@ -63,7 +64,7 @@ export default function Navbar({ variant = 'hero' }) {
         aria-hidden={!open}
       >
         <div className="mobile-menu__bg" aria-hidden="true">
-          <img src={HERO_IMAGE} alt="" decoding="async" />
+          <img src={HERO_IMAGE} alt={HERO_IMAGE_ALT} decoding="async" />
           <div className="mobile-menu__scrim" />
         </div>
 

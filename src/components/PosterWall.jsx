@@ -1640,7 +1640,7 @@ export default function PosterWall() {
                 >
                   <img
                     src={imdbLogo}
-                    alt=""
+                    alt="IMDb"
                     className="poster-wall__imdb-logo"
                     width={128}
                     height={64}

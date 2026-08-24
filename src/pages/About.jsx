@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Layout from '../components/Layout'
 import Reveal from '../components/Reveal'
-import SeoHead, { personJsonLd } from '../components/SeoHead'
+import SeoHead, { aboutPageJsonLd } from '../components/SeoHead'
 import useWaterRipple from '../hooks/useWaterRipple'
 import {
   ABOUT_BIO,
@@ -13,7 +13,6 @@ import {
   // SITE_LOCATION_LINE,
   SITE_NAME,
   SITE_TAGLINE,
-  sitePath,
 } from '../data/site'
 
 // const FEATURED_FILM =
@@ -25,11 +24,7 @@ export default function About() {
   const portraitImgRef = useRef(null)
   const portraitCanvasRef = useRef(null)
   const jsonLd = useMemo(
-    () =>
-      personJsonLd({
-        image: ABOUT_HEADSHOT,
-        url: sitePath('/about'),
-      }),
+    () => aboutPageJsonLd(ABOUT_HEADSHOT),
     []
   )
 

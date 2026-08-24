@@ -20,7 +20,7 @@ export default function Hero() {
               <span className="seo-sr">{SITE_NAME}</span>
               <img
                 src={signature}
-                alt=""
+                alt={`${SITE_NAME} signature`}
                 className="hero-name__signature"
                 width={992}
                 height={280}
@@ -67,7 +67,7 @@ export default function Hero() {
               >
                 <img
                   src={imdbLogo}
-                  alt=""
+                  alt="IMDb"
                   className="hero-imdb__logo"
                   width={128}
                   height={64}

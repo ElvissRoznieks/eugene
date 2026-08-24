@@ -11,9 +11,11 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/film" element={<Film />} />
+        <Route path="/films" element={<Navigate to="/film" replace />} />
         <Route path="/photography" element={<Photography />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   )

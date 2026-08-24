@@ -44,7 +44,7 @@ export default function ImdbBar({ variant = 'hero' }) {
           >
             <img
               src={imdbLogo}
-              alt=""
+              alt="IMDb"
               className="site-dock__imdb-logo"
               width={128}
               height={64}
