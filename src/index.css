@@ -1364,6 +1364,7 @@ html.is-gallery-focus header {
 
 .poster-wall__rail--east {
   align-self: flex-end;
+  width: min(30rem, 36vw);
   padding-top: 0;
   text-align: right;
 }
@@ -1527,7 +1528,7 @@ html.is-gallery-focus header {
 
 .poster-wall__rail--east .poster-wall__synopsis {
   margin-left: auto;
-  max-width: 32ch;
+  max-width: 40ch;
 }
 
 .poster-wall__cta {
@@ -2062,6 +2063,10 @@ html.is-gallery-focus header {
 @media (max-width: 1199.98px) {
   .poster-wall__rail {
     width: min(20rem, 30vw);
+  }
+
+  .poster-wall__rail--east {
+    width: min(24rem, 34vw);
   }
 }
 
