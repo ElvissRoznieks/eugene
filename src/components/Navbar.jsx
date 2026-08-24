@@ -192,7 +192,7 @@ export default function Navbar({ variant = 'hero' }) {
       <div className="mx-auto flex max-w-[1340px] items-center justify-between py-7 px-[15px] mobile:px-[18px] mobile:py-5 md-tablet:px-[18px] md-tablet:py-6">
         <Link
           to="/"
-          className="eb-logo-link not-mobile:hidden"
+          className="eb-logo-link"
           aria-label={SITE_NAME}
         >
           <EbLogo className="mobile-header__mark" invert={darkText} />

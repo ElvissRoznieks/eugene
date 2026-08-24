@@ -120,6 +120,22 @@ body {
   }
 }
 
+@media (max-width: 809.98px) {
+  .hero-name {
+    max-width: min(100%, 17.5rem);
+  }
+
+  .hero-imdb__logo {
+    width: 3.6rem;
+  }
+}
+
+@media (max-width: 809.98px) and (max-height: 740px) {
+  .hero-name {
+    max-width: min(100%, 14.5rem);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero-water__canvas {
     display: none !important;
@@ -607,6 +623,12 @@ img {
   display: grid;
   place-items: center;
   flex-shrink: 0;
+}
+
+@media (min-width: 810px) {
+  .eb-logo-link {
+    display: none;
+  }
 }
 
 .mobile-menu__close {

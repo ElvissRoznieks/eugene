@@ -9,13 +9,13 @@ import PageFade from './PageFade'
  */
 const SHELL = {
   hero: {
-    root: 'relative h-screen overflow-hidden bg-black text-white',
+    root: 'relative h-dvh max-h-dvh overflow-hidden bg-black text-white',
     nav: 'hero',
     dock: null,
     fade: false,
     heroBg: true,
     revealDock: false,
-    chromeClass: 'relative z-[2] h-screen bg-transparent',
+    chromeClass: 'relative z-[2] h-dvh max-h-dvh overflow-hidden bg-transparent',
   },
   immersive: {
     root: 'layout-shell layout-shell--immersive relative h-screen overflow-hidden',
@@ -70,7 +70,7 @@ export default function Layout({ children, variant = 'light' }) {
         {shell.heroBg ? <HeroBackground /> : null}
         <Navbar variant={shell.nav} />
         {shell.heroBg ? (
-          <div className="relative z-[2] h-screen">{children}</div>
+          <div className="relative z-[2] h-full min-h-0">{children}</div>
         ) : (
           <main className={shell.mainClass}>
             {shell.fade ? <PageFade>{children}</PageFade> : children}
