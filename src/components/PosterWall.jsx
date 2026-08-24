@@ -3,7 +3,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import {
   ChevronLeft,
   ChevronRight,
-  Download,
+  // Download,
   LayoutGrid,
   Lightbulb,
   LogIn,
@@ -25,15 +25,15 @@ import imdbLogo from '../assets/imdb-logo.png'
 const GALLERY_WALL_COLOR = '#f7f4ef'
 
 const WALL_H = 6.2
-// Match supplied posters (1024×717 ≈ 1.428)
-const POSTER_W = 2.14
-const POSTER_H = 1.5
+// Match supplied posters (1024×717 ≈ 1.428) — ~30% larger on wall
+const POSTER_W = 2.78
+const POSTER_H = 1.95
 const CAM_Z = 4.6
 const CAM_Y = 3.4
 const LOOK_Y = 3.2
 const POSTER_Z = 0.07
 const FOV_DEG = 40
-const SPACING = 4.6
+const SPACING = 6.0
 const SNAP_LOCK_MS = 780
 const WALL_PAD = 8
 const POSTER_TEX_W = 1024
@@ -1895,6 +1895,7 @@ function FrameImageSlider({
     })
   }, [slideIndex, slides, gridMode])
 
+  /* Download disabled
   async function downloadCurrent() {
     const slide = slides[slideIndex]
     if (!slide?.src) return
@@ -1918,6 +1919,7 @@ function FrameImageSlider({
       window.open(slide.src, '_blank', 'noopener,noreferrer')
     }
   }
+  */
 
   return (
     <div
@@ -1988,6 +1990,7 @@ function FrameImageSlider({
         aria-hidden={!visible}
       >
         <div className="poster-wall__frame-slider-tools">
+          {/* Download disabled
           {!gridMode && (
             <button
               type="button"
@@ -1999,6 +2002,7 @@ function FrameImageSlider({
               <Download size={16} strokeWidth={1.75} />
             </button>
           )}
+          */}
           <button
             type="button"
             className={`poster-wall__frame-slider-icon${gridMode ? ' is-on' : ''}`}

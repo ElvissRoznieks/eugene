@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { ChevronLeft, ChevronRight, Download, X } from 'lucide-react'
+import { ChevronLeft, ChevronRight, /* Download, */ X } from 'lucide-react'
 import {
   useBodyScrollLock,
   useHorizontalSwipe,
@@ -256,6 +256,7 @@ export default function PhotoStudies({ items }) {
     })
   }, [active, closing, finishClose])
 
+  /* Download disabled
   const downloadCurrent = useCallback(async () => {
     if (active === null || closing) return
     const item = items[active]
@@ -285,6 +286,7 @@ export default function PhotoStudies({ items }) {
       window.open(item.image, '_blank', 'noopener,noreferrer')
     }
   }, [active, closing, items])
+  */
 
   const swipe = useHorizontalSwipe(step)
   useBodyScrollLock(open)
@@ -380,6 +382,7 @@ export default function PhotoStudies({ items }) {
         <div className="photo-studies__backdrop" aria-hidden="true" />
 
         <div className="photo-studies__tools">
+          {/* Download disabled
           <button
             type="button"
             className="photo-studies__tool"
@@ -390,6 +393,7 @@ export default function PhotoStudies({ items }) {
           >
             <Download size={16} strokeWidth={1.75} />
           </button>
+          */}
           <button
             type="button"
             className="photo-studies__close"
