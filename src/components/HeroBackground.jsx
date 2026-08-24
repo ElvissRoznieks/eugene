@@ -180,8 +180,9 @@ export default function HeroBackground() {
         canvas.style.display = 'none'
         return
       }
-      canvas.classList.add('is-live')
+      // Size canvas before class toggle to avoid read-after-write forced reflow
       resize()
+      canvas.classList.add('is-live')
       window.addEventListener('resize', resize, { passive: true })
       window.addEventListener('pointermove', onMove, { passive: true })
       window.addEventListener('pointerleave', onLeave, { passive: true })

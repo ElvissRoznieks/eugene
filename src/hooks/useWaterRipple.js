@@ -232,8 +232,9 @@ export default function useWaterRipple({
         canvas.style.display = 'none'
         return
       }
-      canvas.classList.add('is-live')
+      // Measure before class toggle so we don't force a reflow after invalidation
       resize()
+      canvas.classList.add('is-live')
       wrap.addEventListener('pointermove', onMove, { passive: true })
       wrap.addEventListener('pointerleave', onLeave, { passive: true })
       window.addEventListener('resize', resize, { passive: true })

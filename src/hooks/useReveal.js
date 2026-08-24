@@ -38,13 +38,19 @@ export default function useReveal(threshold = 0.15, { immediate = false } = {}) 
 
     observer.observe(node)
 
-    const rect = node.getBoundingClientRect()
-    if (rect.top < window.innerHeight * 0.92 && rect.bottom > 0) {
-      setVisible(true)
+    // Defer the in-view check so it doesn't sync-flush layout after React's commit
+    const raf = requestAnimationFrame(() => {
+      const rect = node.getBoundingClientRect()
+      if (rect.top < window.innerHeight * 0.92 && rect.bottom > 0) {
+        setVisible(true)
+        observer.disconnect()
+      }
+    })
+
+    return () => {
+      cancelAnimationFrame(raf)
       observer.disconnect()
     }
-
-    return () => observer.disconnect()
   }, [threshold, immediate])
 
   return { ref, visible }

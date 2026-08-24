@@ -231,6 +231,7 @@ export default function PhotoStudies({ items }) {
       return
     }
 
+    // Read geometry before any style/DOM writes that invalidate layout
     const from = img.getBoundingClientRect()
     setClosing(true)
     // Unlock immediately so we can scroll the origin cell into view
@@ -245,7 +246,6 @@ export default function PhotoStudies({ items }) {
       }
 
       origin.scrollIntoView({ block: 'center', inline: 'nearest' })
-      const to = origin.getBoundingClientRect()
       const fly = overlayImgRef.current
 
       fly.style.position = 'fixed'
@@ -263,24 +263,30 @@ export default function PhotoStudies({ items }) {
       fly.style.transformOrigin = 'center center'
       fly.style.opacity = '1'
 
-      void fly.offsetWidth
-
+      // Double rAF applies start styles then transitions — avoids sync
+      // layout flush via offsetWidth (forced reflow).
       requestAnimationFrame(() => {
-        const latest = origin.getBoundingClientRect()
-        fly.style.transition = [
-          `left ${CLOSE_MS}ms ${EASE}`,
-          `top ${CLOSE_MS}ms ${EASE}`,
-          `width ${CLOSE_MS}ms ${EASE}`,
-          `height ${CLOSE_MS}ms ${EASE}`,
-          `opacity ${CLOSE_MS}ms ${EASE}`,
-          `box-shadow ${CLOSE_MS}ms ${EASE}`,
-        ].join(', ')
-        fly.style.left = `${latest.left}px`
-        fly.style.top = `${latest.top}px`
-        fly.style.width = `${latest.width}px`
-        fly.style.height = `${latest.height}px`
-        fly.style.opacity = '0.85'
-        fly.style.boxShadow = 'none'
+        requestAnimationFrame(() => {
+          if (!overlayImgRef.current || !pieceRefs.current[index]) {
+            finishClose()
+            return
+          }
+          const latest = origin.getBoundingClientRect()
+          fly.style.transition = [
+            `left ${CLOSE_MS}ms ${EASE}`,
+            `top ${CLOSE_MS}ms ${EASE}`,
+            `width ${CLOSE_MS}ms ${EASE}`,
+            `height ${CLOSE_MS}ms ${EASE}`,
+            `opacity ${CLOSE_MS}ms ${EASE}`,
+            `box-shadow ${CLOSE_MS}ms ${EASE}`,
+          ].join(', ')
+          fly.style.left = `${latest.left}px`
+          fly.style.top = `${latest.top}px`
+          fly.style.width = `${latest.width}px`
+          fly.style.height = `${latest.height}px`
+          fly.style.opacity = '0.85'
+          fly.style.boxShadow = 'none'
+        })
       })
 
       closeTimerRef.current = window.setTimeout(finishClose, CLOSE_MS + 40)

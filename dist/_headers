@@ -4,6 +4,8 @@
   Cache-Control: public, max-age=31536000, immutable
 
 # Static public media
+/signature.webp
+  Cache-Control: public, max-age=31536000, immutable
 /brady-headshot.webp
   Cache-Control: public, max-age=31536000, immutable
 /llms.txt

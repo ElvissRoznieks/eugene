@@ -1,7 +1,8 @@
 import { IMDB_URL, SITE_NAME } from '../data/site'
 import useReveal from '../hooks/useReveal'
-import signature from '../assets/brand/eugene-brady-signature-white.webp'
 import imdbLogo from '../assets/imdb-logo.webp'
+
+const SIGNATURE_SRC = '/signature.webp'
 
 export default function Hero() {
   const nameReveal = useReveal(0.35, { immediate: true })
@@ -19,14 +20,14 @@ export default function Hero() {
             >
               <span className="seo-sr">{SITE_NAME}</span>
               <img
-                src={signature}
+                src={SIGNATURE_SRC}
                 alt={`${SITE_NAME} signature`}
                 className="hero-name__signature"
                 width={599}
                 height={144}
                 decoding="async"
-                fetchPriority="low"
-                loading="lazy"
+                loading="eager"
+                fetchPriority="high"
               />
             </h1>
           </div>

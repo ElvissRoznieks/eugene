@@ -1239,9 +1239,13 @@ export default function PosterWall() {
   }, [])
 
   useEffect(() => {
+    let raf = 0
     function measure() {
-      const el = document.scrollingElement || document.documentElement
-      setPageScrollable(el.scrollHeight > el.clientHeight + 2)
+      cancelAnimationFrame(raf)
+      raf = requestAnimationFrame(() => {
+        const el = document.scrollingElement || document.documentElement
+        setPageScrollable(el.scrollHeight > el.clientHeight + 2)
+      })
     }
     measure()
     window.addEventListener('resize', measure)
@@ -1251,6 +1255,7 @@ export default function PosterWall() {
         : null
     if (ro && sectionRef.current) ro.observe(sectionRef.current)
     return () => {
+      cancelAnimationFrame(raf)
       window.removeEventListener('resize', measure)
       ro?.disconnect()
     }
