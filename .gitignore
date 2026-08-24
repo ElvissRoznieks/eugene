@@ -25,5 +25,7 @@ node_modules
 
 # Source / delivery dumps (never commit originals)
 *.zip
-# Root assets/ only — do not use "assets/" (that also blocks dist/assets/)
+# Ignore root /assets only — /dist/assets/ stays allowed for the build
 /assets/
+!/dist/
+!/dist/assets/
