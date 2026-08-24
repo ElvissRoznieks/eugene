@@ -111,12 +111,14 @@ function GalleryLightbox({ slides, open, onClose }) {
           return (
             <figure key={slide.id} className="film-mobile__gallery-slide">
               {inView ? (
-                <img
-                  src={slide.src}
-                  alt={slide.alt || slide.title}
-                  draggable={false}
-                  decoding="async"
-                />
+                <div className="film-mobile__frame">
+                  <img
+                    src={slide.src}
+                    alt={slide.alt || slide.title}
+                    draggable={false}
+                    decoding="async"
+                  />
+                </div>
               ) : null}
             </figure>
           )
@@ -169,12 +171,14 @@ export default function FilmMobile() {
       <div className="film-mobile__carousel page-shell">
         <div className="film-mobile__stage" {...swipe}>
           <div className="film-mobile__poster" key={active.title}>
-            <img
-              src={active.poster}
-              alt={active.imageAlt || active.title}
-              draggable={false}
-              decoding="async"
-            />
+            <div className="film-mobile__frame">
+              <img
+                src={active.poster}
+                alt={active.imageAlt || active.title}
+                draggable={false}
+                decoding="async"
+              />
+            </div>
           </div>
         </div>
 
