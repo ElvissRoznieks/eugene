@@ -1245,8 +1245,19 @@ export default function PosterWall() {
   const [glReady, setGlReady] = useState(false)
   const [sceneReady, setSceneReady] = useState(false)
   const [pageScrollable, setPageScrollable] = useState(false)
+  // 'never' when idle — stops WebGL from burning the main thread in lab/PSI
+  const [frameloop, setFrameloop] = useState('never')
+  const freezeTimerRef = useRef(0)
   const invalidateRef = useRef(() => {})
   const kickRender = () => invalidateRef.current()
+  const armMotion = (ms = 1000) => {
+    window.clearTimeout(freezeTimerRef.current)
+    setFrameloop('demand')
+    kickRender()
+    freezeTimerRef.current = window.setTimeout(() => {
+      setFrameloop('never')
+    }, ms)
+  }
   const [introReady, setIntroReady] = useState(false)
   // idle | zooming-in | slider | zooming-out
   const [roomPhase, setRoomPhase] = useState('idle')
@@ -1332,6 +1343,7 @@ export default function PosterWall() {
   useEffect(() => {
     return () => {
       window.clearTimeout(roomTimerRef.current)
+      window.clearTimeout(freezeTimerRef.current)
     }
   }, [])
 
@@ -1339,13 +1351,13 @@ export default function PosterWall() {
     const clamped = Math.min(FILMS.length - 1, Math.max(0, next))
     if (clamped === indexRef.current) {
       scrubXRef.current = posterWorldX(clamped)
-      kickRender()
+      armMotion(SNAP_LOCK_MS)
       return
     }
     indexRef.current = clamped
     scrubXRef.current = posterWorldX(clamped)
     setActiveIndex(clamped)
-    kickRender()
+    armMotion(SNAP_LOCK_MS + 200)
   }
 
   function step(dir) {
@@ -1463,7 +1475,7 @@ export default function PosterWall() {
         maxX,
         Math.max(minX, camXRef.current),
       )
-      kickRender()
+      armMotion(1200)
       el.classList.add('is-dragging')
       try {
         el.setPointerCapture(e.pointerId)
@@ -1489,7 +1501,7 @@ export default function PosterWall() {
         maxX,
         Math.max(minX, scrubXRef.current + worldDelta),
       )
-      kickRender()
+      armMotion(1200)
       // EMA velocity for a short coast on release
       const instant = worldDelta / dtSec
       dragVelRef.current = dragVelRef.current * 0.78 + instant * 0.22
@@ -1576,7 +1588,7 @@ export default function PosterWall() {
       }
       if (e.key === 'l' || e.key === 'L') {
         setSpotlightOn((v) => !v)
-        kickRender()
+        armMotion(1200)
       }
       // Sound feature disabled
       // if (e.key === 'm' || e.key === 'M') {
@@ -1737,7 +1749,7 @@ export default function PosterWall() {
                 className={`poster-wall__spot-btn poster-wall__spot-btn--icon${spotlightOn ? ' is-on' : ''}`}
                 onClick={() => {
                   setSpotlightOn((v) => !v)
-                  kickRender()
+                  armMotion(1200)
                 }}
                 aria-pressed={spotlightOn}
                 aria-label={spotlightOn ? 'Spotlight on' : 'Spotlight off'}
@@ -1798,7 +1810,7 @@ export default function PosterWall() {
             <Canvas
               className={`poster-wall__canvas${sceneReady ? ' is-live' : ''}`}
               dpr={[1, 1.15]}
-              frameloop={roomOpen ? 'never' : 'demand'}
+              frameloop={roomOpen ? 'never' : frameloop}
               camera={{
                 position: [0, CAM_Y, CAM_Z],
                 fov: FOV_DEG,
@@ -1841,10 +1853,18 @@ export default function PosterWall() {
                   'aria-label',
                   'Decorative 3D film poster wall'
                 )
+                // One-shot boot frames, then freeze until user interacts
+                setFrameloop('demand')
                 invalidate()
-                // Show canvas once GL is up; posters fill in as textures arrive
                 requestAnimationFrame(() => {
-                  requestAnimationFrame(() => setSceneReady(true))
+                  invalidate()
+                  requestAnimationFrame(() => {
+                    setSceneReady(true)
+                    window.clearTimeout(freezeTimerRef.current)
+                    freezeTimerRef.current = window.setTimeout(() => {
+                      setFrameloop('never')
+                    }, 700)
+                  })
                 })
               }}
             >
