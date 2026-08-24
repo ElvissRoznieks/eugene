@@ -25,5 +25,5 @@ node_modules
 
 # Source / delivery dumps (never commit originals)
 *.zip
-# Entire root assets/ folder (gallery, movies, dumps) — site builds use copies in src/assets/
-assets/
+# Root assets/ only — do not use "assets/" (that also blocks dist/assets/)
+/assets/
