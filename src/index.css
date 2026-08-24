@@ -998,7 +998,8 @@ img {
   min-height: var(--dock-h);
   background: var(--darkroom);
   color: rgba(247, 244, 239, 0.78);
-  border-top: 1px solid rgba(247, 244, 239, 0.1);
+  border: none;
+  border-top: none;
 }
 
 /* Transparent end gap — scrolling here uncovers the fixed dock underneath */
@@ -1052,23 +1053,28 @@ img {
 .site-dock--dark {
   background: var(--darkroom);
   color: rgba(247, 244, 239, 0.78);
-  border-top: 1px solid rgba(247, 244, 239, 0.1);
+  border-top: none;
 }
 
 /* About / light pages — match warm paper page background */
 .site-dock--paper {
   background: var(--paper-warm);
   color: rgba(10, 10, 10, 0.62);
-  border-top: 1px solid rgba(10, 10, 10, 0.08);
+  border-top: none;
 }
 
 .site-dock--paper .site-dock__script {
   mix-blend-mode: normal;
-  filter: none;
+  filter: invert(1);
 }
 
 .site-dock--paper .site-dock__copy {
   color: rgba(10, 10, 10, 0.45);
+}
+
+.site-dock--paper .site-dock__row {
+  max-width: none;
+  padding-inline: 3rem;
 }
 
 .site-dock__row {
@@ -2749,6 +2755,11 @@ html.is-gallery-focus header {
     inset-inline: var(--about-portrait-w) 0;
     z-index: 0;
   }
+
+  .layout-shell--paper .site-dock .site-dock__row {
+    max-width: none;
+    padding-inline: 3rem;
+  }
 }
 
 .about-essay__frame {
@@ -2832,7 +2843,6 @@ html.is-gallery-focus header {
   letter-spacing: -0.03em;
   text-transform: uppercase;
   color: #f7f4ef;
-  animation: about-role-in 480ms var(--ease-spring) both;
 }
 
 .about-essay__place {
