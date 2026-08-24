@@ -2,7 +2,7 @@ import heroHome from '../assets/home2.webp'
 import missingBrendanPoster from '../assets/posters/missing-brendan.webp'
 import theNephewPoster from '../assets/posters/the-nephew.webp'
 import theGirlWhoStayedPoster from '../assets/posters/the-girl-who-stayed.webp'
-import bradyHeadshot from '../assets/brady-headshot.webp'
+import bradyHeadshot from '../assets/brady-headshot2.webp'
 
 export const NAV_LINKS = [
   { index: '01', label: 'Home', path: '/' },

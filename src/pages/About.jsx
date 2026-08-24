@@ -10,7 +10,7 @@ import {
   ABOUT_HEADSHOT_ALT,
   // FILMS,
   PAGE_SEO,
-  SITE_LOCATION_LINE,
+  // SITE_LOCATION_LINE,
   SITE_NAME,
   SITE_TAGLINE,
   sitePath,
@@ -76,9 +76,9 @@ export default function About() {
                 />
               ) : null}
               <div className="about-essay__scrim" aria-hidden="true" />
-              <div className="about-essay__place">
+              {/* <div className="about-essay__place">
                 <p>{SITE_LOCATION_LINE}</p>
-              </div>
+              </div> */}
               {/* <div className="about-essay__credit">
                 <p className="about-essay__directed">In development</p>
                 <p className="about-essay__role">{FEATURED_FILM.title}</p>
