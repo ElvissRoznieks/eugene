@@ -17,7 +17,7 @@ export default function Hero() {
                 nameReveal.visible ? 'is-visible' : ''
               }`}
             >
-              <span className="sr-only">{SITE_NAME}</span>
+              <span className="seo-sr">{SITE_NAME}</span>
               <img
                 src={signature}
                 alt=""

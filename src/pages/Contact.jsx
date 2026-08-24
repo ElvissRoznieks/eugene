@@ -47,6 +47,7 @@ export default function Contact() {
   return (
     <Layout variant="dark">
       <SeoHead {...PAGE_SEO.contact} />
+      <h1 className="seo-sr">Contact</h1>
       <div className="contact-signal page-shell">
         <Reveal as="p" className="contact-signal__kicker" immediate>
           {pageKicker('/contact')}
