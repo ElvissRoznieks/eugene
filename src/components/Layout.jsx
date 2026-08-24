@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import Navbar from './Navbar'
 import HeroBackground from './HeroBackground'
 import ImdbBar from './ImdbBar'
@@ -9,13 +10,14 @@ import PageFade from './PageFade'
  */
 const SHELL = {
   hero: {
-    root: 'relative h-dvh max-h-dvh overflow-hidden bg-black text-white',
+    root: 'layout-shell layout-shell--home relative h-[100svh] max-h-[100svh] overflow-hidden bg-black text-white',
     nav: 'hero',
     dock: null,
     fade: false,
     heroBg: true,
     revealDock: false,
-    chromeClass: 'relative z-[2] h-dvh max-h-dvh overflow-hidden bg-transparent',
+    chromeClass:
+      'relative z-[2] flex h-full max-h-full min-h-0 flex-col overflow-hidden bg-transparent',
   },
   immersive: {
     root: 'layout-shell layout-shell--immersive relative h-screen overflow-hidden',
@@ -61,6 +63,14 @@ const SHELL = {
 
 export default function Layout({ children, variant = 'light' }) {
   const shell = SHELL[variant] || SHELL.light
+  const lockHome = variant === 'hero'
+
+  useEffect(() => {
+    if (!lockHome) return undefined
+    const root = document.documentElement
+    root.classList.add('is-home-lock')
+    return () => root.classList.remove('is-home-lock')
+  }, [lockHome])
 
   return (
     <div className={shell.root}>
@@ -70,7 +80,9 @@ export default function Layout({ children, variant = 'light' }) {
         {shell.heroBg ? <HeroBackground /> : null}
         <Navbar variant={shell.nav} />
         {shell.heroBg ? (
-          <div className="relative z-[2] h-full min-h-0">{children}</div>
+          <div className="relative z-[2] min-h-0 flex-1 overflow-hidden">
+            {children}
+          </div>
         ) : (
           <main className={shell.mainClass}>
             {shell.fade ? <PageFade>{children}</PageFade> : children}

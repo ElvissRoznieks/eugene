@@ -195,6 +195,29 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Home — lock iOS so it can’t scroll into the paper body background */
+html.is-home-lock,
+html.is-home-lock body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  background: #000;
+}
+
+html.is-home-lock #root {
+  height: 100%;
+  min-height: 100%;
+  max-height: 100%;
+  overflow: hidden;
+}
+
+.layout-shell--home {
+  height: 100svh;
+  max-height: 100svh;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
 
 #root {
   min-height: 100vh;
