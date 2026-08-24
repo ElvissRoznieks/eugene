@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import {
   NAV_LINKS,
@@ -12,7 +12,7 @@ import {
 } from '../data/site'
 import { useBodyScrollLock } from '../hooks/usePointerSwipe'
 import { cx } from '../utils/dom'
-import ebMark from '../assets/brand/eb-mark.png'
+import ebLogo from '../assets/brand/eb-logo.png'
 
 const HEADER = {
   light: 'sticky top-0 z-40 border-b border-black/10 bg-white/85 backdrop-blur-md',
@@ -79,6 +79,19 @@ const SOCIAL_ICONS = {
   imdb: ImdbGlyph,
 }
 
+function EbLogo({ className, invert = false }) {
+  return (
+    <img
+      src={ebLogo}
+      alt={SITE_NAME}
+      className={cx('eb-logo', invert && 'eb-logo--invert', className)}
+      width={44}
+      height={44}
+      decoding="async"
+    />
+  )
+}
+
 export default function Navbar({ variant = 'hero' }) {
   const [open, setOpen] = useState(false)
   const darkText = variant === 'light' || variant === 'paper'
@@ -112,14 +125,9 @@ export default function Navbar({ variant = 'hero' }) {
         </div>
 
         <div className="mobile-menu__top">
-          <img
-            src={ebMark}
-            alt={SITE_NAME}
-            className="mobile-menu__mark"
-            width={44}
-            height={44}
-            decoding="async"
-          />
+          <Link to="/" onClick={() => setOpen(false)} aria-label={SITE_NAME}>
+            <EbLogo className="mobile-menu__mark" />
+          </Link>
           <button
             type="button"
             className="mobile-menu__close"
@@ -182,6 +190,14 @@ export default function Navbar({ variant = 'hero' }) {
   return (
     <header className={HEADER[variant] || HEADER.hero}>
       <div className="mx-auto flex max-w-[1340px] items-center justify-between py-7 px-[15px] mobile:px-[18px] mobile:py-5 md-tablet:px-[18px] md-tablet:py-6">
+        <Link
+          to="/"
+          className="eb-logo-link not-mobile:hidden"
+          aria-label={SITE_NAME}
+        >
+          <EbLogo className="mobile-header__mark" invert={darkText} />
+        </Link>
+
         <nav
           className={cx(
             'hidden items-center gap-8 not-mobile:flex md-tablet:gap-5',

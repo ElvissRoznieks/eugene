@@ -592,6 +592,23 @@ img {
   mix-blend-mode: screen;
 }
 
+.mobile-header__mark {
+  display: block;
+  width: 2.35rem;
+  height: 2.35rem;
+  object-fit: contain;
+}
+
+.eb-logo--invert {
+  filter: invert(1);
+}
+
+.eb-logo-link {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
 .mobile-menu__close {
   display: grid;
   place-items: center;
