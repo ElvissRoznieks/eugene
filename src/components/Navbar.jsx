@@ -81,8 +81,7 @@ const SOCIAL_ICONS = {
 
 export default function Navbar({ variant = 'hero' }) {
   const [open, setOpen] = useState(false)
-  const darkText =
-    variant === 'light' || variant === 'immersive' || variant === 'paper'
+  const darkText = variant === 'light' || variant === 'paper'
   const ink = darkText ? 'text-black' : 'text-white'
 
   useBodyScrollLock(open)

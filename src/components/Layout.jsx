@@ -25,7 +25,7 @@ const SHELL = {
     fade: false,
     heroBg: false,
     revealDock: false,
-    chromeClass: 'relative z-[2] h-screen overflow-hidden bg-[var(--paper-warm)]',
+    chromeClass: 'relative z-[2] h-screen overflow-hidden bg-[var(--darkroom)]',
     mainClass: 'h-full overflow-hidden',
   },
   dark: {

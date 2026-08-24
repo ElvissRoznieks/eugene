@@ -22,7 +22,7 @@ import { cx } from '../utils/dom'
 import imdbLogo from '../assets/imdb-logo.png'
 
 // const GALLERY_BG_VIDEO = '/video/gallery-bg.mp4'
-const GALLERY_WALL_COLOR = '#f7f4ef'
+const GALLERY_WALL_COLOR = '#12100e'
 
 const WALL_H = 6.2
 // Match supplied posters (1024×717 ≈ 1.428) — ~30% larger on wall
@@ -44,7 +44,7 @@ const DRAG_TOUCH_GAIN = 0.9775
 const DRAG_FOLLOW = 14
 const SNAP_FOLLOW = 2.55
 const DRAG_COAST_SEC = 0.1
-const ROOM_ZOOM_MS = 560
+// const ROOM_ZOOM_MS = 560 // zoom enter/exit disabled
 
 /** Camera Z so the poster plane covers the viewport (edge-to-edge). */
 function posterCoverZ(aspect, fovDeg = FOV_DEG) {
@@ -274,9 +274,9 @@ function useWallVideoTexture(src, enabled) {
 const FRAME_DEPTH = 0.04
 const FRAME_LIP = 0.028
 const FRAME_MAT = {
-  color: '#1c1c1c',
-  roughness: 0.58,
-  metalness: 0.22,
+  color: '#3a3734',
+  roughness: 0.72,
+  metalness: 0.12,
 }
 
 function createBevelFrameGeometry(innerW, innerH) {
@@ -1303,39 +1303,20 @@ export default function PosterWall() {
     )
       return
     window.clearTimeout(roomTimerRef.current)
-    // Lock on the focused poster before diving in
     scrubXRef.current = posterWorldX(indexRef.current)
     setSlideIndex(0)
     slideIndexRef.current = 0
-    // Apply stacking before the camera dive — refs update this frame,
-    // but React className would lag one paint and leave the title on top.
-    const el = sectionRef.current
-    if (el) {
-      el.classList.add('is-room-busy', 'is-room-zooming')
-      void el.offsetWidth
-    }
-    setRoomPhase('zooming-in')
-    lookYRef.current = CAM_Y
-    camZRef.current = enterZRef.current
-    roomTimerRef.current = window.setTimeout(() => {
-      setRoomPhase('slider')
-    }, ROOM_ZOOM_MS)
+    setRoomPhase('slider')
   }
 
   function closeRoom() {
     if (roomPhaseRef.current !== 'slider') return
     window.clearTimeout(roomTimerRef.current)
-    // Return to the framed poster image, fade slider, then pull back
     setSlideIndex(0)
     slideIndexRef.current = 0
-    setRoomPhase('zooming-out')
-    roomTimerRef.current = window.setTimeout(() => {
-      lookYRef.current = LOOK_Y
-      camZRef.current = CAM_Z
-      roomTimerRef.current = window.setTimeout(() => {
-        setRoomPhase('idle')
-      }, ROOM_ZOOM_MS)
-    }, 260)
+    lookYRef.current = LOOK_Y
+    camZRef.current = CAM_Z
+    setRoomPhase('idle')
   }
 
   const closeRoomRef = useRef(closeRoom)
@@ -1552,7 +1533,7 @@ export default function PosterWall() {
     >
       {/* HUD first so the stage (later sibling) paints above film copy while opening */}
       <div className="poster-wall__hud page-shell">
-        {!roomBusy && pageScrollable && (
+        {!roomBusy && (
           <div className="poster-wall__side-nav" aria-label="Film navigation">
             <button
               type="button"
@@ -1735,15 +1716,7 @@ export default function PosterWall() {
         </div>
       </div>
 
-      <div
-        className={`poster-wall__stage${
-          roomPhase === 'zooming-in'
-            ? ' is-motion-blur--in'
-            : roomPhase === 'zooming-out'
-              ? ' is-motion-blur--out'
-              : ''
-        }`}
-      >
+      <div className="poster-wall__stage">
         <WallErrorBoundary
           key={canvasKey}
           onRetry={() => {
@@ -1791,7 +1764,7 @@ export default function PosterWall() {
               onCreated={({ gl, size }) => {
                 gl.setClearColor(GALLERY_WALL_COLOR, 1)
                 gl.toneMapping = THREE.ACESFilmicToneMapping
-                gl.toneMappingExposure = 1.38
+                gl.toneMappingExposure = 1.48
                 // Cap drawing buffer — tall stages + retina DPR can exhaust
                 // GPU memory and trigger Chrome's context-loss block.
                 const maxDpr = Math.min(window.devicePixelRatio || 1, 1.25)

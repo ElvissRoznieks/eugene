@@ -25,8 +25,8 @@
 }
 
 .layout-shell--immersive {
-  background: var(--gallery-plaster);
-  color: var(--ink);
+  background: var(--darkroom);
+  color: var(--darkroom-ink);
 }
 
 .layout-shell--dark {
@@ -1228,7 +1228,8 @@ html.is-gallery-focus header {
   height: 100dvh;
   max-height: 100dvh;
   overflow: hidden;
-  background: #f7f4ef;
+  background: var(--darkroom);
+  color: var(--darkroom-ink);
   touch-action: none;
   cursor: grab;
   font-family: var(--film-sans);
@@ -1374,11 +1375,11 @@ html.is-gallery-focus header {
   gap: 0.5rem;
   margin: 0;
   padding: 0.55rem 0.85rem;
-  border: 1px solid rgba(36, 25, 16, 0.28);
-  background: rgba(255, 248, 238, 0.28);
+  border: 1px solid rgba(243, 236, 226, 0.22);
+  background: rgba(18, 16, 14, 0.55);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  color: #241910;
+  color: var(--darkroom-ink);
   font-family: var(--film-sans);
   font-size: 10px;
   font-weight: 600;
@@ -1399,15 +1400,15 @@ html.is-gallery-focus header {
 }
 
 .poster-wall__spot-btn:hover {
-  border-color: rgba(36, 25, 16, 0.5);
-  background: rgba(255, 248, 238, 0.5);
+  border-color: rgba(243, 236, 226, 0.4);
+  background: rgba(243, 236, 226, 0.1);
 }
 
 .poster-wall__spot-btn.is-on {
-  border-color: rgba(184, 132, 61, 0.65);
-  background: rgba(36, 25, 16, 0.88);
+  border-color: rgba(201, 166, 107, 0.65);
+  background: rgba(243, 236, 226, 0.12);
   color: #fff4e0;
-  box-shadow: 0 0 24px rgba(255, 214, 140, 0.35);
+  box-shadow: 0 0 24px rgba(201, 166, 107, 0.22);
 }
 
 @keyframes fame-in {
@@ -1435,11 +1436,11 @@ html.is-gallery-focus header {
 }
 
 .poster-wall__star {
-  color: rgba(26, 18, 12, 0.28);
+  color: rgba(243, 236, 226, 0.28);
 }
 
 .poster-wall__star.is-on {
-  color: #b8843d;
+  color: var(--accent);
 }
 
 .poster-wall__score {
@@ -1456,7 +1457,7 @@ html.is-gallery-focus header {
   font-weight: 700;
   letter-spacing: -0.05em;
   line-height: 1;
-  color: #0f0b08;
+  color: var(--darkroom-ink);
 }
 
 .poster-wall__score-den {
@@ -1464,7 +1465,7 @@ html.is-gallery-focus header {
   font-weight: 500;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: rgba(26, 18, 12, 0.58);
+  color: rgba(243, 236, 226, 0.5);
 }
 
 .poster-wall__score--pending {
@@ -1472,7 +1473,7 @@ html.is-gallery-focus header {
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(26, 18, 12, 0.58);
+  color: rgba(243, 236, 226, 0.5);
 }
 
 .poster-wall__meta {
@@ -1481,7 +1482,7 @@ html.is-gallery-focus header {
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(26, 18, 12, 0.65);
+  color: rgba(243, 236, 226, 0.45);
 }
 
 .poster-wall__title {
@@ -1493,7 +1494,7 @@ html.is-gallery-focus header {
   line-height: 1.05;
   letter-spacing: -0.02em;
   text-transform: uppercase;
-  color: #0f0b08;
+  color: var(--darkroom-ink);
 }
 
 .poster-wall__credits {
@@ -1502,7 +1503,7 @@ html.is-gallery-focus header {
   font-weight: 500;
   letter-spacing: 0.04em;
   text-transform: none;
-  color: rgba(26, 18, 12, 0.72);
+  color: rgba(243, 236, 226, 0.62);
 }
 
 .poster-wall__rail-label {
@@ -1511,7 +1512,7 @@ html.is-gallery-focus header {
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(26, 18, 12, 0.58);
+  color: rgba(243, 236, 226, 0.45);
 }
 
 .poster-wall__synopsis {
@@ -1521,7 +1522,7 @@ html.is-gallery-focus header {
   line-height: 1.55;
   letter-spacing: -0.01em;
   text-transform: none;
-  color: rgba(15, 11, 8, 0.92);
+  color: rgba(243, 236, 226, 0.88);
 }
 
 .poster-wall__rail--east .poster-wall__synopsis {
@@ -1535,13 +1536,13 @@ html.is-gallery-focus header {
   gap: 0.45rem;
   padding: 0;
   border: none;
-  border-bottom: 1px solid rgba(36, 25, 16, 0.85);
+  border-bottom: 1px solid rgba(243, 236, 226, 0.55);
   background: transparent;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #1a120c;
+  color: var(--darkroom-ink);
   text-decoration: none;
   transition:
     opacity 0.3s var(--ease-spring),
@@ -1550,12 +1551,12 @@ html.is-gallery-focus header {
 
 .poster-wall__cta:hover {
   opacity: 0.62;
-  border-color: rgba(36, 25, 16, 0.35);
+  border-color: rgba(243, 236, 226, 0.28);
 }
 
 .poster-wall__cta--muted {
-  border-bottom-color: rgba(36, 25, 16, 0.25);
-  color: rgba(42, 32, 24, 0.45);
+  border-bottom-color: rgba(243, 236, 226, 0.22);
+  color: rgba(243, 236, 226, 0.4);
 }
 
 .poster-wall__imdb {
@@ -1593,14 +1594,14 @@ html.is-gallery-focus header {
   right: 0;
   bottom: 0;
   height: 3px;
-  background: rgba(36, 25, 16, 0.1);
+  background: rgba(243, 236, 226, 0.12);
 }
 
 .poster-wall__progress-fill {
   height: 100%;
   width: 100%;
   transform-origin: left center;
-  background: linear-gradient(90deg, #b8843d, #241910);
+  background: linear-gradient(90deg, var(--accent), rgba(243, 236, 226, 0.85));
 }
 
 .poster-wall__side-nav {
@@ -1622,18 +1623,18 @@ html.is-gallery-focus header {
   height: 2.75rem;
   margin: 0;
   padding: 0;
-  border: none;
+  border: 1px solid rgba(243, 236, 226, 0.22);
   border-radius: 0;
-  background: #fff;
-  box-shadow:
-    0 1px 0 rgba(15, 11, 8, 0.06),
-    0 10px 28px rgba(15, 11, 8, 0.1);
-  color: #14110f;
+  background: rgba(18, 16, 14, 0.72);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
+  color: var(--darkroom-ink);
   cursor: pointer;
   transition:
     transform 0.28s var(--ease-spring),
     box-shadow 0.28s var(--ease-spring),
-    opacity 0.28s var(--ease-spring);
+    opacity 0.28s var(--ease-spring),
+    border-color 0.28s var(--ease-spring),
+    background 0.28s var(--ease-spring);
 }
 
 .poster-wall__side-arrow--prev {
@@ -1646,9 +1647,9 @@ html.is-gallery-focus header {
 
 .poster-wall__side-arrow:hover:not(:disabled) {
   transform: translateY(calc(-50% - 1px));
-  box-shadow:
-    0 1px 0 rgba(15, 11, 8, 0.05),
-    0 14px 32px rgba(15, 11, 8, 0.14);
+  border-color: rgba(243, 236, 226, 0.4);
+  background: rgba(243, 236, 226, 0.1);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
 }
 
 .poster-wall__side-arrow:disabled {
@@ -1662,7 +1663,7 @@ html.is-gallery-focus header {
   position: absolute;
   left: 50%;
   top: auto;
-  bottom: clamp(10.5rem, 26vh, 15.5rem);
+  bottom: clamp(5.5rem, 12vh, 7.5rem);
   z-index: 3;
   transform: translateX(-50%);
 }
@@ -1674,29 +1675,29 @@ html.is-gallery-focus header {
   gap: 0.55rem;
   margin: 0;
   padding: 0.72rem 1.15rem;
-  border: none;
+  border: 1px solid rgba(243, 236, 226, 0.22);
   border-radius: 0;
-  background: #fff;
-  box-shadow:
-    0 1px 0 rgba(15, 11, 8, 0.06),
-    0 10px 28px rgba(15, 11, 8, 0.1);
+  background: rgba(18, 16, 14, 0.72);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28);
   font-family: var(--film-ui, inherit);
   font-size: 13px;
   font-weight: 500;
   letter-spacing: -0.01em;
-  color: #14110f;
+  color: var(--darkroom-ink);
   cursor: pointer;
   transition:
+    opacity 0.28s var(--ease-spring),
+    border-color 0.28s var(--ease-spring),
+    background 0.28s var(--ease-spring),
     transform 0.28s var(--ease-spring),
-    box-shadow 0.28s var(--ease-spring),
-    opacity 0.28s var(--ease-spring);
+    box-shadow 0.28s var(--ease-spring);
 }
 
 .poster-wall__enter:hover:not(:disabled) {
   transform: translateY(-1px);
-  box-shadow:
-    0 1px 0 rgba(15, 11, 8, 0.05),
-    0 14px 32px rgba(15, 11, 8, 0.14);
+  border-color: rgba(243, 236, 226, 0.4);
+  background: rgba(243, 236, 226, 0.1);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
 }
 
 .poster-wall__enter:active:not(:disabled) {
@@ -1751,7 +1752,7 @@ html.is-gallery-focus header {
 
 @media (max-width: 809.98px) {
   .poster-wall__enter-slot {
-    bottom: clamp(14rem, 38vh, 20rem);
+    bottom: clamp(7.5rem, 18vh, 11rem);
   }
 
   .poster-wall__enter {
@@ -2015,7 +2016,7 @@ html.is-gallery-focus header {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  color: #1a1816;
+  color: var(--darkroom-ink);
   text-align: center;
 }
 
@@ -2024,15 +2025,15 @@ html.is-gallery-focus header {
   max-width: 36ch;
   font-size: 13px;
   line-height: 1.45;
-  color: rgba(26, 18, 12, 0.62);
+  color: rgba(243, 236, 226, 0.55);
 }
 
 .poster-wall__fallback-btn {
   margin-top: 0.75rem;
   padding: 0.65rem 1.1rem;
-  border: 1px solid rgba(36, 25, 16, 0.35);
-  background: #fff;
-  color: #14110f;
+  border: 1px solid rgba(243, 236, 226, 0.28);
+  background: rgba(243, 236, 226, 0.08);
+  color: var(--darkroom-ink);
   font-family: var(--film-sans, inherit);
   font-size: 13px;
   font-weight: 500;
@@ -2040,7 +2041,7 @@ html.is-gallery-focus header {
 }
 
 .poster-wall__fallback-btn:hover {
-  border-color: rgba(36, 25, 16, 0.55);
+  border-color: rgba(243, 236, 226, 0.5);
 }
 
 @media (max-width: 1199.98px) {
