@@ -54,7 +54,6 @@ function PhotoStudyPiece({
         isOrigin && 'is-origin',
         hovered && 'is-water'
       )}
-      style={{ '--look-delay': `${(index % 5) * 70}ms` }}
       data-study-index={index}
       onClick={() => onOpen(index)}
       onPointerEnter={() => setHovered(true)}
@@ -125,7 +124,13 @@ export default function PhotoStudies({ items }) {
   const visible = active !== null
   const current = visible ? items[active] : null
 
+  const revealedRef = useRef(new Set())
+  const revealQueueRef = useRef([])
+  const revealTimerRef = useRef(0)
+  const revealBusyRef = useRef(false)
+
   const markRevealed = useCallback((index) => {
+    revealedRef.current.add(index)
     setRevealed((prev) => {
       if (prev.has(index)) return prev
       const next = new Set(prev)
@@ -133,6 +138,30 @@ export default function PhotoStudies({ items }) {
       return next
     })
   }, [])
+
+  const enqueueReveal = useCallback(
+    (index) => {
+      if (!Number.isFinite(index)) return
+      if (revealedRef.current.has(index)) return
+      if (revealQueueRef.current.includes(index)) return
+      revealQueueRef.current.push(index)
+
+      const drain = () => {
+        if (revealBusyRef.current) return
+        const next = revealQueueRef.current.shift()
+        if (next === undefined) return
+        revealBusyRef.current = true
+        markRevealed(next)
+        revealTimerRef.current = window.setTimeout(() => {
+          revealBusyRef.current = false
+          drain()
+        }, 155)
+      }
+
+      drain()
+    },
+    [markRevealed]
+  )
 
   const goTo = useCallback(
     (i) => {
@@ -297,10 +326,13 @@ export default function PhotoStudies({ items }) {
   }, [visible])
 
   useEffect(() => {
-    return () => window.clearTimeout(closeTimerRef.current)
+    return () => {
+      window.clearTimeout(closeTimerRef.current)
+      window.clearTimeout(revealTimerRef.current)
+    }
   }, [])
 
-  // First-look: fade pieces up as they enter the viewport
+  // First-look: fade pieces one-by-one as they enter the viewport
   useEffect(() => {
     const nodes = pieceRefs.current
       .map((el, i) => (el ? { el, i } : null))
@@ -312,30 +344,43 @@ export default function PhotoStudies({ items }) {
       return undefined
     }
 
+    revealQueueRef.current = []
+    revealBusyRef.current = false
+    revealedRef.current = new Set()
+    window.clearTimeout(revealTimerRef.current)
+
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return
-          const index = Number(entry.target.getAttribute('data-study-index'))
-          if (Number.isFinite(index)) markRevealed(index)
-          observer.unobserve(entry.target)
+        const incoming = entries
+          .filter((entry) => entry.isIntersecting)
+          .map((entry) => Number(entry.target.getAttribute('data-study-index')))
+          .filter((index) => Number.isFinite(index))
+          .sort((a, b) => a - b)
+
+        incoming.forEach((index) => {
+          const el = pieceRefs.current[index]
+          if (el) observer.unobserve(el)
+          enqueueReveal(index)
         })
       },
-      { threshold: 0.08, rootMargin: '0px 0px -8% 0px' }
+      { threshold: 0.12, rootMargin: '0px 0px -14% 0px' }
     )
 
-    nodes.forEach(({ el, i }) => {
-      el.setAttribute('data-study-index', String(i))
-      observer.observe(el)
-      const rect = el.getBoundingClientRect()
-      if (rect.top < window.innerHeight * 0.92 && rect.bottom > 0) {
-        markRevealed(i)
-        observer.unobserve(el)
-      }
-    })
+    nodes
+      .slice()
+      .sort((a, b) => a.i - b.i)
+      .forEach(({ el, i }) => {
+        el.setAttribute('data-study-index', String(i))
+        observer.observe(el)
+      })
 
-    return () => observer.disconnect()
-  }, [items, markRevealed, colCount])
+    return () => {
+      observer.disconnect()
+      window.clearTimeout(revealTimerRef.current)
+      revealBusyRef.current = false
+      revealQueueRef.current = []
+    }
+  }, [items, enqueueReveal, colCount])
 
   useEffect(() => {
     if (!open) return undefined

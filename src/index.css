@@ -272,18 +272,22 @@ img {
   transform: none;
 }
 
-/* Gallery thumbs — fade up as they enter */
+/* Gallery thumbs — sequential fade-up as they enter */
 .photo-studies__piece.look {
   opacity: 0;
-  transform: translate3d(0, 36px, 0);
+  transform: translate3d(0, 52px, 0) scale(0.985);
+  filter: blur(6px);
   transition:
-    opacity 0.85s var(--ease-spring) var(--look-delay, 0ms),
-    transform 0.85s var(--ease-spring) var(--look-delay, 0ms);
+    opacity 1.05s var(--ease-spring),
+    transform 1.05s var(--ease-spring),
+    filter 1.05s var(--ease-spring);
+  will-change: opacity, transform, filter;
 }
 
 .photo-studies__piece.look.is-in {
   opacity: 1;
   transform: none;
+  filter: none;
 }
 
 /* Film wall — smooth enter */
