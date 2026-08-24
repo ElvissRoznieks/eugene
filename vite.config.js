@@ -25,4 +25,23 @@ function asyncCss() {
 
 export default defineConfig({
   plugins: [react(), tailwindcss(), asyncCss()],
+  build: {
+    modulePreload: {
+      resolveDependencies: (filename, deps, { hostType }) => {
+        // HTML entry must not preload route-only / Three chunks.
+        if (hostType !== 'html') return deps
+        return deps.filter(
+          (dep) =>
+            !dep.includes('three') &&
+            !dep.includes('PosterWall') &&
+            !dep.includes('FilmMobile') &&
+            !dep.includes('/Film-') &&
+            !dep.includes('Photography') &&
+            !dep.includes('/About-') &&
+            !dep.includes('/Contact-') &&
+            !dep.includes('/Home-')
+        )
+      },
+    },
+  },
 })

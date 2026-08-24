@@ -1,13 +1,14 @@
-import { useEffect, useMemo, useState } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import Layout from '../components/Layout'
-import PosterWall from '../components/PosterWall'
-import FilmMobile from '../components/FilmMobile'
 import SeoHead from '../components/SeoHead'
 import {
   FilmSeoCatalog,
   filmCollectionJsonLd,
 } from '../components/SeoCatalog'
 import { PAGE_SEO } from '../data/site'
+
+const PosterWall = lazy(() => import('../components/PosterWall'))
+const FilmMobile = lazy(() => import('../components/FilmMobile'))
 
 function useIsMobileFilm() {
   const [mobile, setMobile] = useState(() =>
@@ -35,7 +36,9 @@ export default function Film() {
     <Layout variant={mobile ? 'dark' : 'immersive'}>
       <SeoHead {...PAGE_SEO.film} jsonLd={jsonLd} />
       <FilmSeoCatalog />
-      {mobile ? <FilmMobile /> : <PosterWall />}
+      <Suspense fallback={null}>
+        {mobile ? <FilmMobile /> : <PosterWall />}
+      </Suspense>
     </Layout>
   )
 }

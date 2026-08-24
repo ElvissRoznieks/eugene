@@ -1,8 +1,9 @@
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import Navbar from './Navbar'
-import HeroBackground from './HeroBackground'
 import ImdbBar from './ImdbBar'
 import PageFade from './PageFade'
+
+const HeroBackground = lazy(() => import('./HeroBackground'))
 
 /**
  * Reveal footer: dock is fixed to the viewport bottom (z behind content).
@@ -88,7 +89,11 @@ export default function Layout({ children, variant = 'light' }) {
       {shell.dock ? <ImdbBar variant={shell.dock} /> : null}
 
       <div className={shell.chromeClass}>
-        {shell.heroBg ? <HeroBackground /> : null}
+        {shell.heroBg ? (
+          <Suspense fallback={null}>
+            <HeroBackground />
+          </Suspense>
+        ) : null}
         <Navbar variant={shell.nav} />
         {shell.heroBg ? (
           <div
