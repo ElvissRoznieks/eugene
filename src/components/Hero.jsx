@@ -45,7 +45,9 @@ export default function Hero() {
                 Feature films include{' '}
                 <span className="italic">The Nephew</span>, starring Pierce
                 Brosnan, and <span className="italic">Missing Brendan</span>,
-                starring Adam Brody.
+                starring Adam Brody.{' '}
+                <span className="italic">The Girl Who Stayed</span> is currently
+                in development.
               </p>
               <p>
                 Exploring grief, family, identity and memory through cinematic
