@@ -10,7 +10,7 @@ export default function Hero() {
   return (
     <main className="relative z-[2] flex h-full min-h-screen w-full flex-col">
       <div className="mx-auto flex h-full w-full max-w-[1340px] flex-1 flex-col justify-end items-end pt-[190px] px-[15px] mobile:items-start mobile:px-[18px] mobile:pt-[140px] md-tablet:px-[18px]">
-        <section className="flex w-full items-end justify-between gap-[50px] pb-[3.25rem] mobile:flex-col mobile:items-start mobile:gap-8 mobile:pb-11 md-tablet:gap-7 md-tablet:pb-11">
+        <section className="flex w-full items-end justify-between gap-[50px] pb-[3.35rem] mobile:flex-col mobile:items-start mobile:gap-8 mobile:pb-11 md-tablet:gap-7 md-tablet:pb-11">
           <div className="flex-[2]" ref={nameReveal.ref}>
             <h1
               className={`hero-name animate-reveal-up ${
@@ -34,7 +34,7 @@ export default function Hero() {
             ref={copyReveal.ref}
           >
             <div
-              className={`animate-reveal-right flex flex-col gap-4 text-base font-normal leading-6 tracking-[-0.16px] text-white/90 ${
+              className={`hero-copy animate-reveal-right flex flex-col gap-4 text-base font-bold leading-6 tracking-[-0.16px] text-white/90 ${
                 copyReveal.visible ? 'is-visible' : ''
               }`}
             >
@@ -42,12 +42,9 @@ export default function Hero() {
                 Director / Photographer
               </p>
               <p>
-                Feature films include{' '}
-                <span className="italic">The Nephew</span>, starring Pierce
-                Brosnan, and <span className="italic">Missing Brendan</span>,
-                starring Adam Brody.{' '}
-                <span className="italic">The Girl Who Stayed</span> is currently
-                in development.
+                Feature films include <em>The Nephew</em>, starring Pierce
+                Brosnan, and <em>Missing Brendan</em>, starring Adam Brody.&nbsp;
+                <em>The Girl Who Stayed</em>&nbsp;&nbsp;is currently in development.
               </p>
               <p>
                 Exploring grief, family, identity and memory through cinematic

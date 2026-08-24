@@ -156,6 +156,16 @@ body {
   font-style: italic;
 }
 
+.hero-copy,
+.hero-copy .font-bold {
+  font-weight: 500;
+}
+
+.hero-copy em {
+  font-style: italic;
+  font-weight: inherit;
+}
+
 html {
   scroll-behavior: smooth;
 }
