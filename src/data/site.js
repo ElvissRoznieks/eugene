@@ -50,24 +50,31 @@ const movieStillModules = import.meta.glob('../../assets/movies/*/*.webp', {
   import: 'default',
 })
 
-function filmGallery(folder, title) {
-  return Object.entries(movieStillModules)
+function filmGallery(folder, title, order) {
+  const items = Object.entries(movieStillModules)
     .filter(([path]) => path.includes(`/movies/${folder}/`))
-    .sort(([a], [b]) => {
-      const na = Number((a.match(/(\d+)\.webp$/i) || [])[1] || 0)
-      const nb = Number((b.match(/(\d+)\.webp$/i) || [])[1] || 0)
-      return na - nb
+    .map(([path, src]) => {
+      const n = Number((path.match(/(\d+)\.webp$/i) || [])[1] || 0)
+      return { n, src }
     })
-    .map(([, src], i) => {
-      const n = String(i + 1).padStart(2, '0')
-      return {
-        id: n,
-        src,
-        title: `${title} · ${n}`,
-        caption: `Still ${n}`,
-        alt: `${title} — production still ${n}`,
-      }
-    })
+
+  const sorted = order?.length
+    ? order
+        .map((n) => items.find((item) => item.n === n))
+        .filter(Boolean)
+        .concat(items.filter((item) => !order.includes(item.n)))
+    : items.sort((a, b) => a.n - b.n)
+
+  return sorted.map(({ n, src }, i) => {
+    const id = String(n || i + 1).padStart(2, '0')
+    return {
+      id,
+      src,
+      title: `${title} · ${id}`,
+      caption: `Still ${id}`,
+      alt: `${title} — production still ${id}`,
+    }
+  })
 }
 
 export const FILMS = [
@@ -86,7 +93,8 @@ export const FILMS = [
     poster: theNephewPoster,
     imageAlt:
       'The Nephew movie poster — Donal McCann, Pierce Brosnan, Sinead Cusack',
-    gallery: filmGallery('The Nephew', 'The Nephew'),
+    gallery: filmGallery('The Nephew', 'The Nephew', [5, 6, 1, 2, 3, 4]),
+    galleryPoster: 'last',
   },
   {
     title: 'Missing Brendan',
@@ -103,7 +111,8 @@ export const FILMS = [
     poster: missingBrendanPoster,
     imageAlt:
       'Missing Brendan movie poster — Edward Asner, Adam Brody, Illeana Douglas',
-    gallery: filmGallery('Missing Brendan', 'Missing Brendan'),
+    gallery: filmGallery('Missing Brendan', 'Missing Brendan', [1, 2, 3, 4, 5, 6]),
+    galleryPoster: 'last',
   },
   {
     title: 'The Girl Who Stayed',
@@ -121,7 +130,7 @@ export const FILMS = [
     poster: theGirlWhoStayedPoster,
     imageAlt:
       'The Girl Who Stayed concept art — coastal path under storm light',
-    gallery: filmGallery('The Girl Who Stayed', 'The Girl Who Stayed'),
+    gallery: [],
   },
 ]
 

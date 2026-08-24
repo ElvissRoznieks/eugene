@@ -1198,7 +1198,7 @@ export default function PosterWall() {
   const roomOpen = roomPhase === 'slider'
 
   const slides = useMemo(() => {
-    const head = {
+    const poster = {
       id: `film-${active.index}`,
       src: active.poster,
       title: active.title,
@@ -1212,7 +1212,7 @@ export default function PosterWall() {
       caption: item.caption,
       alt: item.alt,
     }))
-    return [head, ...rest]
+    return active.galleryPoster === 'last' ? [...rest, poster] : [poster, ...rest]
   }, [active])
 
   // usePosterAudio(trackSrc, soundOn)
