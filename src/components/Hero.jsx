@@ -1,7 +1,7 @@
 import { IMDB_URL, SITE_NAME } from '../data/site'
 import useReveal from '../hooks/useReveal'
-import signature from '../assets/brand/eugene-brady-signature-white.png'
-import imdbLogo from '../assets/imdb-logo.png'
+import signature from '../assets/brand/eugene-brady-signature-white.webp'
+import imdbLogo from '../assets/imdb-logo.webp'
 
 export default function Hero() {
   const nameReveal = useReveal(0.35, { immediate: true })
@@ -22,8 +22,8 @@ export default function Hero() {
                 src={signature}
                 alt={`${SITE_NAME} signature`}
                 className="hero-name__signature"
-                width={992}
-                height={280}
+                width={599}
+                height={144}
                 decoding="async"
                 fetchPriority="low"
                 loading="lazy"
@@ -71,10 +71,10 @@ export default function Hero() {
                   src={imdbLogo}
                   alt="IMDb"
                   className="hero-imdb__logo"
-                  width={128}
-                  height={64}
-                  decoding="async"
-                />
+                width={575}
+                height={290}
+                decoding="async"
+              />
               </a>
             </div>
           </div>

@@ -19,7 +19,7 @@ import { FILMS /*, DEFAULT_ATMOSPHERE */ } from '../data/site'
 import { useHorizontalSwipe } from '../hooks/usePointerSwipe'
 import { cx } from '../utils/dom'
 // import wallWhiteTex from '../assets/wall-white.jpg'
-import imdbLogo from '../assets/imdb-logo.png'
+import imdbLogo from '../assets/imdb-logo.webp'
 
 // const GALLERY_BG_VIDEO = '/video/gallery-bg.mp4'
 const GALLERY_WALL_COLOR = '#12100e'
@@ -1642,8 +1642,8 @@ export default function PosterWall() {
                     src={imdbLogo}
                     alt="IMDb"
                     className="poster-wall__imdb-logo"
-                    width={128}
-                    height={64}
+                    width={575}
+                    height={290}
                     decoding="async"
                   />
                 </a>

@@ -10,7 +10,7 @@ import PageFade from './PageFade'
  */
 const SHELL = {
   hero: {
-    root: 'layout-shell layout-shell--home relative h-[100svh] max-h-[100svh] overflow-hidden bg-black text-white',
+    root: 'layout-shell layout-shell--home relative h-[100svh] max-h-[100svh] overflow-hidden bg-transparent text-white',
     nav: 'hero',
     dock: null,
     fade: false,
@@ -71,6 +71,14 @@ export default function Layout({ children, variant = 'light' }) {
     root.classList.add('is-home-lock')
     return () => root.classList.remove('is-home-lock')
   }, [lockHome])
+
+  useEffect(() => {
+    const el = document.querySelector('.boot-hero')
+    if (!el) return
+    const show = variant === 'hero'
+    el.classList.toggle('is-done', !show)
+    el.toggleAttribute('aria-hidden', !show)
+  }, [variant])
 
   return (
     <div className={shell.root}>

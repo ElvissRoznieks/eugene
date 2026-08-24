@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight, LogIn, Star, X } from 'lucide-react'
 import { FILMS } from '../data/site'
 import { useBodyScrollLock, useHorizontalSwipe } from '../hooks/usePointerSwipe'
 import { cx } from '../utils/dom'
-import imdbLogo from '../assets/imdb-logo.png'
+import imdbLogo from '../assets/imdb-logo.webp'
 
 function filmSlides(film) {
   const poster = {
@@ -246,8 +246,8 @@ export default function FilmMobile() {
                 src={imdbLogo}
                 alt="IMDb"
                 className="film-mobile__imdb-logo"
-                width={128}
-                height={64}
+                width={575}
+                height={290}
                 decoding="async"
               />
             </a>

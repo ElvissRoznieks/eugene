@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { HERO_IMAGE, HERO_IMAGE_ALT } from '../data/site'
 
 // Water effect disabled — set to `true` to restore mouse-following ripples
@@ -74,6 +74,9 @@ export default function HeroBackground() {
   const canvasRef = useRef(null)
   const imgRef = useRef(null)
   const wrapRef = useRef(null)
+  const [hasBootHero] = useState(
+    () => typeof document !== 'undefined' && !!document.querySelector('.boot-hero')
+  )
 
   useEffect(() => {
     if (!HERO_WATER_ENABLED) return undefined
@@ -202,18 +205,24 @@ export default function HeroBackground() {
   return (
     <div
       ref={wrapRef}
-      className="hero-water pointer-events-none absolute inset-0 z-0 overflow-hidden bg-black"
+      className="hero-water pointer-events-none absolute inset-0 z-0 overflow-hidden bg-transparent"
       aria-hidden="true"
     >
-      <img
-        ref={imgRef}
-        src={HERO_IMAGE}
-        alt={HERO_IMAGE_ALT}
-        className="hero-water__fallback absolute inset-0 h-full w-full object-cover"
-        decoding="async"
-        fetchPriority="high"
-      />
-      {/* Water canvas kept — toggle HERO_WATER_ENABLED above to restore */}
+      {/* LCP image lives in index.html (.boot-hero) so it is discoverable
+          in the initial document with fetchpriority=high. Only mount a
+          React copy if that boot image is missing. */}
+      {!hasBootHero ? (
+        <img
+          ref={imgRef}
+          src={HERO_IMAGE}
+          alt={HERO_IMAGE_ALT}
+          className="hero-water__fallback absolute inset-0 h-full w-full object-cover"
+          width={4479}
+          height={2519}
+          decoding="async"
+          fetchPriority="high"
+        />
+      ) : null}
       {HERO_WATER_ENABLED ? (
         <canvas ref={canvasRef} className="hero-water__canvas" />
       ) : null}

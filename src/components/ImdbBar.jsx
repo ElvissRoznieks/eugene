@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { IMDB_PRO_URL, SITE_NAME, navByPath } from '../data/site'
-import scriptLogo from '../assets/brand/eugene-brady-script.png'
-import imdbLogo from '../assets/imdb-logo.png'
+import scriptLogo from '../assets/brand/eugene-brady-script.webp'
+import imdbLogo from '../assets/imdb-logo.webp'
 
 const YEAR = new Date().getFullYear()
 const homePath = navByPath('/')?.path || '/'
@@ -46,8 +46,8 @@ export default function ImdbBar({ variant = 'hero' }) {
               src={imdbLogo}
               alt="IMDb"
               className="site-dock__imdb-logo"
-              width={128}
-              height={64}
+              width={575}
+              height={290}
               decoding="async"
             />
           </a>

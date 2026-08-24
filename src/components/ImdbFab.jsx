@@ -1,4 +1,4 @@
-import imdbLogo from '../assets/imdb-logo.png'
+import imdbLogo from '../assets/imdb-logo.webp'
 import { IMDB_PRO_URL, SITE_NAME } from '../data/site'
 
 /** Fixed corner IMDb Pro badge */
@@ -16,8 +16,8 @@ export default function ImdbFab() {
         src={imdbLogo}
         alt="IMDb"
         className="imdb-fab__logo"
-        width={128}
-        height={64}
+        width={575}
+        height={290}
         decoding="async"
       />
     </a>

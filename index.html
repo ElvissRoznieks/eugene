@@ -77,10 +77,9 @@
       #preloader .preloader__mark {
         width: 4.5rem;
         height: 4.5rem;
-        object-fit: contain;
-        /* white-on-black → dark mark on light paper */
-        filter: invert(1);
-        mix-blend-mode: multiply;
+        background-color: #0a0a0a;
+        -webkit-mask: url('/brand/eb-mark.png') center / contain no-repeat;
+        mask: url('/brand/eb-mark.png') center / contain no-repeat;
         animation: preloader-breathe 1.6s ease-in-out infinite;
       }
       @keyframes preloader-breathe {
@@ -100,6 +99,26 @@
           opacity: 1;
           transform: none;
         }
+      }
+      /* Real LCP candidate — in the initial HTML with fetchpriority=high */
+      .boot-hero {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        background: #000;
+        pointer-events: none;
+      }
+      .boot-hero.is-done {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      #root {
+        position: relative;
+        z-index: 1;
       }
     </style>
     <script type="application/ld+json">
@@ -139,6 +158,15 @@
     </script>
   </head>
   <body>
+    <img
+      class="boot-hero"
+      src="/hero.webp"
+      alt="Eugene Brady — cinematic opening still"
+      width="4479"
+      height="2519"
+      fetchpriority="high"
+      decoding="async"
+    />
     <div
       id="preloader"
       class="preloader"
@@ -146,14 +174,7 @@
       aria-live="polite"
       aria-label="Loading"
     >
-      <img
-        class="preloader__mark"
-        src="/brand/eb-mark.png"
-        alt="Eugene Brady"
-        width="72"
-        height="72"
-        decoding="async"
-      />
+      <div class="preloader__mark" aria-hidden="true"></div>
     </div>
     <div id="root"></div>
     <noscript>
