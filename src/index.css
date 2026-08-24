@@ -1951,31 +1951,41 @@ html.is-gallery-focus header {
   justify-content: flex-start;
 }
 
-.poster-wall__frame-slider-nav {
-  pointer-events: auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-
 .poster-wall__frame-slider-arrow {
+  pointer-events: auto;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
   margin: 0;
   padding: 0;
   border: 1px solid rgba(255, 255, 255, 0.28);
   background: rgba(12, 11, 10, 0.72);
   color: #f7f5f1;
   cursor: pointer;
-  transition: opacity 0.25s ease;
+  transition:
+    opacity 0.25s ease,
+    transform 0.28s var(--ease-spring),
+    border-color 0.25s ease;
+}
+
+.poster-wall__frame-slider-arrow--prev {
+  left: clamp(0.75rem, 2.5vw, 1.5rem);
+}
+
+.poster-wall__frame-slider-arrow--next {
+  right: clamp(0.75rem, 2.5vw, 1.5rem);
 }
 
 .poster-wall__frame-slider-arrow:hover:not(:disabled) {
-  opacity: 0.72;
+  opacity: 0.85;
+  transform: translateY(calc(-50% - 1px));
+  border-color: rgba(255, 255, 255, 0.45);
 }
 
 .poster-wall__frame-slider-arrow:disabled {
@@ -1984,6 +1994,11 @@ html.is-gallery-focus header {
 }
 
 .poster-wall__frame-slider-meta {
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  bottom: max(1.5rem, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -95,7 +95,7 @@ export const FILMS = [
     index: '02',
     imdb: 'https://pro.imdb.com/title/tt0311530/?ref_=nmovr_i_2',
     synopsis:
-      'Thirty years after the Vietnam War, an aging father returns to Vietnam with his reluctant family to uncover the fate of the son he never stopped searching for—only to discover that some truths are harder to live with than never knowing.',
+      'Thirty years after the Vietnam War, an aging father travels to Vietnam with his reluctant family to uncover the fate of the son he never stopped searching for, only to discover that some truths are harder to live with than never knowing.',
     credits: 'Starring Adam Brody',
     rating: 6.2,
     ratingOutOf: 10,

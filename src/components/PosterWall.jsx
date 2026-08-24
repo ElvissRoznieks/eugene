@@ -2002,15 +2002,24 @@ function FrameImageSlider({
         </div>
 
         {!gridMode && (
-          <div className="poster-wall__frame-slider-nav">
+          <>
             <button
               type="button"
-              className="poster-wall__frame-slider-arrow"
+              className="poster-wall__frame-slider-arrow poster-wall__frame-slider-arrow--prev"
               onClick={() => onStep(-1)}
               disabled={slideIndex <= 0}
               aria-label="Previous image"
             >
               <ChevronLeft size={20} strokeWidth={1.75} />
+            </button>
+            <button
+              type="button"
+              className="poster-wall__frame-slider-arrow poster-wall__frame-slider-arrow--next"
+              onClick={() => onStep(1)}
+              disabled={slideIndex >= slides.length - 1}
+              aria-label="Next image"
+            >
+              <ChevronRight size={20} strokeWidth={1.75} />
             </button>
             <p className="poster-wall__frame-slider-meta">
               <span>{slides[slideIndex]?.title}</span>
@@ -2018,16 +2027,7 @@ function FrameImageSlider({
                 {slideIndex + 1} / {slides.length}
               </span>
             </p>
-            <button
-              type="button"
-              className="poster-wall__frame-slider-arrow"
-              onClick={() => onStep(1)}
-              disabled={slideIndex >= slides.length - 1}
-              aria-label="Next image"
-            >
-              <ChevronRight size={20} strokeWidth={1.75} />
-            </button>
-          </div>
+          </>
         )}
       </div>
     </div>
