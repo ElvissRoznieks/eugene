@@ -62,6 +62,8 @@ export default function About() {
                 width={1200}
                 height={1500}
                 decoding="async"
+                loading="eager"
+                fetchPriority="high"
               />
               {portraitHover ? (
                 <canvas

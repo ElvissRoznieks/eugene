@@ -64,6 +64,24 @@ function stripContext(node) {
   return rest
 }
 
+function upsertLcpPreload(href) {
+  const id = 'seo-lcp-preload'
+  let el = document.getElementById(id)
+  if (!href) {
+    el?.remove()
+    return
+  }
+  if (!el) {
+    el = document.createElement('link')
+    el.id = id
+    el.rel = 'preload'
+    el.as = 'image'
+    document.head.appendChild(el)
+  }
+  el.href = href
+  el.setAttribute('fetchpriority', 'high')
+}
+
 /**
  * Per-route document head for SPA SEO (title, description, OG, canonical, JSON-LD).
  * Pass a PAGE_SEO entry: <SeoHead {...PAGE_SEO.film} jsonLd={...} />
@@ -75,6 +93,7 @@ export default function SeoHead({
   image = SITE_OG_IMAGE,
   imageAlt = `${SITE_NAME} — ${SITE_TAGLINE}`,
   type = 'website',
+  preloadLcp = false,
   jsonLd,
 }) {
   const fullTitle = title.includes(SITE_NAME)
@@ -82,6 +101,7 @@ export default function SeoHead({
     : `${title} · ${SITE_NAME}`
   const url = sitePath(path)
   const ogImage = absoluteUrl(image, SITE_URL)
+  const lcpHref = preloadLcp ? absoluteUrl(image, SITE_URL) : null
 
   useEffect(() => {
     document.title = fullTitle
@@ -98,19 +118,25 @@ export default function SeoHead({
     upsertMeta('property', 'og:image', ogImage)
     upsertMeta('property', 'og:image:secure_url', ogImage)
     upsertMeta('property', 'og:image:alt', imageAlt)
-    upsertMeta('property', 'og:image:type', 'image/png')
+    upsertMeta(
+      'property',
+      'og:image:type',
+      ogImage.endsWith('.webp') ? 'image/webp' : 'image/png'
+    )
     upsertMeta('name', 'twitter:card', 'summary_large_image')
     upsertMeta('name', 'twitter:title', fullTitle)
     upsertMeta('name', 'twitter:description', description)
     upsertMeta('name', 'twitter:image', ogImage)
     upsertMeta('name', 'twitter:image:alt', imageAlt)
     upsertLink('canonical', url)
+    upsertLcpPreload(lcpHref)
     upsertJsonLd('seo-json-ld', jsonLd)
 
     return () => {
       upsertJsonLd('seo-json-ld', null)
+      upsertLcpPreload(null)
     }
-  }, [fullTitle, description, url, ogImage, imageAlt, type, jsonLd])
+  }, [fullTitle, description, url, ogImage, imageAlt, type, lcpHref, jsonLd])
 
   return null
 }

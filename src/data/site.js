@@ -1,7 +1,6 @@
 import missingBrendanPoster from '../assets/posters/missing-brendan.webp'
 import theNephewPoster from '../assets/posters/the-nephew.webp'
 import theGirlWhoStayedPoster from '../assets/posters/the-girl-who-stayed.webp'
-import bradyHeadshot from '../assets/brady-headshot2.webp'
 
 export const NAV_LINKS = [
   { index: '01', label: 'Home', path: '/' },
@@ -168,7 +167,7 @@ export const GALLERY = PHOTO_ORDER.filter((n) => photoByNumber[n]).map(
   },
 )
 
-export const ABOUT_HEADSHOT = bradyHeadshot
+export const ABOUT_HEADSHOT = '/brady-headshot.webp'
 export const ABOUT_HEADSHOT_ALT =
   'Portrait of Eugene Brady, Irish director and photographer'
 
@@ -256,8 +255,9 @@ export const PAGE_SEO = {
     title: 'About',
     description: `About ${SITE_NAME} — ${SITE_NATIONALITY} director and photographer, BAFTA member. Films include ${FILM_TITLES_INLINE}.`,
     path: '/about',
-    image: SITE_OG_IMAGE,
+    image: ABOUT_HEADSHOT,
     imageAlt: ABOUT_HEADSHOT_ALT,
+    preloadLcp: true,
   },
   contact: {
     title: 'Contact',

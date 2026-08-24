@@ -37,6 +37,18 @@
     <meta name="twitter:image" content="https://eugenebrady.com/og-image.png" />
     <meta name="twitter:image:alt" content="Eugene Brady — Director / Photographer" />
     <link rel="preload" as="image" href="/hero.webp" type="image/webp" fetchpriority="high" />
+    <script>
+      /* About LCP — discover headshot from the initial document on /about */
+      if (/^\/about\/?$/.test(location.pathname)) {
+        var l = document.createElement('link')
+        l.rel = 'preload'
+        l.as = 'image'
+        l.href = '/brady-headshot.webp'
+        l.type = 'image/webp'
+        l.fetchPriority = 'high'
+        document.head.appendChild(l)
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -58,6 +70,16 @@
     </noscript>
     <title>Eugene Brady — Director / Photographer</title>
     <style>
+      /* Critical first-paint shell so async CSS does not flash unstyled */
+      html,
+      body {
+        margin: 0;
+        background: #000;
+        min-height: 100%;
+      }
+      #root {
+        min-height: 100%;
+      }
       #preloader {
         position: fixed;
         inset: 0;
@@ -156,8 +178,8 @@
         ]
       }
     </script>
-    <script type="module" crossorigin src="/assets/index-4MaqWeWU.js"></script>
-    <link rel="preload" as="style" href="/assets/index-cgQzTvOh.css" /><link rel="stylesheet" href="/assets/index-cgQzTvOh.css" media="print" onload="this.media='all'" /><noscript><link rel="stylesheet" href="/assets/index-cgQzTvOh.css" /></noscript>
+    <script type="module" crossorigin src="/assets/index-CuhEog6z.js"></script>
+    <link rel="preload" as="style" href="/assets/index-BrRIR5Vk.css" onload="this.onload=null;this.rel='stylesheet'" /><noscript><link rel="stylesheet" href="/assets/index-BrRIR5Vk.css" /></noscript>
   </head>
   <body>
     <img

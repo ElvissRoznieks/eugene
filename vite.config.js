@@ -2,7 +2,10 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
-/** Load built CSS without blocking first paint (Lighthouse render-blocking). */
+/**
+ * Avoid render-blocking CSS: preload the stylesheet, then promote it
+ * to rel=stylesheet on load (standard Lighthouse-friendly pattern).
+ */
 function asyncCss() {
   return {
     name: 'async-css',
@@ -10,10 +13,9 @@ function asyncCss() {
       order: 'post',
       handler(html) {
         return html.replace(
-          /<link([^>]*\s)?rel="stylesheet"([^>]*\s)?href="([^"]+\.css)"([^>]*)\/?>/g,
-          (_m, pre = '', mid = '', href, post = '') =>
-            `<link rel="preload" as="style" href="${href}" />` +
-            `<link rel="stylesheet" href="${href}" media="print" onload="this.media='all'" />` +
+          /<link[^>]*\brel=["']stylesheet["'][^>]*\bhref=["']([^"']+\.css)["'][^>]*>/gi,
+          (_m, href) =>
+            `<link rel="preload" as="style" href="${href}" onload="this.onload=null;this.rel='stylesheet'" />` +
             `<noscript><link rel="stylesheet" href="${href}" /></noscript>`
         )
       },

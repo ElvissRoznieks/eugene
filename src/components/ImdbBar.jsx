@@ -24,6 +24,7 @@ export default function ImdbBar({ variant = 'hero' }) {
             src={scriptLogo}
             alt={SITE_NAME}
             className="site-dock__script"
+            width={92}
             height={22}
             decoding="async"
           />
