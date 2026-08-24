@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { ChevronLeft, ChevronRight, LogIn, Star, X } from 'lucide-react'
 import { FILMS } from '../data/site'
 import { useBodyScrollLock, useHorizontalSwipe } from '../hooks/usePointerSwipe'
@@ -56,6 +57,11 @@ function GalleryLightbox({ slides, open, onClose }) {
 
   useBodyScrollLock(open)
 
+  useEffect(() => {
+    document.documentElement.classList.toggle('is-gallery-focus', open)
+    return () => document.documentElement.classList.remove('is-gallery-focus')
+  }, [open])
+
   const step = (dir) => {
     setIndex((i) => Math.min(slides.length - 1, Math.max(0, i + dir)))
   }
@@ -77,9 +83,9 @@ function GalleryLightbox({ slides, open, onClose }) {
     return () => window.removeEventListener('keydown', onKey)
   }, [open, onClose, slides.length])
 
-  if (!open || !slides.length) return null
+  if (!open || !slides.length || typeof document === 'undefined') return null
 
-  return (
+  return createPortal(
     <div
       className="film-mobile__gallery is-open"
       role="dialog"
@@ -139,7 +145,8 @@ function GalleryLightbox({ slides, open, onClose }) {
       <p className="film-mobile__gallery-meta">
         {index + 1} / {slides.length}
       </p>
-    </div>
+    </div>,
+    document.body
   )
 }
 
@@ -161,16 +168,6 @@ export default function FilmMobile() {
     <section className="film-mobile" aria-label="Films">
       <div className="film-mobile__carousel page-shell">
         <div className="film-mobile__stage" {...swipe}>
-          <button
-            type="button"
-            className="film-mobile__arrow film-mobile__arrow--prev"
-            onClick={() => step(-1)}
-            disabled={activeIndex <= 0}
-            aria-label="Previous film"
-          >
-            <ChevronLeft size={22} strokeWidth={1.75} />
-          </button>
-
           <div className="film-mobile__poster" key={active.title}>
             <img
               src={active.poster}
@@ -178,6 +175,30 @@ export default function FilmMobile() {
               draggable={false}
               decoding="async"
             />
+          </div>
+        </div>
+
+        <div className="film-mobile__controls">
+          <button
+            type="button"
+            className="film-mobile__arrow film-mobile__arrow--prev"
+            onClick={() => step(-1)}
+            disabled={activeIndex <= 0}
+            aria-label="Previous film"
+          >
+            <ChevronLeft size={16} strokeWidth={1.75} />
+          </button>
+
+          <div className="film-mobile__dots" aria-hidden="true">
+            {FILMS.map((film, i) => (
+              <button
+                key={film.title}
+                type="button"
+                className={cx('film-mobile__dot', i === activeIndex && 'is-on')}
+                onClick={() => setActiveIndex(i)}
+                aria-label={film.title}
+              />
+            ))}
           </div>
 
           <button
@@ -187,20 +208,8 @@ export default function FilmMobile() {
             disabled={activeIndex >= FILMS.length - 1}
             aria-label="Next film"
           >
-            <ChevronRight size={22} strokeWidth={1.75} />
+            <ChevronRight size={16} strokeWidth={1.75} />
           </button>
-        </div>
-
-        <div className="film-mobile__dots" aria-hidden="true">
-          {FILMS.map((film, i) => (
-            <button
-              key={film.title}
-              type="button"
-              className={cx('film-mobile__dot', i === activeIndex && 'is-on')}
-              onClick={() => setActiveIndex(i)}
-              aria-label={film.title}
-            />
-          ))}
         </div>
       </div>
 

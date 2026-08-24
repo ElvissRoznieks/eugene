@@ -2194,20 +2194,16 @@ html.is-gallery-focus header {
 
 .film-mobile__stage {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
+  display: block;
   touch-action: pan-y pinch-zoom;
   user-select: none;
 }
 
 .film-mobile__poster {
-  flex: 1 1 auto;
-  min-width: 0;
+  width: 100%;
   aspect-ratio: 1024 / 717;
-  max-height: min(42vh, 16rem);
-  margin: 0 auto;
+  max-height: min(58vh, 22rem);
+  margin: 0;
   overflow: hidden;
   background: #1a1612;
   border: 1px solid rgba(247, 245, 241, 0.12);
@@ -2221,12 +2217,20 @@ html.is-gallery-focus header {
   pointer-events: none;
 }
 
+.film-mobile__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  margin-top: 0.85rem;
+}
+
 .film-mobile__arrow {
   flex: 0 0 auto;
   display: grid;
   place-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 1.85rem;
+  height: 1.85rem;
   margin: 0;
   padding: 0;
   border: 1px solid rgba(247, 245, 241, 0.22);
@@ -2244,7 +2248,7 @@ html.is-gallery-focus header {
   display: flex;
   justify-content: center;
   gap: 0.45rem;
-  margin-top: 0.9rem;
+  margin: 0;
 }
 
 .film-mobile__dot {
@@ -2382,7 +2386,7 @@ html.is-gallery-focus header {
 .film-mobile__gallery {
   position: fixed;
   inset: 0;
-  z-index: 220;
+  z-index: 240;
   display: grid;
   place-items: center;
   background: rgba(8, 6, 5, 0.96);
