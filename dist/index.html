@@ -36,25 +36,35 @@
     />
     <meta name="twitter:image" content="https://eugenebrady.com/og-image.png" />
     <meta name="twitter:image:alt" content="Eugene Brady — Director / Photographer" />
-    <link rel="preload" as="image" href="/hero.webp" type="image/webp" fetchpriority="high" />
-    <link
-      rel="preload"
-      as="image"
-      href="/signature.webp"
-      type="image/webp"
-      fetchpriority="high"
-    />
     <script>
-      /* About LCP — discover headshot from the initial document on /about */
-      if (/^\/about\/?$/.test(location.pathname)) {
-        var l = document.createElement('link')
-        l.rel = 'preload'
-        l.as = 'image'
-        l.href = '/brady-headshot.webp'
-        l.type = 'image/webp'
-        l.fetchPriority = 'high'
-        document.head.appendChild(l)
-      }
+      /* Home-only LCP assets — never preload hero/signature on /film etc. */
+      (function () {
+        var path = location.pathname.replace(/\/+$/, '') || '/'
+        if (path === '/') {
+          ;[
+            ['/hero.webp', 'high'],
+            ['/signature.webp', 'high'],
+          ].forEach(function (item) {
+            var l = document.createElement('link')
+            l.rel = 'preload'
+            l.as = 'image'
+            l.href = item[0]
+            l.type = 'image/webp'
+            l.fetchPriority = item[1]
+            document.head.appendChild(l)
+          })
+          return
+        }
+        if (path === '/about') {
+          var a = document.createElement('link')
+          a.rel = 'preload'
+          a.as = 'image'
+          a.href = '/brady-headshot.webp'
+          a.type = 'image/webp'
+          a.fetchPriority = 'high'
+          document.head.appendChild(a)
+        }
+      })()
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -185,19 +195,26 @@
         ]
       }
     </script>
-    <script type="module" crossorigin src="/assets/index-CJ2IPwRw.js"></script>
+    <script type="module" crossorigin src="/assets/index-Dbv8xM4N.js"></script>
     <link rel="preload" as="style" href="/assets/index-DKHI7kXI.css" onload="this.onload=null;this.rel='stylesheet'" /><noscript><link rel="stylesheet" href="/assets/index-DKHI7kXI.css" /></noscript>
   </head>
   <body>
-    <img
-      class="boot-hero"
-      src="/hero.webp"
-      alt="Eugene Brady — cinematic opening still"
-      width="4479"
-      height="2519"
-      fetchpriority="high"
-      decoding="async"
-    />
+    <script>
+      /* Boot hero img only on home — avoids a 4MB download on /film, /about, etc. */
+      ;(function () {
+        var path = location.pathname.replace(/\/+$/, '') || '/'
+        if (path !== '/') return
+        var img = document.createElement('img')
+        img.className = 'boot-hero'
+        img.src = '/hero.webp'
+        img.alt = 'Eugene Brady — cinematic opening still'
+        img.width = 4479
+        img.height = 2519
+        img.fetchPriority = 'high'
+        img.decoding = 'async'
+        document.body.insertBefore(img, document.body.firstChild)
+      })()
+    </script>
     <div
       id="preloader"
       class="preloader"

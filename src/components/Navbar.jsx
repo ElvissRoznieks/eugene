@@ -67,7 +67,14 @@ export default function Navbar({ variant = 'hero' }) {
         inert={!open ? true : undefined}
       >
         <div className="mobile-menu__bg" aria-hidden="true">
-          <img src={HERO_IMAGE} alt={HERO_IMAGE_ALT} decoding="async" loading="lazy" />
+          {open ? (
+            <img
+              src={HERO_IMAGE}
+              alt={HERO_IMAGE_ALT}
+              decoding="async"
+              loading="lazy"
+            />
+          ) : null}
           <div className="mobile-menu__scrim" />
         </div>
 
