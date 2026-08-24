@@ -1,4 +1,3 @@
-import heroHome from '../assets/home2.webp'
 import missingBrendanPoster from '../assets/posters/missing-brendan.webp'
 import theNephewPoster from '../assets/posters/the-nephew.webp'
 import theGirlWhoStayedPoster from '../assets/posters/the-girl-who-stayed.webp'
@@ -38,8 +37,8 @@ export const SITE_TZ = 'Europe/Dublin'
 export const SITE_LOCATION_LINE = 'Based · Ireland · International'
 export const SITE_OG_IMAGE = `${SITE_URL}/og-image.png`
 
-/** Full-bleed home still */
-export const HERO_IMAGE = heroHome
+/** Full-bleed home still — public so HTML can preload for LCP */
+export const HERO_IMAGE = '/hero.webp'
 export const HERO_IMAGE_ALT = 'Eugene Brady — cinematic opening still'
 
 export const DEFAULT_ATMOSPHERE = '/audio/default-atmosphere.m4a'

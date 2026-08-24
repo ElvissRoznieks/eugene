@@ -18,8 +18,7 @@
   --muted: #6b6b6b;
   --line: rgba(10, 10, 10, 0.1);
   --dock-h: 3.5rem;
-  /* Single site stack — set --film-display back to 'Bebas Neue', 'Syne', sans-serif to restore titles */
-  --font-sans-prev: 'Outfit', 'Figtree', sans-serif;
+  --font-sans-prev: 'Outfit', system-ui, sans-serif;
   --film-sans: var(--font-sans-prev);
   --film-display: var(--font-sans-prev);
 }

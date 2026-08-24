@@ -25,6 +25,8 @@ export default function Hero() {
                 width={992}
                 height={280}
                 decoding="async"
+                fetchPriority="low"
+                loading="lazy"
               />
             </h1>
           </div>
