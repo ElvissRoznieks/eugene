@@ -15,10 +15,10 @@ import { cx } from '../utils/dom'
 import ebLogo from '../assets/brand/eb-logo.png'
 
 const HEADER = {
-  light: 'sticky top-0 z-40 border-b border-black/10 bg-white/85 backdrop-blur-md',
+  light: 'sticky top-0 z-40 bg-white/85 backdrop-blur-md',
   paper:
-    'sticky top-0 z-40 border-b border-black/10 bg-[color-mix(in_srgb,var(--paper-warm)_90%,transparent)] backdrop-blur-md',
-  dark: 'sticky top-0 z-40 border-b border-white/10 bg-[color-mix(in_srgb,var(--darkroom)_90%,transparent)] backdrop-blur-md',
+    'sticky top-0 z-40 bg-[color-mix(in_srgb,var(--paper-warm)_90%,transparent)] backdrop-blur-md',
+  dark: 'sticky top-0 z-40 bg-[color-mix(in_srgb,var(--darkroom)_90%,transparent)] backdrop-blur-md',
   immersive: 'absolute inset-x-0 top-0 z-10',
   hero: 'absolute inset-x-0 top-0 z-10',
 }
