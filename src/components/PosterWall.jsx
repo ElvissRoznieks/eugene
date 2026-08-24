@@ -20,6 +20,7 @@ import { useHorizontalSwipe } from '../hooks/usePointerSwipe'
 import { cx } from '../utils/dom'
 // import wallWhiteTex from '../assets/wall-white.jpg'
 import imdbLogo from '../assets/imdb-logo.webp'
+import FilmStageLoader from './FilmStageLoader'
 
 // const GALLERY_BG_VIDEO = '/video/gallery-bg.mp4'
 const GALLERY_WALL_COLOR = '#12100e'
@@ -141,7 +142,7 @@ function createPosterTexture(film, paletteIndex) {
 }
 
 function loadPosterTexture(url) {
-  // Cover-fit into landscape frame — no stretch; crop only if ratios differ
+  // Cover-fit into the landscape frame via canvas — reliable for Vite asset URLs
   const frameW = POSTER_TEX_W
   const frameH = POSTER_TEX_H
   return new Promise((resolve, reject) => {
@@ -151,7 +152,7 @@ function loadPosterTexture(url) {
       const canvas = document.createElement('canvas')
       canvas.width = frameW
       canvas.height = frameH
-      const ctx = canvas.getContext('2d')
+      const ctx = canvas.getContext('2d', { alpha: false })
       ctx.fillStyle = '#0a0a0a'
       ctx.fillRect(0, 0, frameW, frameH)
 
@@ -164,7 +165,7 @@ function loadPosterTexture(url) {
 
       const texture = new THREE.CanvasTexture(canvas)
       texture.colorSpace = THREE.SRGBColorSpace
-      texture.anisotropy = 8
+      texture.anisotropy = 4
       texture.needsUpdate = true
       resolve(texture)
     }
@@ -315,13 +316,24 @@ function createBevelFrameGeometry(innerW, innerH) {
   return geo
 }
 
-const SHADOW_TEX = (() => {
-  const size = 512
+/** Build canvas textures on first use — avoid blocking the Film chunk parse. */
+function lazyCanvasTexture(draw) {
+  let tex = null
+  return () => {
+    if (!tex) {
+      tex = new THREE.CanvasTexture(draw())
+      tex.colorSpace = THREE.SRGBColorSpace
+    }
+    return tex
+  }
+}
+
+const getShadowTex = lazyCanvasTexture(() => {
+  const size = 256
   const canvas = document.createElement('canvas')
   canvas.width = size
   canvas.height = size
   const ctx = canvas.getContext('2d')
-  // Soft top-light blob — wide falloff so motion never reads as a hard slash
   const g = ctx.createRadialGradient(
     size / 2,
     size * 0.54,
@@ -336,14 +348,12 @@ const SHADOW_TEX = (() => {
   g.addColorStop(1, 'rgba(8, 6, 4, 0)')
   ctx.fillStyle = g
   ctx.fillRect(0, 0, size, size)
-  const tex = new THREE.CanvasTexture(canvas)
-  tex.colorSpace = THREE.SRGBColorSpace
-  return tex
-})()
+  return canvas
+})
 
 /** Soft cloud dapples — live on the plaster wall only (behind frames). */
-const DRIFT_SHADOW_TEX = (() => {
-  const size = 256
+const getDriftShadowTex = lazyCanvasTexture(() => {
+  const size = 128
   const canvas = document.createElement('canvas')
   canvas.width = size
   canvas.height = size
@@ -369,10 +379,8 @@ const DRIFT_SHADOW_TEX = (() => {
     ctx.fillStyle = g
     ctx.fillRect(0, 0, size, size)
   })
-  const tex = new THREE.CanvasTexture(canvas)
-  tex.colorSpace = THREE.SRGBColorSpace
-  return tex
-})()
+  return canvas
+})
 
 const DRIFT_SHADOWS = [
   { speed: 0.048, ampX: 2.4, ampY: 0.7, phase: 0.3, w: 4.2, h: 2.8, opacity: 0.34 },
@@ -425,7 +433,7 @@ function WallDriftShadows({ camXRef, motionLite }) {
             ref={(el) => {
               mats.current[i] = el
             }}
-            map={DRIFT_SHADOW_TEX}
+            map={getDriftShadowTex()}
             color="#1a140f"
             transparent
             opacity={cfg.opacity}
@@ -440,8 +448,8 @@ function WallDriftShadows({ camXRef, motionLite }) {
 }
 
 // Soft protective-foil sheen — drifts with camera so light seems to travel
-const FOIL_SHEEN_TEX = (() => {
-  const size = 512
+const getFoilSheenTex = lazyCanvasTexture(() => {
+  const size = 256
   const canvas = document.createElement('canvas')
   canvas.width = size
   canvas.height = size
@@ -472,11 +480,43 @@ const FOIL_SHEEN_TEX = (() => {
   bloom.addColorStop(1, 'rgba(255,255,255,0)')
   ctx.fillStyle = bloom
   ctx.fillRect(0, 0, size, size)
+  return canvas
+})
 
-  const tex = new THREE.CanvasTexture(canvas)
-  tex.colorSpace = THREE.SRGBColorSpace
-  return tex
-})()
+/** Kick demand-mode frames while the pointer moves / camera is settling. */
+function RenderOnInteract({ dragLiveRef }) {
+  const { gl, invalidate } = useThree()
+  const leftover = useRef(18)
+
+  useEffect(() => {
+    const el = gl.domElement
+    const kick = () => {
+      leftover.current = 24
+      invalidate()
+    }
+    el.addEventListener('pointermove', kick, { passive: true })
+    el.addEventListener('pointerdown', kick, { passive: true })
+    leftover.current = 18
+    invalidate()
+    return () => {
+      el.removeEventListener('pointermove', kick)
+      el.removeEventListener('pointerdown', kick)
+    }
+  }, [gl, invalidate])
+
+  useFrame(() => {
+    if (dragLiveRef?.current) {
+      leftover.current = 12
+      invalidate()
+      return
+    }
+    if (leftover.current > 0) {
+      leftover.current -= 1
+      invalidate()
+    }
+  })
+  return null
+}
 
 function FramedPoster({
   filmIndex,
@@ -502,7 +542,7 @@ function FramedPoster({
   const shadowOffY = useRef(-0.03)
   const sheenUV = useMemo(() => new THREE.Vector2(0, 0), [])
   const sheenMap = useMemo(() => {
-    const map = FOIL_SHEEN_TEX.clone()
+    const map = getFoilSheenTex().clone()
     map.wrapS = THREE.ClampToEdgeWrapping
     map.wrapT = THREE.ClampToEdgeWrapping
     map.needsUpdate = true
@@ -645,7 +685,7 @@ function FramedPoster({
         <planeGeometry args={[POSTER_W + 0.42, POSTER_H + 0.38]} />
         <meshBasicMaterial
           ref={shadowMat}
-          map={SHADOW_TEX}
+          map={getShadowTex()}
           transparent
           opacity={0.48}
           depthWrite={false}
@@ -654,7 +694,7 @@ function FramedPoster({
       </mesh>
 
       {/* Dark beveled gallery frame — catches room lights on edges */}
-      <mesh geometry={frameGeo} castShadow receiveShadow>
+      <mesh geometry={frameGeo}>
         <meshStandardMaterial
           color={FRAME_MAT.color}
           roughness={FRAME_MAT.roughness}
@@ -668,9 +708,15 @@ function FramedPoster({
         <meshStandardMaterial color="#0a0a0a" roughness={0.95} metalness={0} />
       </mesh>
 
-      <mesh position={[0, 0, 0.02]} castShadow>
+      <mesh position={[0, 0, 0.02]}>
         <planeGeometry args={[POSTER_W, POSTER_H]} />
-        <meshStandardMaterial map={texture} roughness={0.52} metalness={0.03} />
+        <meshStandardMaterial
+          key={texture?.uuid || `empty-${filmIndex}`}
+          map={texture || undefined}
+          color={texture ? '#ffffff' : '#1a1814'}
+          roughness={0.52}
+          metalness={0.03}
+        />
       </mesh>
 
       {/* Protective foil — thin clear coat over the print */}
@@ -720,7 +766,7 @@ function GalleryWorld({
   enterZRef,
   motionLite,
 }) {
-  const { camera, size, gl } = useThree()
+  const { camera, size } = useThree()
   // Plain cream wall — image/video BG commented out
   // const plasterMap = useWallTexture(wallWhiteTex)
   // const { map: videoMap, ready: videoReady } = useWallVideoTexture(
@@ -739,38 +785,49 @@ function GalleryWorld({
   const fixtureRef = useRef()
   const spotlightAmt = useRef(0)
   const lookYSmooth = useRef(LOOK_Y)
-  const [posterMaps, setPosterMaps] = useState(() =>
-    FILMS.map((film, filmIndex) => createPosterTexture(film, filmIndex)),
-  )
+  const [posterMaps, setPosterMaps] = useState(() => FILMS.map(() => null))
+  const settleFrames = useRef(12)
+  const invalidate = useThree((s) => s.invalidate)
+
+  useEffect(() => {
+    settleFrames.current = 16
+    invalidate()
+  }, [activeIndex, spotlightOn, invalidate])
 
   useEffect(() => {
     let alive = true
-    const fallbacks = FILMS.map((film, filmIndex) =>
-      createPosterTexture(film, filmIndex),
-    )
     const loads = FILMS.map(async (film, filmIndex) => {
-      if (!film.poster) return fallbacks[filmIndex]
+      if (!film.poster) return createPosterTexture(film, filmIndex)
       try {
-        const tex = await loadPosterTexture(film.poster)
-        fallbacks[filmIndex].dispose()
-        return tex
+        return await loadPosterTexture(film.poster)
       } catch {
-        return fallbacks[filmIndex]
+        return createPosterTexture(film, filmIndex)
       }
     })
 
-    Promise.all(loads).then((maps) => {
-      if (!alive) {
-        maps.forEach((m) => m.dispose())
-        return
-      }
-      setPosterMaps(maps)
+    // Reveal posters as each finishes — avoids one long main-thread burst
+    loads.forEach((p, filmIndex) => {
+      p.then((tex) => {
+        if (!alive) {
+          tex.dispose()
+          return
+        }
+        setPosterMaps((prev) => {
+          const next = prev.slice()
+          const old = next[filmIndex]
+          next[filmIndex] = tex
+          if (old && old !== tex) old.dispose()
+          return next
+        })
+        settleFrames.current = 12
+        invalidate()
+      })
     })
 
     return () => {
       alive = false
     }
-  }, [])
+  }, [invalidate])
 
   const posters = useMemo(
     () =>
@@ -822,16 +879,15 @@ function GalleryWorld({
     if (enterZRef) enterZRef.current = z
   }, [size.width, size.height, enterZRef])
 
-  useEffect(() => {
-    // Drop shadow-map passes while zooming / in the 2D gallery
-    gl.shadowMap.enabled = !motionLite
-  }, [gl, motionLite])
-
+  // Dispose only when the world unmounts — never on each posterMaps update
+  // (that was wiping textures right after load → white posters).
+  const posterMapsRef = useRef(posterMaps)
+  posterMapsRef.current = posterMaps
   useEffect(() => {
     return () => {
-      posterMaps.forEach((tex) => tex.dispose())
+      posterMapsRef.current.forEach((tex) => tex?.dispose())
     }
-  }, [posterMaps])
+  }, [])
 
   useFrame((_, dt) => {
     const dragging = dragLiveRef?.current
@@ -960,10 +1016,29 @@ function GalleryWorld({
       spotRef.current.target = spotTarget.current
       spotRef.current.target?.updateMatrixWorld()
     }
+
+    // Demand frameloop: keep ticking only while motion is settling
+    const dx = Math.abs(camera.position.x - targetX)
+    const dz = Math.abs(camera.position.z - targetZ)
+    const spotTargetAmt = spotlightOn ? 1 : 0
+    const spotBusy = Math.abs(spotlightAmt.current - spotTargetAmt) > 0.012
+    const busy =
+      dragging ||
+      motionLite ||
+      zooming ||
+      dx > 0.0015 ||
+      dz > 0.004 ||
+      spotBusy
+    if (busy) settleFrames.current = 10
+    if (settleFrames.current > 0) {
+      settleFrames.current -= 1
+      invalidate()
+    }
   })
 
   return (
     <>
+      <RenderOnInteract dragLiveRef={dragLiveRef} />
       <color attach="background" args={[GALLERY_WALL_COLOR]} />
       <fog attach="fog" args={[GALLERY_WALL_COLOR, 18, 38]} />
 
@@ -971,20 +1046,9 @@ function GalleryWorld({
 
       <directionalLight
         ref={keyLight}
-        castShadow
         position={[focusX - 0.6, 4.6, 3.2]}
         intensity={2.35}
         color="#fffaf2"
-        shadow-mapSize={[512, 512]}
-        shadow-camera-near={0.5}
-        shadow-camera-far={20}
-        shadow-camera-left={-6}
-        shadow-camera-right={6}
-        shadow-camera-top={5}
-        shadow-camera-bottom={-4}
-        shadow-bias={-0.00035}
-        shadow-normalBias={0.032}
-        shadow-radius={2}
       />
 
       <directionalLight
@@ -1050,7 +1114,6 @@ function GalleryWorld({
       <mesh
         key="wall-cream"
         position={[0, CAM_Y + 0.35, 0]}
-        receiveShadow
       >
         <planeGeometry args={[wallWidth, WALL_H]} />
         <meshStandardMaterial
@@ -1066,7 +1129,6 @@ function GalleryWorld({
       <mesh
         rotation={[-Math.PI / 2, 0, 0]}
         position={[0, 0, 2.2]}
-        receiveShadow
       >
         <planeGeometry args={[wallWidth + 4, 9]} />
         <meshStandardMaterial color={GALLERY_WALL_COLOR} roughness={0.96} />
@@ -1180,7 +1242,11 @@ export default function PosterWall() {
   const wallVideo = false
   const [canvasKey, setCanvasKey] = useState(0)
   const [webglOk, setWebglOk] = useState(true)
+  const [glReady, setGlReady] = useState(false)
+  const [sceneReady, setSceneReady] = useState(false)
   const [pageScrollable, setPageScrollable] = useState(false)
+  const invalidateRef = useRef(() => {})
+  const kickRender = () => invalidateRef.current()
   const [introReady, setIntroReady] = useState(false)
   // idle | zooming-in | slider | zooming-out
   const [roomPhase, setRoomPhase] = useState('idle')
@@ -1228,14 +1294,16 @@ export default function PosterWall() {
     return () => root.classList.remove('is-gallery-focus')
   }, [roomBusy])
 
-  // Smooth first open — stage + HUD ease in
+  // Smooth first open — HUD eases in; mount WebGL as soon as this chunk is live
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       setIntroReady(true)
+      setGlReady(true)
       return undefined
     }
-    const id = window.setTimeout(() => setIntroReady(true), 40)
-    return () => window.clearTimeout(id)
+    setGlReady(true)
+    const introId = window.setTimeout(() => setIntroReady(true), 40)
+    return () => window.clearTimeout(introId)
   }, [])
 
   useEffect(() => {
@@ -1271,11 +1339,13 @@ export default function PosterWall() {
     const clamped = Math.min(FILMS.length - 1, Math.max(0, next))
     if (clamped === indexRef.current) {
       scrubXRef.current = posterWorldX(clamped)
+      kickRender()
       return
     }
     indexRef.current = clamped
     scrubXRef.current = posterWorldX(clamped)
     setActiveIndex(clamped)
+    kickRender()
   }
 
   function step(dir) {
@@ -1393,6 +1463,7 @@ export default function PosterWall() {
         maxX,
         Math.max(minX, camXRef.current),
       )
+      kickRender()
       el.classList.add('is-dragging')
       try {
         el.setPointerCapture(e.pointerId)
@@ -1418,6 +1489,7 @@ export default function PosterWall() {
         maxX,
         Math.max(minX, scrubXRef.current + worldDelta),
       )
+      kickRender()
       // EMA velocity for a short coast on release
       const instant = worldDelta / dtSec
       dragVelRef.current = dragVelRef.current * 0.78 + instant * 0.22
@@ -1504,10 +1576,12 @@ export default function PosterWall() {
       }
       if (e.key === 'l' || e.key === 'L') {
         setSpotlightOn((v) => !v)
+        kickRender()
       }
-      if (e.key === 'm' || e.key === 'M') {
-        setSoundOn((v) => !v)
-      }
+      // Sound feature disabled
+      // if (e.key === 'm' || e.key === 'M') {
+      //   setSoundOn((v) => !v)
+      // }
     }
 
     el.addEventListener('wheel', onWheel, { passive: false })
@@ -1661,7 +1735,10 @@ export default function PosterWall() {
               <button
                 type="button"
                 className={`poster-wall__spot-btn poster-wall__spot-btn--icon${spotlightOn ? ' is-on' : ''}`}
-                onClick={() => setSpotlightOn((v) => !v)}
+                onClick={() => {
+                  setSpotlightOn((v) => !v)
+                  kickRender()
+                }}
                 aria-pressed={spotlightOn}
                 aria-label={spotlightOn ? 'Spotlight on' : 'Spotlight off'}
                 title={spotlightOn ? 'Spotlight on' : 'Spotlight'}
@@ -1688,9 +1765,13 @@ export default function PosterWall() {
       </div>
 
       <div className="poster-wall__stage">
+        {!sceneReady && webglOk !== false ? (
+          <FilmStageLoader label="Preparing gallery" />
+        ) : null}
         <WallErrorBoundary
           key={canvasKey}
           onRetry={() => {
+            setSceneReady(false)
             setWebglOk(probeWebGL())
             setCanvasKey((k) => k + 1)
           }}
@@ -1705,6 +1786,7 @@ export default function PosterWall() {
                 type="button"
                 className="poster-wall__fallback-btn"
                 onClick={() => {
+                  setSceneReady(false)
                   setWebglOk(probeWebGL())
                   setCanvasKey((k) => k + 1)
                 }}
@@ -1712,12 +1794,11 @@ export default function PosterWall() {
                 Try again
               </button>
             </div>
-          ) : (
+          ) : glReady ? (
             <Canvas
-              className="poster-wall__canvas"
-              shadows
-              dpr={[1, 1.25]}
-              frameloop={roomOpen ? 'never' : 'always'}
+              className={`poster-wall__canvas${sceneReady ? ' is-live' : ''}`}
+              dpr={[1, 1.15]}
+              frameloop={roomOpen ? 'never' : 'demand'}
               camera={{
                 position: [0, CAM_Y, CAM_Z],
                 fov: FOV_DEG,
@@ -1727,19 +1808,19 @@ export default function PosterWall() {
               gl={{
                 antialias: true,
                 alpha: false,
-                powerPreference: 'default',
+                powerPreference: 'high-performance',
                 failIfMajorPerformanceCaveat: false,
                 stencil: false,
                 depth: true,
               }}
-              onCreated={({ gl, size }) => {
+              onCreated={({ gl, size, invalidate }) => {
+                invalidateRef.current = invalidate
                 gl.setClearColor(GALLERY_WALL_COLOR, 1)
                 gl.toneMapping = THREE.ACESFilmicToneMapping
                 gl.toneMappingExposure = 1.48
-                // Cap drawing buffer — tall stages + retina DPR can exhaust
-                // GPU memory and trigger Chrome's context-loss block.
-                const maxDpr = Math.min(window.devicePixelRatio || 1, 1.25)
-                const maxEdge = 1680
+                gl.shadowMap.enabled = false
+                const maxDpr = Math.min(window.devicePixelRatio || 1, 1.15)
+                const maxEdge = 1600
                 const w = Math.max(size.width, 1)
                 const h = Math.max(size.height, 1)
                 const dpr = Math.min(maxDpr, maxEdge / Math.max(w, h))
@@ -1750,6 +1831,7 @@ export default function PosterWall() {
                 const canvas = gl.domElement
                 const onLost = (e) => {
                   e.preventDefault()
+                  setSceneReady(false)
                   setWebglOk(false)
                 }
                 canvas.addEventListener('webglcontextlost', onLost, false)
@@ -1759,6 +1841,11 @@ export default function PosterWall() {
                   'aria-label',
                   'Decorative 3D film poster wall'
                 )
+                invalidate()
+                // Show canvas once GL is up; posters fill in as textures arrive
+                requestAnimationFrame(() => {
+                  requestAnimationFrame(() => setSceneReady(true))
+                })
               }}
             >
               <GalleryWorld
@@ -1787,6 +1874,12 @@ export default function PosterWall() {
                 }}
               />
             </Canvas>
+          ) : (
+            <div
+              className="poster-wall__canvas poster-wall__canvas--boot"
+              aria-hidden="true"
+              style={{ background: GALLERY_WALL_COLOR }}
+            />
           )}
         </WallErrorBoundary>
       </div>

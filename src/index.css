@@ -2198,6 +2198,69 @@ html.is-gallery-focus header {
   border-color: rgba(243, 236, 226, 0.5);
 }
 
+/* —— Film desktop: async Three.js load —— */
+.film-stage-loader {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: #12100e;
+  color: rgba(247, 245, 241, 0.72);
+  font-family: var(--film-sans, inherit);
+}
+
+.layout-shell--immersive > .film-stage-loader,
+.layout-shell--immersive main > .film-stage-loader {
+  position: fixed;
+}
+
+.film-stage-loader__mark {
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1.5px solid rgba(247, 245, 241, 0.18);
+  border-top-color: rgba(247, 245, 241, 0.85);
+  border-radius: 50%;
+  animation: film-stage-spin 0.7s linear infinite;
+}
+
+.film-stage-loader__label {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+@keyframes film-stage-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.poster-wall__canvas:not(.is-live) {
+  opacity: 0;
+}
+
+.poster-wall__canvas.is-live {
+  opacity: 1;
+  transition: opacity 0.35s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .film-stage-loader__mark {
+    animation: none;
+    border-color: rgba(247, 245, 241, 0.55);
+  }
+
+  .poster-wall__canvas.is-live {
+    transition: none;
+  }
+}
+
 /* —— Mobile film (scrollable 2D; desktop keeps 3D wall) —— */
 .film-mobile {
   position: relative;
