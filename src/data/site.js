@@ -1,7 +1,7 @@
 import heroHome from '../assets/home2.webp'
-import missingBrendanPoster from '../assets/posters/missing-brendan.png'
-import theNephewPoster from '../assets/posters/the-nephew.png'
-import theGirlWhoStayedPoster from '../assets/posters/the-girl-who-stayed.png'
+import missingBrendanPoster from '../assets/posters/missing-brendan.webp'
+import theNephewPoster from '../assets/posters/the-nephew.webp'
+import theGirlWhoStayedPoster from '../assets/posters/the-girl-who-stayed.webp'
 import bradyHeadshot from '../assets/brady-headshot.png'
 
 export const NAV_LINKS = [
@@ -112,7 +112,7 @@ export const FILMS = [
     index: '03',
     imdb: null,
     synopsis:
-      'A grieving mother, a broken writer, and the ghost of the daughter he never knew must confront the truth that binds them before she can finally move on.',
+      'The Girl Who Stayed is an intimate drama with subtle otherworldly elements about Emily, a fifteen-year-old girl caught between worlds after her death. When she discovers that the father she never knew was never told she existed, Emily quietly draws him back into the life of her grieving mother. But as every attempt to reach him costs her a little more of her own presence, Emily must discover that being loved may mean finally learning to let go.',
     credits: 'Currently in Development',
     inDevelopment: true,
     rating: null,

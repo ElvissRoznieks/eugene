@@ -1628,36 +1628,30 @@ export default function PosterWall() {
             </h2>
             {/* <p className="poster-wall__credits">{active.credits}</p> */}
 
-            {active.imdb ? (
-              <a
-                href={active.imdb}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="poster-wall__imdb"
-                aria-label={`${active.title} on IMDb`}
-                title="IMDb"
-              >
-                <img
-                  src={imdbLogo}
-                  alt=""
-                  className="poster-wall__imdb-logo"
-                  width={128}
-                  height={64}
-                  decoding="async"
-                />
-              </a>
-            ) : (
-              <span className="poster-wall__cta poster-wall__cta--muted">
-                In development
-              </span>
-            )}
-          </aside>
-
-          <aside className="poster-wall__rail poster-wall__rail--east">
-            <p className="poster-wall__rail-label">Synopsis</p>
-            <p className="poster-wall__synopsis">{active.synopsis}</p>
-
-            <div className="poster-wall__controls">
+            <div className="poster-wall__actions">
+              {active.imdb ? (
+                <a
+                  href={active.imdb}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="poster-wall__imdb"
+                  aria-label={`${active.title} on IMDb`}
+                  title="IMDb"
+                >
+                  <img
+                    src={imdbLogo}
+                    alt=""
+                    className="poster-wall__imdb-logo"
+                    width={128}
+                    height={64}
+                    decoding="async"
+                  />
+                </a>
+              ) : (
+                <span className="poster-wall__cta poster-wall__cta--muted">
+                  In development
+                </span>
+              )}
               <button
                 type="button"
                 className={`poster-wall__spot-btn poster-wall__spot-btn--icon${spotlightOn ? ' is-on' : ''}`}
@@ -1668,41 +1662,12 @@ export default function PosterWall() {
               >
                 <Lightbulb size={16} strokeWidth={1.75} />
               </button>
-
-              {/* Sound feature commented out
-              <button
-                type="button"
-                className={`poster-wall__spot-btn poster-wall__spot-btn--icon${soundOn ? ' is-on' : ''}`}
-                onClick={() => setSoundOn((v) => !v)}
-                aria-pressed={soundOn}
-                aria-label={soundOn ? 'Sound on' : 'Sound off'}
-                title={
-                  isCustomTrack
-                    ? 'Film score'
-                    : 'Default gallery atmosphere'
-                }
-              >
-                {soundOn ? (
-                  <Volume2 size={16} strokeWidth={1.75} />
-                ) : (
-                  <VolumeX size={16} strokeWidth={1.75} />
-                )}
-              </button>
-              */}
-
-              {/* BG video feature commented out
-              <button
-                type="button"
-                className={`poster-wall__spot-btn${wallVideo ? ' is-on' : ''}`}
-                onClick={() => setWallVideo((v) => !v)}
-                aria-pressed={wallVideo}
-                title={wallVideo ? 'BG video' : 'BG image'}
-              >
-                <Film size={16} strokeWidth={1.75} />
-                <span>{wallVideo ? 'BG video' : 'BG image'}</span>
-              </button>
-              */}
             </div>
+          </aside>
+
+          <aside className="poster-wall__rail poster-wall__rail--east">
+            <p className="poster-wall__rail-label">Synopsis</p>
+            <p className="poster-wall__synopsis">{active.synopsis}</p>
           </aside>
         </div>
 

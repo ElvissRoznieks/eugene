@@ -1262,25 +1262,26 @@ html.is-gallery-focus header {
 .poster-wall .poster-wall__rail-label,
 .poster-wall .poster-wall__synopsis,
 .poster-wall .poster-wall__progress,
-.poster-wall__controls {
+.poster-wall__actions {
   pointer-events: auto;
   transition:
     opacity 0.55s var(--ease-spring),
     filter 0.55s var(--ease-spring);
 }
 
-.poster-wall__controls {
+.poster-wall__actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: flex-end;
-  gap: 0.45rem;
-  margin-top: 1.15rem;
+  justify-content: flex-start;
+  gap: 0.65rem;
+  margin-top: 0.35rem;
 }
 
-.poster-wall.is-spotlight .poster-wall__controls {
+.poster-wall.is-spotlight .poster-wall__actions {
   opacity: 1;
   filter: none;
+  pointer-events: auto;
 }
 
 .poster-wall__stage::after {
@@ -1563,7 +1564,7 @@ html.is-gallery-focus header {
 .poster-wall__imdb {
   display: inline-flex;
   align-items: center;
-  margin-top: 0.35rem;
+  margin-top: 0;
   line-height: 0;
   border-radius: 0.35rem;
   text-decoration: none;
@@ -2098,9 +2099,9 @@ html.is-gallery-focus header {
     margin: 0;
   }
 
-  .poster-wall__controls {
+  .poster-wall__actions {
     justify-content: flex-start;
-    margin-top: 1rem;
+    margin-top: 0.85rem;
     margin-bottom: 0;
   }
 
