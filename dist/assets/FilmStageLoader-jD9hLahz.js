@@ -1,1 +1,0 @@
-import{t as e}from"./index-CNpQMfHf.js";var t=e();function n({label:e=`Loading gallery`}){return(0,t.jsxs)(`div`,{className:`film-stage-loader`,role:`status`,"aria-live":`polite`,"aria-busy":`true`,children:[(0,t.jsx)(`div`,{className:`film-stage-loader__mark`,"aria-hidden":`true`}),(0,t.jsx)(`p`,{className:`film-stage-loader__label`,children:e})]})}export{n as t};

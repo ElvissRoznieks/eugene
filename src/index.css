@@ -2207,7 +2207,7 @@ html.is-gallery-focus header {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.85rem;
   background: #12100e;
   color: rgba(247, 245, 241, 0.72);
   font-family: var(--film-sans, inherit);
@@ -2216,15 +2216,29 @@ html.is-gallery-focus header {
 .layout-shell--immersive > .film-stage-loader,
 .layout-shell--immersive main > .film-stage-loader {
   position: fixed;
+  inset: 0;
 }
 
-.film-stage-loader__mark {
-  width: 1.75rem;
-  height: 1.75rem;
-  border: 1.5px solid rgba(247, 245, 241, 0.18);
-  border-top-color: rgba(247, 245, 241, 0.85);
-  border-radius: 50%;
-  animation: film-stage-spin 0.7s linear infinite;
+.film-stage-loader__icon {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+.film-stage-loader__spinner {
+  display: block;
+  animation: film-stage-spin 0.85s linear infinite;
+}
+
+.film-stage-loader__track {
+  stroke: rgba(247, 245, 241, 0.14);
+}
+
+.film-stage-loader__arc {
+  stroke: rgba(247, 245, 241, 0.92);
+  stroke-dasharray: 40 80;
+  transform-origin: 24px 24px;
 }
 
 .film-stage-loader__label {
@@ -2233,6 +2247,15 @@ html.is-gallery-focus header {
   font-weight: 500;
   letter-spacing: 0.16em;
   text-transform: uppercase;
+}
+
+.film-stage-loader__phase {
+  margin: 0;
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(247, 245, 241, 0.38);
 }
 
 @keyframes film-stage-spin {
@@ -2251,9 +2274,12 @@ html.is-gallery-focus header {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .film-stage-loader__mark {
+  .film-stage-loader__spinner {
     animation: none;
-    border-color: rgba(247, 245, 241, 0.55);
+  }
+
+  .film-stage-loader__arc {
+    stroke-dasharray: 90 20;
   }
 
   .poster-wall__canvas.is-live {

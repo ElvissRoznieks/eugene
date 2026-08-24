@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
+import { lazy, startTransition, Suspense, useEffect, useMemo, useState } from 'react'
 import Layout from '../components/Layout'
 import SeoHead from '../components/SeoHead'
 import FilmStageLoader from '../components/FilmStageLoader'
@@ -7,6 +7,7 @@ import {
   filmCollectionJsonLd,
 } from '../components/SeoCatalog'
 import { PAGE_SEO } from '../data/site'
+import { loadPosterWallAsync } from '../utils/load-poster-wall'
 
 const FilmMobile = lazy(() => import('../components/FilmMobile'))
 
@@ -29,35 +30,32 @@ function useIsMobileFilm() {
 }
 
 /**
- * Desktop Film: paint the shell first, then fetch Three.js / PosterWall
- * asynchronously with an explicit loading state (not on the critical path).
+ * Desktop Film: shell + loading icon first.
+ * Three.js / PosterWall load only after paint + idle — zero critical-path block.
  */
 function FilmDesktop() {
   const [PosterWall, setPosterWall] = useState(null)
+  const [phase, setPhase] = useState('paint')
   const [failed, setFailed] = useState(false)
 
   useEffect(() => {
-    let cancelled = false
-    let raf2 = 0
+    const ac = new AbortController()
 
-    // Two rAFs so Layout + SEO commit before we pull the ~900KB Three chunk
-    const raf1 = requestAnimationFrame(() => {
-      raf2 = requestAnimationFrame(() => {
-        import('../components/PosterWall')
-          .then((mod) => {
-            if (!cancelled) setPosterWall(() => mod.default)
-          })
-          .catch(() => {
-            if (!cancelled) setFailed(true)
-          })
-      })
+    loadPosterWallAsync({
+      signal: ac.signal,
+      onPhase: setPhase,
     })
+      .then((Comp) => {
+        startTransition(() => {
+          setPosterWall(() => Comp)
+        })
+      })
+      .catch((err) => {
+        if (err?.name === 'AbortError') return
+        setFailed(true)
+      })
 
-    return () => {
-      cancelled = true
-      cancelAnimationFrame(raf1)
-      cancelAnimationFrame(raf2)
-    }
+    return () => ac.abort()
   }, [])
 
   if (failed) {
@@ -76,7 +74,12 @@ function FilmDesktop() {
   }
 
   if (!PosterWall) {
-    return <FilmStageLoader label="Loading gallery" />
+    return (
+      <FilmStageLoader
+        label="Loading gallery"
+        phase={phase}
+      />
+    )
   }
 
   return <PosterWall />
