@@ -78,7 +78,7 @@ export const FILMS = [
     index: '01',
     imdb: 'https://pro.imdb.com/title/tt0119772/?ref_=nmovr_t_1',
     synopsis:
-      'A young Black American arrives on a remote Irish island to honour his mother’s dying wish, forcing a family—and a community built on buried secrets—to confront the past.',
+      'A young Black American arrives on a remote Irish island to honour his mother’s dying wish, forcing a family and a community built on buried secrets to confront the past.',
     credits: 'Starring Pierce Brosnan',
     rating: 6.5,
     ratingOutOf: 10,
