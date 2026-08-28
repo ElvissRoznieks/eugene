@@ -1222,6 +1222,20 @@ img {
   z-index: 0;
 }
 
+.site-dock--copy-only .site-dock__row {
+  grid-template-columns: 1fr;
+  justify-items: center;
+}
+
+.site-dock--copy-only .site-dock__copy {
+  position: static;
+  left: auto;
+  top: auto;
+  transform: none;
+  max-width: min(36rem, 92%);
+  opacity: 0.8;
+}
+
 .site-dock__socials {
   justify-self: end;
   display: inline-flex;
@@ -3465,6 +3479,12 @@ html.is-gallery-focus header {
 
 .about-chapter__body:last-child {
   margin-bottom: 0;
+}
+
+.about-chapter__body--emphasis,
+.about-chapter__body--emphasis strong {
+  font-weight: 700;
+  color: rgba(26, 18, 12, 0.88);
 }
 
 .about-essay__films {

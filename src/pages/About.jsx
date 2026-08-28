@@ -38,7 +38,7 @@ export default function About() {
   })
 
   return (
-    <Layout variant="paper">
+    <Layout variant="paper" dockBrand={false} dockImdb={false}>
       <SeoHead {...PAGE_SEO.about} jsonLd={jsonLd} />
       <div className="about-essay">
         <aside className="about-essay__rail">
@@ -112,9 +112,12 @@ export default function About() {
             delay={260}
           >
             <div className="about-chapter__bio">
-              {ABOUT_BIO.map((text) => (
-                <p key={text.slice(0, 32)} className="about-chapter__body">
-                  {text}
+              {ABOUT_BIO.map((text, i) => (
+                <p
+                  key={text.slice(0, 32)}
+                  className={`about-chapter__body${i === ABOUT_BIO.length - 1 ? ' about-chapter__body--emphasis' : ''}`}
+                >
+                  {i === ABOUT_BIO.length - 1 ? <strong>{text}</strong> : text}
                 </p>
               ))}
             </div>

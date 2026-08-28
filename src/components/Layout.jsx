@@ -62,9 +62,17 @@ const SHELL = {
   },
 }
 
-export default function Layout({ children, variant = 'light' }) {
+export default function Layout({
+  children,
+  variant = 'light',
+  dock,
+  dockBrand = true,
+  dockImdb = true,
+}) {
   const shell = SHELL[variant] || SHELL.light
   const lockHome = variant === 'hero'
+  const dockVariant = dock === false ? null : shell.dock
+  const revealDock = dock === false ? false : shell.revealDock
 
   useEffect(() => {
     if (!lockHome) return undefined
@@ -86,7 +94,13 @@ export default function Layout({ children, variant = 'light' }) {
       <a href="#main-content" className="skip-link">
         Skip to content
       </a>
-      {shell.dock ? <ImdbBar variant={shell.dock} /> : null}
+      {dockVariant ? (
+        <ImdbBar
+          variant={dockVariant}
+          brand={dockBrand}
+          imdb={dockImdb}
+        />
+      ) : null}
 
       <div className={shell.chromeClass}>
         {shell.heroBg ? (
@@ -110,7 +124,7 @@ export default function Layout({ children, variant = 'light' }) {
         )}
       </div>
 
-      {shell.revealDock ? (
+      {revealDock ? (
         <div className="site-dock-spacer" aria-hidden="true" />
       ) : null}
     </div>

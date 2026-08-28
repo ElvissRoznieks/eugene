@@ -5,7 +5,6 @@ import {
   ChevronRight,
   // Download,
   LayoutGrid,
-  Lightbulb,
   LogIn,
   Rows3,
   Star,
@@ -19,7 +18,6 @@ import { FILMS /*, DEFAULT_ATMOSPHERE */ } from '../data/site'
 import { useHorizontalSwipe } from '../hooks/usePointerSwipe'
 import { cx } from '../utils/dom'
 // import wallWhiteTex from '../assets/wall-white.jpg'
-import imdbLogo from '../assets/imdb-logo.webp'
 import FilmStageLoader from './FilmStageLoader'
 
 // const GALLERY_BG_VIDEO = '/video/gallery-bg.mp4'
@@ -1383,12 +1381,7 @@ export default function PosterWall() {
   stepSlideRef.current = stepSlide
 
   function enterRoom() {
-    if (
-      spotlightOn ||
-      roomPhaseRef.current !== 'idle' ||
-      dragLiveRef.current
-    )
-      return
+    if (roomPhaseRef.current !== 'idle' || dragLiveRef.current) return
     window.clearTimeout(roomTimerRef.current)
     scrubXRef.current = posterWorldX(indexRef.current)
     setSlideIndex(0)
@@ -1586,10 +1579,6 @@ export default function PosterWall() {
         e.preventDefault()
         step(-1)
       }
-      if (e.key === 'l' || e.key === 'L') {
-        setSpotlightOn((v) => !v)
-        armMotion(1200)
-      }
       // Sound feature disabled
       // if (e.key === 'm' || e.key === 'M') {
       //   setSoundOn((v) => !v)
@@ -1653,13 +1642,7 @@ export default function PosterWall() {
               type="button"
               className="poster-wall__enter"
               onClick={enterRoom}
-              disabled={spotlightOn}
-              aria-disabled={spotlightOn}
-              title={
-                spotlightOn
-                  ? 'Turn off spotlight to view gallery'
-                  : 'View gallery'
-              }
+              title="View gallery"
             >
               <LogIn size={15} strokeWidth={1.75} aria-hidden="true" />
               View gallery
@@ -1718,46 +1701,6 @@ export default function PosterWall() {
               ))}
             </h2>
             {/* <p className="poster-wall__credits">{active.credits}</p> */}
-
-            <div className="poster-wall__actions">
-              {active.imdb ? (
-                <a
-                  href={active.imdb}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="poster-wall__imdb"
-                  aria-label={`${active.title} on IMDb`}
-                  title="IMDb"
-                >
-                  <img
-                    src={imdbLogo}
-                    alt="IMDb"
-                    className="poster-wall__imdb-logo"
-                    width={575}
-                    height={290}
-                    decoding="async"
-                    loading="lazy"
-                  />
-                </a>
-              ) : (
-                <span className="poster-wall__cta poster-wall__cta--muted">
-                  In development
-                </span>
-              )}
-              <button
-                type="button"
-                className={`poster-wall__spot-btn poster-wall__spot-btn--icon${spotlightOn ? ' is-on' : ''}`}
-                onClick={() => {
-                  setSpotlightOn((v) => !v)
-                  armMotion(1200)
-                }}
-                aria-pressed={spotlightOn}
-                aria-label={spotlightOn ? 'Spotlight on' : 'Spotlight off'}
-                title={spotlightOn ? 'Spotlight on' : 'Spotlight'}
-              >
-                <Lightbulb size={16} strokeWidth={1.75} />
-              </button>
-            </div>
           </aside>
 
           <aside className="poster-wall__rail poster-wall__rail--east">

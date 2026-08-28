@@ -12,7 +12,7 @@ export default function Photography() {
   const jsonLd = useMemo(() => photoCollectionJsonLd(), [])
 
   return (
-    <Layout variant="dark">
+    <Layout variant="dark" dockBrand={false} dockImdb={false}>
       <SeoHead {...PAGE_SEO.photography} jsonLd={jsonLd} />
       <PhotoSeoCatalog />
 

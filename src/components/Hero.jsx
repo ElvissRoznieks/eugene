@@ -1,6 +1,5 @@
-import { IMDB_URL, SITE_NAME } from '../data/site'
+import { SITE_NAME } from '../data/site'
 import useReveal from '../hooks/useReveal'
-import imdbLogo from '../assets/imdb-logo.webp'
 
 const SIGNATURE_SRC = '/signature.webp'
 
@@ -53,31 +52,6 @@ export default function Hero() {
                 Exploring grief, family, identity and memory through cinematic
                 storytelling and photographic portraiture.
               </p>
-            </div>
-
-            <div
-              className={`animate-reveal-right delay-cta flex flex-wrap gap-3 ${
-                copyReveal.visible ? 'is-visible' : ''
-              }`}
-            >
-              <a
-                href={IMDB_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hero-imdb"
-                aria-label={`${SITE_NAME} on IMDb`}
-                title="IMDb"
-              >
-                <img
-                  src={imdbLogo}
-                  alt="IMDb"
-                  className="hero-imdb__logo"
-                  width={575}
-                  height={290}
-                  decoding="async"
-                  loading="lazy"
-                />
-              </a>
             </div>
           </div>
         </section>

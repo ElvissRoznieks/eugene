@@ -139,7 +139,8 @@ const photoModules = import.meta.glob('../../assets/gallery/*.webp', {
 })
 
 const PHOTO_ORDER = [
-  21, 19, 20, 3, 5, 17, 13, 10, 6, 16, 9, 1, 11, 7, 18, 15, 2, 4, 12, 14, 8,
+  // Row 1 unchanged; rows 2 ↔ 3 swapped (desktop 3-up)
+  21, 19, 20, 13, 10, 6, 3, 5, 17, 15, 2, 1, 11, 7, 18, 12, 14, 8,
 ]
 
 const PHOTO_SPANS = ['tall', 'wide', 'square', 'tall', 'wide', 'square']
@@ -172,7 +173,7 @@ export const ABOUT_HEADSHOT_ALT =
   'Portrait of Eugene Brady, Irish director and photographer'
 
 export const PHOTO_LEDE =
-  'Photographic portrait studies that approach their subjects as characters, blurring the line between photography and cinema.'
+  'Photography that approaches people and places with a cinematic eye, blurring the line between photography and cinema.'
 
 export const CONTACT_ENQUIRIES = [
   { id: 'Directing', prompt: 'For directing and narrative enquiries.' },
@@ -184,7 +185,7 @@ export const ABOUT_BIO = [
   'Drawn to emotionally authentic stories with a strong visual atmosphere, his films are grounded in performance and stillness, revealing the tensions that exist beneath everyday life.',
   'A BAFTA member, Brady directed The Nephew, starring Pierce Brosnan, and Missing Brendan, starring Adam Brody. He has worked internationally across the United States, Europe and Australia, and is currently developing his next feature film, The Girl Who Stayed.',
   '“I make films about the families we inherit, the people we lose, and the memories that continue to shape us.”',
-  'His photographic portrait studies approach their subjects as characters, blurring the line between photography and cinema.',
+  'His photography approaches people and places with a cinematic eye, blurring the line between photography and cinema.',
 ]
 
 /** @deprecated use ABOUT_BIO — kept for any leftover imports */
