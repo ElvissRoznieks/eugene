@@ -499,28 +499,31 @@ const getFoilSheenTex = lazyCanvasTexture(() => {
 })
 
 /** Kick demand-mode frames while the pointer moves / camera is settling. */
-function RenderOnInteract({ dragLiveRef }) {
+function RenderOnInteract({ dragLiveRef, wallHoverRef }) {
   const { gl, invalidate } = useThree()
   const leftover = useRef(18)
 
   useEffect(() => {
     const el = gl.domElement
     const kick = () => {
-      leftover.current = 24
+      leftover.current = 36
       invalidate()
     }
     el.addEventListener('pointermove', kick, { passive: true })
     el.addEventListener('pointerdown', kick, { passive: true })
+    el.addEventListener('pointerenter', kick, { passive: true })
     leftover.current = 18
     invalidate()
     return () => {
       el.removeEventListener('pointermove', kick)
       el.removeEventListener('pointerdown', kick)
+      el.removeEventListener('pointerenter', kick)
     }
   }, [gl, invalidate])
 
   useFrame(() => {
-    if (dragLiveRef?.current) {
+    // Keep rendering while dragging or hovering so foil / tilt stay live
+    if (dragLiveRef?.current || wallHoverRef?.current) {
       leftover.current = 12
       invalidate()
       return
@@ -775,6 +778,7 @@ function GalleryWorld({
   wallVideo,
   scrubXRef,
   dragLiveRef,
+  wallHoverRef,
   camXRef,
   camZRef,
   lookYRef,
@@ -1060,7 +1064,7 @@ function GalleryWorld({
 
   return (
     <>
-      <RenderOnInteract dragLiveRef={dragLiveRef} />
+      <RenderOnInteract dragLiveRef={dragLiveRef} wallHoverRef={wallHoverRef} />
       <color attach="background" args={[GALLERY_WALL_COLOR]} />
       <fog attach="fog" args={[GALLERY_WALL_COLOR, 18, 38]} />
 
@@ -1267,20 +1271,24 @@ export default function PosterWall() {
   const [glReady, setGlReady] = useState(false)
   const [sceneReady, setSceneReady] = useState(false)
   const [pageScrollable, setPageScrollable] = useState(false)
-  // 'never' when idle — stops WebGL from burning the main thread in lab/PSI
+  // 'demand' while the wall is live so foil / tilt track the mouse;
+  // freeze only after the pointer leaves (or gallery overlay opens).
   const [frameloop, setFrameloop] = useState('never')
   const freezeTimerRef = useRef(0)
+  const hoverWallRef = useRef(false)
   const invalidateRef = useRef(() => {})
   const kickRender = () => invalidateRef.current()
   const armMotion = (ms = 1000) => {
     window.clearTimeout(freezeTimerRef.current)
-    setFrameloop('demand')
+    setFrameloop((mode) => (mode === 'demand' ? mode : 'demand'))
     kickRender()
-    // Keep demand mode long enough for the soft snap to finish (avoids end-frame freeze flicker)
+    // Stay live while hovering; otherwise settle then freeze
+    if (hoverWallRef.current) return
     freezeTimerRef.current = window.setTimeout(() => {
+      if (hoverWallRef.current) return
       setFrameloop('never')
       kickRender()
-    }, Math.max(ms, 1600))
+    }, Math.max(ms, 900))
   }
   const [introReady, setIntroReady] = useState(false)
   // idle | zooming-in | slider | zooming-out
@@ -1646,6 +1654,20 @@ export default function PosterWall() {
       ref={sectionRef}
       className={`poster-wall${spotlightOn ? ' is-spotlight' : ''}${roomBusy ? ' is-room-busy' : ''}${roomZooming ? ' is-room-zooming' : ''}${roomOpen ? ' is-room-open' : ''}${introReady ? ' is-ready' : ' is-booting'}`}
       aria-label="Interactive 3D film gallery"
+      onPointerEnter={() => {
+        if (roomPhaseRef.current !== 'idle') return
+        hoverWallRef.current = true
+        armMotion(1200)
+      }}
+      onPointerMove={() => {
+        if (roomPhaseRef.current !== 'idle') return
+        if (!hoverWallRef.current) hoverWallRef.current = true
+        armMotion(1200)
+      }}
+      onPointerLeave={() => {
+        hoverWallRef.current = false
+        armMotion(700)
+      }}
     >
       {/* HUD first so the stage (later sibling) paints above film copy while opening */}
       <div className="poster-wall__hud page-shell">
@@ -1854,6 +1876,7 @@ export default function PosterWall() {
                 wallVideo={wallVideo}
                 scrubXRef={scrubXRef}
                 dragLiveRef={dragLiveRef}
+                wallHoverRef={hoverWallRef}
                 camXRef={camXRef}
                 camZRef={camZRef}
                 lookYRef={lookYRef}
