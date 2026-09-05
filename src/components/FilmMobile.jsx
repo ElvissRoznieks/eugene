@@ -1,6 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { ChevronLeft, ChevronRight, LogIn, Star, X } from 'lucide-react'
+import {
+  ChevronLeft,
+  ChevronRight,
+  LayoutGrid,
+  LogIn,
+  Rows3,
+  Star,
+  X,
+} from 'lucide-react'
 import { FILMS } from '../data/site'
 import { useBodyScrollLock, useHorizontalSwipe } from '../hooks/usePointerSwipe'
 import { cx } from '../utils/dom'
@@ -13,6 +21,7 @@ function filmSlides(film) {
     alt: film.imageAlt || film.title,
   }
   const rest = film.gallery || []
+  if (film.galleryIncludePoster === false) return rest
   if (!rest.length) return [poster]
   return film.galleryPoster === 'last' ? [...rest, poster] : [poster, ...rest]
 }
@@ -55,10 +64,14 @@ function FameRating({ film }) {
 }
 
 function GalleryLightbox({ slides, open, onClose }) {
+  const multi = slides.length > 1
   const [index, setIndex] = useState(0)
+  const [gridMode, setGridMode] = useState(multi)
 
   useEffect(() => {
-    if (open) setIndex(0)
+    if (!open) return
+    setIndex(0)
+    setGridMode(slides.length > 1)
   }, [open, slides])
 
   useBodyScrollLock(open)
@@ -72,12 +85,15 @@ function GalleryLightbox({ slides, open, onClose }) {
     setIndex((i) => Math.min(slides.length - 1, Math.max(0, i + dir)))
   }
 
-  const swipe = useHorizontalSwipe((dir) => step(dir))
+  const swipe = useHorizontalSwipe((dir) => {
+    if (!gridMode) step(dir)
+  })
 
   useEffect(() => {
     if (!open) return undefined
     function onKey(e) {
       if (e.key === 'Escape') onClose()
+      if (gridMode) return
       if (e.key === 'ArrowLeft') {
         setIndex((i) => Math.max(0, i - 1))
       }
@@ -87,73 +103,136 @@ function GalleryLightbox({ slides, open, onClose }) {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [open, onClose, slides.length])
+  }, [open, onClose, slides.length, gridMode])
 
   if (!open || !slides.length || typeof document === 'undefined') return null
 
   return createPortal(
     <div
-      className="film-mobile__gallery is-open"
+      className={cx(
+        'film-mobile__gallery is-open',
+        gridMode && 'is-grid',
+      )}
       role="dialog"
       aria-modal="true"
       aria-label="Frame gallery"
       {...swipe}
     >
-      <button
-        type="button"
-        className="film-mobile__gallery-close"
-        onClick={onClose}
-        aria-label="Close gallery"
-      >
-        <X size={22} strokeWidth={1.5} />
-      </button>
-
-      <div
-        className="film-mobile__gallery-track"
-        style={{ transform: `translate3d(${-index * 100}%, 0, 0)` }}
-      >
-        {slides.map((slide, i) => {
-          const inView = Math.abs(i - index) <= 1
-          return (
-            <figure key={slide.id} className="film-mobile__gallery-slide">
-              {inView ? (
-                <div className="film-mobile__frame">
-                  <img
-                    src={slide.src}
-                    alt={slide.alt || slide.title}
-                    draggable={false}
-                    decoding="async"
-                    loading={i === index ? 'eager' : 'lazy'}
-                  />
-                </div>
-              ) : null}
-            </figure>
-          )
-        })}
+      <div className="film-mobile__gallery-tools">
+        {multi ? (
+          <button
+            type="button"
+            className={cx(
+              'film-mobile__gallery-tool',
+              gridMode && 'is-on',
+            )}
+            onClick={() => setGridMode((v) => !v)}
+            aria-label={gridMode ? 'Slideshow view' : 'Grid view'}
+            aria-pressed={gridMode}
+          >
+            {gridMode ? (
+              <Rows3 size={18} strokeWidth={1.75} />
+            ) : (
+              <LayoutGrid size={18} strokeWidth={1.75} />
+            )}
+          </button>
+        ) : null}
+        <button
+          type="button"
+          className="film-mobile__gallery-tool"
+          onClick={onClose}
+          aria-label="Close gallery"
+        >
+          <X size={20} strokeWidth={1.5} />
+        </button>
       </div>
 
-      <button
-        type="button"
-        className="film-mobile__gallery-arrow film-mobile__gallery-arrow--prev"
-        onClick={() => step(-1)}
-        disabled={index <= 0}
-        aria-label="Previous still"
-      >
-        <ChevronLeft size={24} strokeWidth={1.75} />
-      </button>
-      <button
-        type="button"
-        className="film-mobile__gallery-arrow film-mobile__gallery-arrow--next"
-        onClick={() => step(1)}
-        disabled={index >= slides.length - 1}
-        aria-label="Next still"
-      >
-        <ChevronRight size={24} strokeWidth={1.75} />
-      </button>
+      {gridMode ? (
+        <div className="film-mobile__gallery-grid">
+          {slides.map((slide, i) => (
+            <button
+              key={slide.id}
+              type="button"
+              className={cx(
+                'film-mobile__gallery-grid-item',
+                i === index && 'is-active',
+              )}
+              onClick={() => {
+                setIndex(i)
+                setGridMode(false)
+              }}
+              aria-label={`Open ${slide.title}`}
+            >
+              <img
+                src={slide.src}
+                alt={slide.alt || slide.title}
+                loading="lazy"
+                decoding="async"
+                draggable={false}
+              />
+            </button>
+          ))}
+        </div>
+      ) : (
+        <>
+          <div
+            className="film-mobile__gallery-track"
+            style={{
+              width: `${Math.max(slides.length, 1) * 100}%`,
+              transform: `translate3d(${(-index * 100) / Math.max(slides.length, 1)}%, 0, 0)`,
+            }}
+          >
+            {slides.map((slide, i) => {
+              const inView = Math.abs(i - index) <= 1
+              return (
+                <figure
+                  key={slide.id}
+                  className="film-mobile__gallery-slide"
+                  style={{ flex: `0 0 ${100 / Math.max(slides.length, 1)}%` }}
+                >
+                  {inView ? (
+                    <div className="film-mobile__frame">
+                      <img
+                        src={slide.src}
+                        alt={slide.alt || slide.title}
+                        draggable={false}
+                        decoding="async"
+                        loading={i === index ? 'eager' : 'lazy'}
+                      />
+                    </div>
+                  ) : null}
+                </figure>
+              )
+            })}
+          </div>
 
-      <p className="film-mobile__gallery-meta">
-        {index + 1} / {slides.length}
-      </p>
+          {multi ? (
+            <>
+              <button
+                type="button"
+                className="film-mobile__gallery-arrow film-mobile__gallery-arrow--prev"
+                onClick={() => step(-1)}
+                disabled={index <= 0}
+                aria-label="Previous still"
+              >
+                <ChevronLeft size={24} strokeWidth={1.75} />
+              </button>
+              <button
+                type="button"
+                className="film-mobile__gallery-arrow film-mobile__gallery-arrow--next"
+                onClick={() => step(1)}
+                disabled={index >= slides.length - 1}
+                aria-label="Next still"
+              >
+                <ChevronRight size={24} strokeWidth={1.75} />
+              </button>
+              <p className="film-mobile__gallery-meta">
+                {index + 1} / {slides.length}
+              </p>
+            </>
+          ) : null}
+        </>
+      )}
     </div>,
     document.body
   )

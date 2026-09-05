@@ -2533,20 +2533,84 @@ html.is-gallery-focus header {
   user-select: none;
 }
 
+.film-mobile__gallery.is-grid {
+  place-items: stretch;
+  align-content: start;
+  overflow: auto;
+  touch-action: pan-y;
+}
+
+.film-mobile__gallery-tools {
+  position: absolute;
+  top: max(0.85rem, env(safe-area-inset-top));
+  right: 0.85rem;
+  z-index: 3;
+  display: flex;
+  gap: 0.35rem;
+}
+
+.film-mobile__gallery-tool {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(247, 245, 241, 0.18);
+  border-radius: 999px;
+  background: rgba(18, 16, 14, 0.55);
+  color: #f7f5f1;
+  cursor: pointer;
+}
+
+.film-mobile__gallery-tool.is-on {
+  border-color: rgba(247, 245, 241, 0.45);
+  background: rgba(247, 245, 241, 0.12);
+}
+
+.film-mobile__gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  width: 100%;
+  padding: 4.5rem 1rem max(1.25rem, env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+.film-mobile__gallery-grid-item {
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(247, 245, 241, 0.12);
+  background: #12100e;
+  cursor: pointer;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+}
+
+.film-mobile__gallery-grid-item img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.film-mobile__gallery-grid-item.is-active {
+  border-color: rgba(247, 245, 241, 0.55);
+}
+
 .film-mobile__gallery-track {
   display: flex;
-  width: 100%;
   height: 100%;
   transition: transform 0.35s var(--ease-spring);
 }
 
 .film-mobile__gallery-slide {
-  flex: 0 0 100%;
   display: grid;
   place-items: center;
   margin: 0;
   padding: 4.5rem 1rem 3.5rem;
   height: 100%;
+  box-sizing: border-box;
 }
 
 .film-mobile__gallery-slide .film-mobile__frame {
@@ -2563,23 +2627,6 @@ html.is-gallery-focus header {
   max-height: min(68vh, calc(100dvh - 9rem));
   object-fit: contain;
   aspect-ratio: auto;
-}
-
-.film-mobile__gallery-close {
-  position: absolute;
-  top: max(0.85rem, env(safe-area-inset-top));
-  right: 0.85rem;
-  z-index: 2;
-  display: grid;
-  place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  margin: 0;
-  padding: 0;
-  border: none;
-  background: transparent;
-  color: #f7f5f1;
-  cursor: pointer;
 }
 
 .film-mobile__gallery-arrow {

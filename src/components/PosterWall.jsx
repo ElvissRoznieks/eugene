@@ -1313,6 +1313,8 @@ export default function PosterWall() {
       caption: item.caption,
       alt: item.alt,
     }))
+    if (active.galleryIncludePoster === false) return rest
+    if (!rest.length) return [poster]
     return active.galleryPoster === 'last' ? [...rest, poster] : [poster, ...rest]
   }, [active])
 
@@ -1436,8 +1438,9 @@ export default function PosterWall() {
     const maxX = posterWorldX(FILMS.length - 1)
 
     function onWheel(e) {
-      // Room slider: keep exclusive wheel control
+      // Room gallery: only hijack wheel in slideshow (grid should scroll)
       if (roomPhaseRef.current === 'slider') {
+        if (el.querySelector('.poster-wall__frame-slider.is-grid')) return
         e.preventDefault()
         const delta = e.deltaY + e.deltaX
         if (Math.abs(delta) < 6) return
@@ -1584,6 +1587,8 @@ export default function PosterWall() {
           closeRoomRef.current()
           return
         }
+        const inGrid = el.querySelector('.poster-wall__frame-slider.is-grid')
+        if (inGrid) return
         if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
           e.preventDefault()
           stepSlideRef.current(1)
@@ -1905,14 +1910,16 @@ function FrameImageSlider({
   onStep,
   onJump,
 }) {
-  const [gridMode, setGridMode] = useState(false)
+  const multi = slides.length > 1
+  const [gridMode, setGridMode] = useState(multi)
   const swipe = useHorizontalSwipe((dir) => {
     if (!gridMode) onStep(dir)
   })
 
+  // List/grid by default for multiple stills; single image opens the viewer
   useEffect(() => {
-    if (!visible) setGridMode(false)
-  }, [visible])
+    if (visible) setGridMode(slides.length > 1)
+  }, [visible, slides.length])
 
   // Prefetch neighbors so swipes stay light without mounting every image
   useEffect(() => {
@@ -2029,33 +2036,22 @@ function FrameImageSlider({
         aria-hidden={!visible}
       >
         <div className="poster-wall__frame-slider-tools">
-          {/* Download disabled
-          {!gridMode && (
+          {multi ? (
             <button
               type="button"
-              className="poster-wall__frame-slider-icon"
-              onClick={downloadCurrent}
-              aria-label="Download image"
-              title="Download"
+              className={`poster-wall__frame-slider-icon${gridMode ? ' is-on' : ''}`}
+              onClick={() => setGridMode((v) => !v)}
+              aria-label={gridMode ? 'Slideshow view' : 'Grid view'}
+              aria-pressed={gridMode}
+              title={gridMode ? 'Slideshow' : 'Grid'}
             >
-              <Download size={16} strokeWidth={1.75} />
+              {gridMode ? (
+                <Rows3 size={16} strokeWidth={1.75} />
+              ) : (
+                <LayoutGrid size={16} strokeWidth={1.75} />
+              )}
             </button>
-          )}
-          */}
-          <button
-            type="button"
-            className={`poster-wall__frame-slider-icon${gridMode ? ' is-on' : ''}`}
-            onClick={() => setGridMode((v) => !v)}
-            aria-label={gridMode ? 'Slideshow view' : 'Grid view'}
-            aria-pressed={gridMode}
-            title={gridMode ? 'Slideshow' : 'Grid'}
-          >
-            {gridMode ? (
-              <Rows3 size={16} strokeWidth={1.75} />
-            ) : (
-              <LayoutGrid size={16} strokeWidth={1.75} />
-            )}
-          </button>
+          ) : null}
           <button
             type="button"
             className="poster-wall__frame-slider-icon"
@@ -2067,7 +2063,7 @@ function FrameImageSlider({
           </button>
         </div>
 
-        {!gridMode && (
+        {!gridMode && multi ? (
           <>
             <button
               type="button"
@@ -2094,7 +2090,13 @@ function FrameImageSlider({
               </span>
             </p>
           </>
-        )}
+        ) : null}
+
+        {!gridMode && !multi ? (
+          <p className="poster-wall__frame-slider-meta">
+            <span>{slides[slideIndex]?.title}</span>
+          </p>
+        ) : null}
       </div>
     </div>
   )

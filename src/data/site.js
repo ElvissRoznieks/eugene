@@ -52,15 +52,14 @@ function filmGallery(folder, title, order) {
   const items = Object.entries(movieStillModules)
     .filter(([path]) => path.includes(`/movies/${folder}/`))
     .map(([path, src]) => {
-      const n = Number((path.match(/(\d+)\.webp$/i) || [])[1] || 0)
-      return { n, src }
+      const match = path.match(/\/(\d+)\.webp$/i)
+      if (!match) return null
+      return { n: Number(match[1]), src }
     })
+    .filter(Boolean)
 
   const sorted = order?.length
-    ? order
-        .map((n) => items.find((item) => item.n === n))
-        .filter(Boolean)
-        .concat(items.filter((item) => !order.includes(item.n)))
+    ? order.map((n) => items.find((item) => item.n === n)).filter(Boolean)
     : items.sort((a, b) => a.n - b.n)
 
   return sorted.map(({ n, src }, i) => {
@@ -127,8 +126,9 @@ export const FILMS = [
     audio: null,
     poster: theGirlWhoStayedPoster,
     imageAlt:
-      'The Girl Who Stayed concept art — coastal path under storm light',
-    gallery: [],
+      'The Girl Who Stayed poster — In Development',
+    gallery: filmGallery('The Girl Who Stayed', 'The Girl Who Stayed', [1]),
+    galleryIncludePoster: false,
   },
 ]
 
