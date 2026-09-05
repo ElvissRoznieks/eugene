@@ -584,10 +584,10 @@ function FramedPoster({
     )
     const spot = spotAmt.current
 
-    // Card tilt toward the cursor — R3F pointer is NDC (−1…1).
-    // Vertical: invert so top leans toward the pointer.
-    // Horizontal: positive Y rot (not inverted) — side lean was caving “inside”.
-    const amp = active ? 1 : 0.35
+    // Active follows the camera (not React index) so scale/lights don’t pop on snap
+    const focused =
+      Math.abs(camera.position.x - x) < SPACING * 0.48
+    const amp = focused ? 1 : 0.35
     tiltX.current = THREE.MathUtils.damp(
       tiltX.current,
       -pointer.y * 0.03 * amp,
@@ -611,9 +611,9 @@ function FramedPoster({
     group.current.position.z = 0.07
 
     // Keep frame flush on the wall — spotlight is light only, not a pop-out
-    const s = active ? 1.03 : 0.97
+    const s = focused ? 1.03 : 0.97
     scale.set(s, s, 1)
-    group.current.scale.lerp(scale, 1 - Math.exp(-6 * dt))
+    group.current.scale.lerp(scale, 1 - Math.exp(-5 * dt))
 
     // Contact shadow stays wall-flush (counter-tilt) and lags the lean
     if (shadowMesh.current) {
@@ -637,7 +637,7 @@ function FramedPoster({
       shadowMesh.current.visible = spot < 0.98
     }
     if (shadowMat.current) {
-      const soft = active ? 0.42 : 0.28
+      const soft = focused ? 0.42 : 0.28
       shadowMat.current.opacity = THREE.MathUtils.lerp(soft, 0, spot)
     }
 
@@ -657,7 +657,7 @@ function FramedPoster({
     }
     const glance = 0.55 + (1 - Math.abs(viewX)) * 0.45
     if (foilSheenMat.current) {
-      const roomPeak = (active ? 0.22 : 0.14) * glance
+      const roomPeak = (focused ? 0.22 : 0.14) * glance
       foilSheenMat.current.opacity = THREE.MathUtils.damp(
         foilSheenMat.current.opacity,
         THREE.MathUtils.lerp(roomPeak, 0, spot),
@@ -667,7 +667,7 @@ function FramedPoster({
     }
     if (foilBaseMat.current) {
       foilBaseMat.current.opacity = THREE.MathUtils.lerp(
-        active ? 0.07 : 0.045,
+        focused ? 0.07 : 0.045,
         0,
         spot,
       )
@@ -976,8 +976,9 @@ function GalleryWorld({
 
     poolRefs.current.forEach((light, i) => {
       if (!light) return
-      const base = i === activeIndex ? 1.9 : 0.75
-      const dimmed = i === activeIndex ? 0.05 : 0
+      const nearest = nearestPosterIndex(camX)
+      const base = i === nearest ? 1.9 : 0.75
+      const dimmed = i === nearest ? 0.05 : 0
       light.intensity = THREE.MathUtils.lerp(base, dimmed, s)
     })
 
@@ -1267,9 +1268,11 @@ export default function PosterWall() {
     window.clearTimeout(freezeTimerRef.current)
     setFrameloop('demand')
     kickRender()
+    // Keep demand mode long enough for the soft snap to finish (avoids end-frame freeze flicker)
     freezeTimerRef.current = window.setTimeout(() => {
       setFrameloop('never')
-    }, ms)
+      kickRender()
+    }, Math.max(ms, 1600))
   }
   const [introReady, setIntroReady] = useState(false)
   // idle | zooming-in | slider | zooming-out
@@ -1670,7 +1673,7 @@ export default function PosterWall() {
           </div>
         )}
 
-        <div key={active.title} className="poster-wall__rails" aria-live="polite">
+        <div className="poster-wall__rails" aria-live="polite">
           <aside className="poster-wall__rail poster-wall__rail--west">
             {active.inDevelopment ? (
               <div className="poster-wall__fame-rating">

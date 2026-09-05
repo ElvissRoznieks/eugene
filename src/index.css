@@ -1498,7 +1498,12 @@ html.is-gallery-focus header {
   min-height: 0;
   margin-top: auto;
   padding-block: 0;
-  animation: fame-in 720ms var(--ease-spring) both;
+}
+
+.poster-wall__rail--west .poster-wall__title,
+.poster-wall__rail--east .poster-wall__synopsis,
+.poster-wall__fame-rating {
+  transition: opacity 0.28s ease;
 }
 
 .poster-wall__rail {

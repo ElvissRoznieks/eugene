@@ -1,4 +1,4 @@
-import{c as e,d as t}from"./index-DNGQyhIw.js";var n=t(e(),1),r=`
+import{c as e,d as t}from"./index-BzVsKOlX.js";var n=t(e(),1),r=`
 attribute vec2 a_pos;
 varying vec2 v_uv;
 void main() {
