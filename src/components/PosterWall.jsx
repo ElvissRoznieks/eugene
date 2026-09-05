@@ -1652,28 +1652,33 @@ export default function PosterWall() {
 
         <div key={active.title} className="poster-wall__rails" aria-live="polite">
           <aside className="poster-wall__rail poster-wall__rail--west">
-            <div className="poster-wall__fame-rating">
-              <div className="poster-wall__stars" aria-hidden="true">
-                {Array.from({ length: 5 }, (_, i) => {
-                  const filled =
-                    active.rating != null &&
-                    i < Math.round((active.rating / 10) * 5)
-                  return (
-                    <Star
-                      key={i}
-                      size={15}
-                      strokeWidth={1.6}
-                      className={
-                        filled
-                          ? 'poster-wall__star is-on'
-                          : 'poster-wall__star'
-                      }
-                      fill={filled ? 'currentColor' : 'none'}
-                    />
-                  )
-                })}
+            {active.inDevelopment ? (
+              <div className="poster-wall__fame-rating">
+                <p className="poster-wall__score poster-wall__score--pending">
+                  In Development
+                </p>
               </div>
-              {active.rating != null ? (
+            ) : active.rating != null ? (
+              <div className="poster-wall__fame-rating">
+                <div className="poster-wall__stars" aria-hidden="true">
+                  {Array.from({ length: 5 }, (_, i) => {
+                    const filled =
+                      i < Math.round((active.rating / 10) * 5)
+                    return (
+                      <Star
+                        key={i}
+                        size={15}
+                        strokeWidth={1.6}
+                        className={
+                          filled
+                            ? 'poster-wall__star is-on'
+                            : 'poster-wall__star'
+                        }
+                        fill={filled ? 'currentColor' : 'none'}
+                      />
+                    )
+                  })}
+                </div>
                 <p className="poster-wall__score">
                   <span className="poster-wall__score-num">
                     {active.rating.toFixed(1)}
@@ -1682,12 +1687,8 @@ export default function PosterWall() {
                     / {active.ratingOutOf}
                   </span>
                 </p>
-              ) : (
-                <p className="poster-wall__score poster-wall__score--pending">
-                  Coming soon
-                </p>
-              )}
-            </div>
+              </div>
+            ) : null}
 
             {/* <p className="poster-wall__meta">
               Inducted {active.year} · Entry {active.index}

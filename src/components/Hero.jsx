@@ -41,7 +41,7 @@ export default function Hero() {
               }`}
             >
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-white">
-                Director / Photographer
+                Film Director / Photographer
               </p>
               <p>
                 Feature films include <em>The Nephew</em>, starring Pierce

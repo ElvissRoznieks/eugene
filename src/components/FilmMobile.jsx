@@ -18,12 +18,23 @@ function filmSlides(film) {
 }
 
 function FameRating({ film }) {
+  if (film.inDevelopment) {
+    return (
+      <div className="film-mobile__rating">
+        <p className="film-mobile__score film-mobile__score--pending">
+          In Development
+        </p>
+      </div>
+    )
+  }
+
+  if (film.rating == null) return null
+
   return (
     <div className="film-mobile__rating">
       <div className="film-mobile__stars" aria-hidden="true">
         {Array.from({ length: 5 }, (_, i) => {
-          const filled =
-            film.rating != null && i < Math.round((film.rating / 10) * 5)
+          const filled = i < Math.round((film.rating / 10) * 5)
           return (
             <Star
               key={i}
@@ -35,14 +46,10 @@ function FameRating({ film }) {
           )
         })}
       </div>
-      {film.rating != null ? (
-        <p className="film-mobile__score">
-          <span>{film.rating.toFixed(1)}</span>
-          <span className="film-mobile__score-den"> / {film.ratingOutOf}</span>
-        </p>
-      ) : (
-        <p className="film-mobile__score film-mobile__score--pending">Coming soon</p>
-      )}
+      <p className="film-mobile__score">
+        <span>{film.rating.toFixed(1)}</span>
+        <span className="film-mobile__score-den"> / {film.ratingOutOf}</span>
+      </p>
     </div>
   )
 }
@@ -242,10 +249,6 @@ export default function FilmMobile() {
         <p className="film-mobile__synopsis">{active.synopsis}</p>
 
         <div className="film-mobile__actions">
-          {active.inDevelopment ? (
-            <span className="film-mobile__muted">In development</span>
-          ) : null}
-
           {hasGallery ? (
             <button
               type="button"

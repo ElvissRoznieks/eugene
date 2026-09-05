@@ -112,12 +112,9 @@ export default function About() {
             delay={260}
           >
             <div className="about-chapter__bio">
-              {ABOUT_BIO.map((text, i) => (
-                <p
-                  key={text.slice(0, 32)}
-                  className={`about-chapter__body${i === ABOUT_BIO.length - 1 ? ' about-chapter__body--emphasis' : ''}`}
-                >
-                  {i === ABOUT_BIO.length - 1 ? <strong>{text}</strong> : text}
+              {ABOUT_BIO.map((text) => (
+                <p key={text.slice(0, 32)} className="about-chapter__body">
+                  {text}
                 </p>
               ))}
             </div>

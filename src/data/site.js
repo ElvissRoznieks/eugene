@@ -29,7 +29,7 @@ export const CONTACT_PHONE_HREF = `tel:${CONTACT_PHONE.replace(/\s+/g, '')}`
 export const SITE_URL = 'https://eugenebrady.com'
 export const SITE_HOST = 'eugenebrady.com'
 export const SITE_NAME = 'Eugene Brady'
-export const SITE_TAGLINE = 'Director / Photographer'
+export const SITE_TAGLINE = 'Film Director / Photographer'
 export const SITE_NATIONALITY = 'Irish'
 export const SITE_CITY = 'Dublin'
 export const SITE_TZ = 'Europe/Dublin'
@@ -85,7 +85,7 @@ export const FILMS = [
     synopsis:
       'A young Black American arrives on a remote Irish island to honour his mother’s dying wish, forcing a family and a community built on buried secrets to confront the past.',
     credits: 'Starring Pierce Brosnan',
-    rating: 6.5,
+    rating: null,
     ratingOutOf: 10,
     audio: null,
     poster: theNephewPoster,
@@ -103,7 +103,7 @@ export const FILMS = [
     synopsis:
       'Thirty years after the Vietnam War, an aging father travels to Vietnam with his reluctant family to uncover the fate of the son he never stopped searching for, only to discover that some truths are harder to live with than never knowing.',
     credits: 'Starring Adam Brody',
-    rating: 6.2,
+    rating: null,
     ratingOutOf: 10,
     audio: null,
     poster: missingBrendanPoster,
@@ -119,7 +119,7 @@ export const FILMS = [
     index: '03',
     imdb: null,
     synopsis:
-      'The Girl Who Stayed is an intimate drama with subtle otherworldly elements about Emily, a fifteen-year-old girl caught between worlds after her death. When she discovers that the father she never knew was never told she existed, Emily quietly draws him back into the life of her grieving mother. But as every attempt to reach him costs her a little more of her own presence, Emily must discover that being loved may mean finally learning to let go.',
+      'The Girl Who Stayed is an intimate drama with subtle otherworldly elements about Emily, a fifteen-year-old girl who remains tethered between worlds after her death. When she discovers that Michael, the father she never knew, was never told she existed, Emily becomes determined to bring him back into the life of her grieving mother, Rachel.',
     credits: 'Currently in Development',
     inDevelopment: true,
     rating: null,
