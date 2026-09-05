@@ -40,11 +40,13 @@ const POSTER_TEX_H = 717
 const DRAG_PX_PER_POSTER = 820
 const DRAG_MOUSE_GAIN = 0.575
 const DRAG_TOUCH_GAIN = 0.9775
-const DRAG_FOLLOW = 12
-const SNAP_FOLLOW = 1.85
-const DRAG_COAST_SEC = 0.18
+const DRAG_FOLLOW = 14
+const SNAP_FOLLOW = 3.6
+const DRAG_COAST_SEC = 0.16
 /** How far past first/last poster drag can ease before resistance flattens */
-const EDGE_OVERSHOOT = SPACING * 0.42
+const EDGE_OVERSHOOT = SPACING * 0.38
+/** Snap finishes exactly when within this world distance of the poster center */
+const SNAP_SETTLE = 0.025
 // const ROOM_ZOOM_MS = 560 // zoom enter/exit disabled
 
 /** Camera Z so the poster plane covers the viewport (edge-to-edge). */
@@ -905,16 +907,22 @@ function GalleryWorld({
   useFrame((_, dt) => {
     const dragging = dragLiveRef?.current
     const scrub = scrubXRef?.current
+    // scrubXRef is the source of truth (goTo writes it immediately; don’t wait on React focusX)
     const targetX =
-      dragging && typeof scrub === 'number' ? scrub : focusX
+      typeof scrub === 'number' ? scrub : focusX
 
-    // Soft follow while dragging; slower ease when snapping to a frame
-    camera.position.x = THREE.MathUtils.damp(
+    // Soft follow while dragging; snappier ease when snapping to a frame
+    let nextX = THREE.MathUtils.damp(
       camera.position.x,
       targetX,
       dragging ? DRAG_FOLLOW : SNAP_FOLLOW,
       dt,
     )
+    // Damp asymptotes — finish dead-center so the poster isn’t cut off
+    if (!dragging && Math.abs(nextX - targetX) < SNAP_SETTLE) {
+      nextX = targetX
+    }
+    camera.position.x = nextX
     camera.position.y = CAM_Y
     const targetZ =
       typeof camZRef?.current === 'number' ? camZRef.current : CAM_Z
@@ -1031,7 +1039,7 @@ function GalleryWorld({
       spotRef.current.target?.updateMatrixWorld()
     }
 
-    // Demand frameloop: keep ticking only while motion is settling
+    // Demand frameloop: keep ticking until the poster is dead-centered
     const dx = Math.abs(camera.position.x - targetX)
     const dz = Math.abs(camera.position.z - targetZ)
     const spotTargetAmt = spotlightOn ? 1 : 0
@@ -1040,10 +1048,10 @@ function GalleryWorld({
       dragging ||
       motionLite ||
       zooming ||
-      dx > 0.0015 ||
+      dx > SNAP_SETTLE * 0.4 ||
       dz > 0.004 ||
       spotBusy
-    if (busy) settleFrames.current = 10
+    if (busy) settleFrames.current = 14
     if (settleFrames.current > 0) {
       settleFrames.current -= 1
       invalidate()
@@ -1365,15 +1373,15 @@ export default function PosterWall() {
 
   function goTo(next) {
     const clamped = Math.min(FILMS.length - 1, Math.max(0, next))
+    const target = posterWorldX(clamped)
+    scrubXRef.current = target
     if (clamped === indexRef.current) {
-      scrubXRef.current = posterWorldX(clamped)
-      armMotion(SNAP_LOCK_MS)
+      armMotion(SNAP_LOCK_MS + 200)
       return
     }
     indexRef.current = clamped
-    scrubXRef.current = posterWorldX(clamped)
     setActiveIndex(clamped)
-    armMotion(SNAP_LOCK_MS + 320)
+    armMotion(SNAP_LOCK_MS + 400)
   }
 
   function step(dir) {
@@ -1384,7 +1392,7 @@ export default function PosterWall() {
     goTo(next)
     window.setTimeout(() => {
       lockRef.current = false
-    }, SNAP_LOCK_MS)
+    }, SNAP_LOCK_MS + 120)
   }
 
   function stepSlide(dir) {
@@ -1961,12 +1969,19 @@ function FrameImageSlider({
       {!gridMode && (
         <div
           className="poster-wall__frame-slider-track"
-          style={{ transform: `translate3d(${-slideIndex * 100}%, 0, 0)` }}
+          style={{
+            width: `${Math.max(slides.length, 1) * 100}%`,
+            transform: `translate3d(${(-slideIndex * 100) / Math.max(slides.length, 1)}%, 0, 0)`,
+          }}
         >
           {slides.map((slide, i) => {
             const inView = Math.abs(i - slideIndex) <= 1
             return (
-              <figure key={slide.id} className="poster-wall__frame-slide">
+              <figure
+                key={slide.id}
+                className="poster-wall__frame-slide"
+                style={{ flex: `0 0 ${100 / Math.max(slides.length, 1)}%` }}
+              >
                 {inView ? (
                   <img
                     src={slide.src}
