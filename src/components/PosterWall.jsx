@@ -40,9 +40,11 @@ const POSTER_TEX_H = 717
 const DRAG_PX_PER_POSTER = 820
 const DRAG_MOUSE_GAIN = 0.575
 const DRAG_TOUCH_GAIN = 0.9775
-const DRAG_FOLLOW = 14
-const SNAP_FOLLOW = 2.55
-const DRAG_COAST_SEC = 0.1
+const DRAG_FOLLOW = 12
+const SNAP_FOLLOW = 1.85
+const DRAG_COAST_SEC = 0.18
+/** How far past first/last poster drag can ease before resistance flattens */
+const EDGE_OVERSHOOT = SPACING * 0.42
 // const ROOM_ZOOM_MS = 560 // zoom enter/exit disabled
 
 /** Camera Z so the poster plane covers the viewport (edge-to-edge). */
@@ -75,6 +77,19 @@ function nearestPosterIndex(worldX) {
     }
   }
   return best
+}
+
+/** Soft rubber-band past first/last poster instead of a hard wall. */
+function resistEdges(x, minX, maxX, overshoot = EDGE_OVERSHOOT) {
+  if (x < minX) {
+    const overflow = minX - x
+    return minX - overshoot * Math.tanh(overflow / overshoot)
+  }
+  if (x > maxX) {
+    const overflow = x - maxX
+    return maxX + overshoot * Math.tanh(overflow / overshoot)
+  }
+  return x
 }
 
 const PALETTES = [
@@ -1355,7 +1370,7 @@ export default function PosterWall() {
     indexRef.current = clamped
     scrubXRef.current = posterWorldX(clamped)
     setActiveIndex(clamped)
-    armMotion(SNAP_LOCK_MS + 200)
+    armMotion(SNAP_LOCK_MS + 320)
   }
 
   function step(dir) {
@@ -1464,10 +1479,7 @@ export default function PosterWall() {
       dragVelRef.current = 0
       dragLiveRef.current = true
       // Grab from live camera so mid-snap drags feel continuous
-      scrubXRef.current = Math.min(
-        maxX,
-        Math.max(minX, camXRef.current),
-      )
+      scrubXRef.current = resistEdges(camXRef.current, minX, maxX)
       armMotion(1200)
       el.classList.add('is-dragging')
       try {
@@ -1490,14 +1502,20 @@ export default function PosterWall() {
       if (!drag.moved) return
       e.preventDefault()
       const worldDelta = dxPx * dragTuneRef.current.pxToWorld * drag.gain
-      scrubXRef.current = Math.min(
+      // Rubber-band past ends — no hard stop
+      scrubXRef.current = resistEdges(
+        scrubXRef.current + worldDelta,
+        minX,
         maxX,
-        Math.max(minX, scrubXRef.current + worldDelta),
       )
       armMotion(1200)
-      // EMA velocity for a short coast on release
+      // EMA velocity for a short coast on release (fade at edges)
+      const atEdge =
+        scrubXRef.current <= minX + 0.02 || scrubXRef.current >= maxX - 0.02
       const instant = worldDelta / dtSec
-      dragVelRef.current = dragVelRef.current * 0.78 + instant * 0.22
+      const edgeFade = atEdge ? 0.45 : 1
+      dragVelRef.current =
+        dragVelRef.current * 0.82 + instant * 0.18 * edgeFade
     }
 
     function endDrag(e) {
@@ -1519,12 +1537,14 @@ export default function PosterWall() {
       if (didMove) {
         const coast = THREE.MathUtils.clamp(
           dragVelRef.current * DRAG_COAST_SEC,
-          -SPACING * 0.28,
-          SPACING * 0.28,
+          -SPACING * 0.35,
+          SPACING * 0.35,
         )
-        const predicted = Math.min(
+        // Predict with coast, then snap to nearest — edges ease back gently
+        const predicted = resistEdges(
+          scrubXRef.current + coast,
+          minX,
           maxX,
-          Math.max(minX, scrubXRef.current + coast),
         )
         const nearest = nearestPosterIndex(predicted)
         goTo(nearest)
@@ -1532,7 +1552,7 @@ export default function PosterWall() {
         lockRef.current = true
         window.setTimeout(() => {
           lockRef.current = false
-        }, SNAP_LOCK_MS)
+        }, SNAP_LOCK_MS + 120)
 
         const blockClick = (ev) => {
           ev.preventDefault()
